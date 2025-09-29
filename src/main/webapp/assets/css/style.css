@@ -1,0 +1,91 @@
+@charset "UTF-8";
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Poppins", sans-serif;
+}
+
+/* Body background */
+body {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background: #f4f7fb;
+}
+
+/* Card */
+.login-box {
+  background: #fff;
+  padding: 40px 35px;
+  border-radius: 10px;
+  box-shadow: 0px 4px 10px rgba(0,0,0,0.1);
+  text-align: center;
+  width: 350px;
+}
+
+/* Icon */
+.login-box img {
+  width: 80px;
+  margin-bottom: 0px;
+}
+
+/* Title */
+.login-box h2 {
+  font-size: 22px;
+  color: #1a49d3;
+  margin-bottom: 5px;
+  font-weight: 600;
+}
+
+/* Subtitle */
+.login-box p {
+  font-size: 14px;
+  color: #6b6b6b;
+  margin-bottom: 20px;
+}
+
+/* Label */
+.login-box label {
+  display: block;
+  text-align: left;
+  font-size: 14px;
+  margin: 10px 0 5px;
+  color: #333;
+}
+
+/* Input */
+.login-box input {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  outline: none;
+  font-size: 14px;
+  transition: 0.3s;
+}
+
+.login-box input:focus {
+  border-color: #1a49d3;
+  box-shadow: 0 0 5px rgba(26,73,211,0.3);
+}
+
+/* Button */
+.login-box button {
+  width: 100%;
+  padding: 12px;
+  margin-top: 20px;
+  border: none;
+  border-radius: 6px;
+  background: #f97316;
+  color: #fff;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.login-box button:hover {
+  background: #ea580c;
+}

@@ -1,0 +1,81 @@
+@charset "UTF-8";
+
+/* Reset */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Poppins", sans-serif;
+}
+
+body {
+  background-color: white;
+}
+.logo span img {
+  width: 50px;
+  margin-right: 10px;
+  border-radius:60%;
+}
+/* Navbar */
+.navbar {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #1a49d3;
+  color: white;
+  padding: 15px 30px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 1000;
+}
+
+.logo {
+  font-size: 24px;
+  font-weight: 600;
+  display: flex;
+  align-items: center
+}
+
+.nav-options {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.billing-btn {
+  background-color: #3b82f6;
+  color: white;
+  padding: 8px 16px;
+  border: none;
+  border-radius: 6px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.billing-btn:hover {
+  background-color: #2563eb;
+}
+
+.cart-icon, .profile-icon i {
+  font-size: 22px;
+  cursor: pointer;
+}
+
+.lang-select {
+  padding: 5px;
+  border-radius: 4px;
+  border: none;
+  background: white;
+  color: #1a49d3;
+  font-weight: 500;
+}
+
+/* Main content placeholder */
+.main-content {
+  margin-top: 70px; /* height of navbar */
+  height: calc(100vh - 70px);
+  background-color: white;
+}
