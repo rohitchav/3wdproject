@@ -2,6 +2,8 @@ package com.pos.kiranastore.util;
 
 public class ConstantVariables {
     // Navbar
+	public static String lblhead = "Kirana Store";
+	public static String lblhead_MR = "किराणा दुकान";
     public static String lblBilling = "Billing";
     public static String lblBilling_MR = "बिलिंग";
 
