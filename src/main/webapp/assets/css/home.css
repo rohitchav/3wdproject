@@ -36,12 +36,17 @@ body {
 .logo {
   font-size: 22px;
   font-weight: 600;
+}
+
+.logo-link {
   display: flex;
   align-items: center;
   gap: 10px;
+  text-decoration: none;
+  color: white;       /* keep text white */
 }
 
-.logo span img {
+.logo-link img {
   width: 50px;
   height: 50px;
   border-radius: 50%;
@@ -83,6 +88,7 @@ body {
   font-weight: 500;
 }
 
+
 /* =============================
    MAIN CONTAINER
    ============================= */
@@ -121,22 +127,33 @@ body {
 .sidebar ul {
   list-style: none;
 }
-
 .sidebar ul li {
-  padding: 12px 20px;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  transition: background 0.3s, border-left 0.3s;
+  padding: 0; 
+  display: block; 
 }
 
-.sidebar ul li:hover,
-.sidebar ul li.active {
+
+.sidebar ul li a {
+  display: flex;           
+  align-items: center;    
+  gap: 4px;             
+  color: white;           
+  text-decoration: none;   
+  width: 100%;            
+  height: 50px;            
+  padding: 12px 20px;      
+  box-sizing: border-box;  
+}
+
+
+
+.sidebar ul li:hover a,
+.sidebar ul li.active a {
   background: #34495e;
   border-left: 4px solid #1a49d3;
-  padding-left: 16px;
+  padding-left: 16px; /* optional, adjust as needed */
 }
+
 
 .sidebar ul li a {
   color: white;

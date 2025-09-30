@@ -19,16 +19,18 @@ public class HomeServlet extends HttpServlet {
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         // 1. Get language from request or session
-        String lang = request.getParameter("lang");
-        if (lang != null) {
-            request.getSession().setAttribute("vlang", lang);
-        } else {
-            lang = (String) request.getSession().getAttribute("vlang");
-            if (lang == null) lang = "EN";
-            request.getSession().setAttribute("vlang", lang);
-        }
-
-        request.setAttribute("vlang", lang);
+    	String lang = request.getParameter("lang");
+    	if (lang != null) {
+    	    // Save selected language in session
+    	    request.getSession().setAttribute("vlang", lang);
+    	} else {
+    	    // If no param, try to read from session
+    	    lang = (String) request.getSession().getAttribute("vlang");
+    	    if (lang == null) {
+    	        lang = "EN"; // default language
+    	        request.getSession().setAttribute("vlang", lang);
+    	    }
+    	}
 
         // 2. Set dynamic labels for home page
         boolean isEN = lang.equals("EN");

@@ -1,5 +1,11 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html ng-app="loginApp" ng-controller="LoginController">
+<%
+    String vlang = (String)session.getAttribute("vlang");
+    if (vlang==null) {
+       session.setAttribute("vlang", "EN");
+    }
+%>
 <head>
     <title>Login</title>
     <%@include file="csslink.jsp"%>
