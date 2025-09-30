@@ -1,6 +1,8 @@
 @charset "UTF-8";
 
-/* Reset */
+/* =============================
+   RESET & BASE STYLES
+   ============================= */
 * {
   margin: 0;
   padding: 0;
@@ -9,14 +11,13 @@
 }
 
 body {
-  background-color: white;
+  background-color: #ffffff;
+  color: #333;
 }
-.logo span img {
-  width: 50px;
-  margin-right: 10px;
-  border-radius:60%;
-}
-/* Navbar */
+
+/* =============================
+   NAVBAR
+   ============================= */
 .navbar {
   width: 100%;
   display: flex;
@@ -33,10 +34,17 @@ body {
 }
 
 .logo {
-  font-size: 24px;
+  font-size: 22px;
   font-weight: 600;
   display: flex;
-  align-items: center
+  align-items: center;
+  gap: 10px;
+}
+
+.logo span img {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
 }
 
 .nav-options {
@@ -51,21 +59,23 @@ body {
   padding: 8px 16px;
   border: none;
   border-radius: 6px;
-  font-weight: bold;
+  font-weight: 600;
   cursor: pointer;
+  transition: 0.3s;
 }
 
 .billing-btn:hover {
   background-color: #2563eb;
 }
 
-.cart-icon, .profile-icon i {
+.cart-icon, 
+.profile-icon i {
   font-size: 22px;
   cursor: pointer;
 }
 
 .lang-select {
-  padding: 5px;
+  padding: 5px 8px;
   border-radius: 4px;
   border: none;
   background: white;
@@ -73,9 +83,277 @@ body {
   font-weight: 500;
 }
 
-/* Main content placeholder */
-.main-content {
-  margin-top: 70px; /* height of navbar */
+/* =============================
+   MAIN CONTAINER
+   ============================= */
+/* .container {
+  display: flex;
+  margin-top: 70px; Below navbar
   height: calc(100vh - 70px);
-  background-color: white;
+  width: 100%;
+  background: #f5f6fa;
+  border-top: 1px solid #ddd;
+} */
+.container {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 70px; /* Below navbar */
+  height: calc(100vh - 70px);
+  width: 100%;
+  background: #f5f6fa;
+  border-top: 1px solid #ddd;
+  position: relative;
+}
+
+/* =============================
+   LEFT SIDEBAR
+   ============================= */
+.sidebar {
+  width: 220px;
+  background: #2c3e50;
+  color: white;
+  padding-top: 20px;
+  box-shadow: 2px 0 6px rgba(0,0,0,0.1);
+  flex-shrink: 0;
+  overflow-y: auto;
+}
+
+.sidebar ul {
+  list-style: none;
+}
+
+.sidebar ul li {
+  padding: 12px 20px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  transition: background 0.3s, border-left 0.3s;
+}
+
+.sidebar ul li:hover,
+.sidebar ul li.active {
+  background: #34495e;
+  border-left: 4px solid #1a49d3;
+  padding-left: 16px;
+}
+
+.sidebar ul li a {
+  color: white;
+  text-decoration: none;
+  flex-grow: 1;
+  display: flex;
+  align-items: center;
+}
+
+.sidebar ul li i {
+  font-size: 16px;
+  width: 20px;
+  text-align: center;
+}
+
+.sidebar hr {
+  border: none;
+  height: 1px;
+  background: #34495e;
+  margin: 15px 20px;
+}
+
+/* =============================
+   CENTER CONTENT
+   ============================= */
+.content {
+  flex: 1;
+  padding: 20px;
+  background: #f5f6fa;
+  overflow-y: auto;
+}
+
+.search-bar {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+  align-items: center;
+}
+
+.search-bar input,
+.search-bar select {
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 16px;
+}
+
+.search-bar input {
+  flex-grow: 1;
+}
+
+.product-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 20px;
+}
+
+.product-card {
+  background: white;
+  padding: 15px;
+  border-radius: 10px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  text-align: center;
+  transition: transform 0.2s;
+}
+
+.product-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+}
+
+.product-card img {
+  max-width: 100%;
+  height: 100px;
+  object-fit: contain;
+  border-radius: 6px;
+  margin-bottom: 10px;
+}
+
+.product-card h3 {
+  font-size: 16px;
+  margin-bottom: 4px;
+}
+
+.product-card p {
+  margin: 2px 0;
+  font-size: 14px;
+  color: #555;
+}
+
+.product-card button {
+  margin-top: 10px;
+  padding: 8px 12px;
+  background: #1a49d3;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  width: 100%;
+  font-weight: 600;
+  transition: 0.3s;
+}
+
+.product-card button:hover {
+  background: #0f2e7a;
+}
+
+/* =============================
+   RIGHT SIDEBAR (CART)
+   ============================= */
+/* .cart {
+  width: 300px;
+  background: #fff;
+  border-left: 1px solid #ddd;
+  padding: 20px;
+  box-shadow: -2px 0 6px rgba(0,0,0,0.1);
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+} */
+.cart {
+  width: 300px;
+  margin-top:30px;
+  background: #fff;
+  border-left: 1px solid #ddd;
+  padding: 20px;
+  box-shadow: -2px 0 6px rgba(0,0,0,0.1);
+  flex-shrink: 0;        /* prevents shrinking */
+  display: flex;
+  flex-direction: column;
+  height: calc(100vh - 350px);
+}
+
+
+.cart h2 {
+  margin-bottom: 15px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #eee;
+}
+
+.cart-items {
+  list-style: none;
+  padding: 0;
+  margin-bottom: 15px;
+  flex-grow: 1;
+  overflow-y: auto;
+}
+
+.cart-items li {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 0;
+  border-bottom: 1px dashed #eee;
+  font-size: 15px;
+}
+
+.cart-items li span:first-child {
+  flex-grow: 1;
+}
+
+.cart-items .remove {
+  background: none;
+  border: none;
+  color: #d32f2f;
+  cursor: pointer;
+  font-size: 14px;
+  margin-left: 10px;
+}
+
+.summary {
+  padding-top: 15px;
+  border-top: 1px solid #eee;
+}
+
+.summary p {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+
+.summary .total {
+  font-weight: bold;
+  font-size: 18px;
+  color: #1a49d3;
+}
+
+.cart-actions {
+  margin-top: 15px;
+}
+
+.cart-actions button {
+  width: 100%;
+  padding: 12px;
+  margin-bottom: 10px;
+  border: none;
+  border-radius: 6px;
+  font-weight: 700;
+  font-size: 16px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.checkout {
+  background: #16a34a;
+  color: white;
+}
+
+.checkout:hover {
+  background: #0d802d;
+}
+
+.clear {
+  background: #fca5a5;
+  color: #333;
+}
+
+.clear:hover {
+  background: #f87171;
 }

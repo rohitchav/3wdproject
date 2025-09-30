@@ -42,4 +42,5 @@ public class AuthController extends HttpServlet {
             response.getWriter().write("{\"status\":\"error\", \"message\":\"Invalid username or password!\"}");
         }
     }
+
 }
