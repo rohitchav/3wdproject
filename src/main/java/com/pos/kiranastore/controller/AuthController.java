@@ -33,7 +33,7 @@ public class AuthController extends HttpServlet {
 
         if (user != null) {
             HttpSession session = request.getSession();
-            session.setAttribute("user", user);
+            session.setAttribute("user", username);
 
             // ✅ Send success response
             response.getWriter().write("{\"status\":\"success\"}");

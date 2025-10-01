@@ -39,6 +39,6 @@
 				</li>
 
 		        <hr>
-		        <li><a href="index.jsp"><i class="fa-solid fa-right-from-bracket"></i> <c:out value="${lblLogout}"/></a></li>
+		        <li><a href="logout"><i class="fa-solid fa-right-from-bracket"></i> <c:out value="${lblLogout}"/></a></li>
 		    </ul>
 		</aside>
