@@ -11,7 +11,7 @@
 				</li>
 				
 				 <li>
-				    <a href="inventory"> 
+				    <a href="InventoryServlet"> 
 				        <i class="fa-solid fa-boxes-stacked"></i> 
 				        <c:out value="${lblInventory}"/>
 				    </a>

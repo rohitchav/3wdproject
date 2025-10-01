@@ -124,6 +124,7 @@ body {
   flex-shrink: 0;
   min-height: 100vh; 
   overflow-y: auto;
+  position:sticky;
 }
 
 .sidebar ul {

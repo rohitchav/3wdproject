@@ -15,7 +15,10 @@
 </head>
 <body>
     <!-- Navbar -->
-    <%@ include file="navbar.jsp" %>
+   <jsp:include page="navbar.jsp">
+      <jsp:param name="servlet" value="HomeServlet"/>
+   </jsp:include>
+
    
 
     <!-- MAIN LAYOUT -->

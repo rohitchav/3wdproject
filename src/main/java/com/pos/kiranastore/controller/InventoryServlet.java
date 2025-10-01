@@ -11,7 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.pos.kiranastore.util.ConstantVariables;
 
-@WebServlet("/inventory")
+@WebServlet("/InventoryServlet")
 public class InventoryServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
 
@@ -30,7 +30,6 @@ public class InventoryServlet extends HttpServlet {
         } else {
             lang = (String) request.getSession().getAttribute("vlang");
         }
-        lang = "EN";
         boolean isEN = "EN".equalsIgnoreCase(lang);
 
         // ---------------------------

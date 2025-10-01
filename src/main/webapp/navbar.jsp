@@ -10,10 +10,14 @@
     <div class="nav-options">
         <button class="billing-btn"><c:out value="${lblBilling}"/></button>
         <i class="fas fa-shopping-cart cart-icon"></i>
-       <select class="lang-select" onchange="window.location.href='HomeServlet?lang='+this.value">
-             <option value="EN" ${sessionScope.vlang == 'EN' ? 'selected' : ''}>EN</option>
-             <option value="MR" ${sessionScope.vlang == 'MR' ? 'selected' : ''}>Marathi</option>
-       </select>
+       <c:set var="targetServlet" value="${param.servlet}" />
+
+		<select class="lang-select" 
+		        onchange="window.location.href='${targetServlet}?lang='+this.value">
+		    <option value="EN" ${sessionScope.vlang == 'EN' ? 'selected' : ''}>EN</option>
+		    <option value="MR" ${sessionScope.vlang == 'MR' ? 'selected' : ''}>Marathi</option>
+		</select>
+
 
         <div class="profile-icon"><i class="fas fa-user-circle"></i></div>
     </div>

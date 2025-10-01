@@ -42,7 +42,9 @@
 </head>
 <body ng-app="inventoryApp" ng-controller="InventoryController">
 
-<%@ include file="navbar.jsp" %>
+<jsp:include page="navbar.jsp">
+   <jsp:param name="servlet" value="InventoryServlet"/>
+</jsp:include>
 
 
 <div class="container-fluid p-0" style="height: 100vh;">
