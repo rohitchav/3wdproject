@@ -16,6 +16,8 @@
 <link rel="stylesheet" href="assets/css/home.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+<!-- For AngularJS 1.x -->
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.3/angular.min.js"></script>
 
 <style>
     body { background-color: #f8f9fa; }
@@ -38,7 +40,7 @@
     
 </style>
 </head>
-<body>
+<body ng-app="inventoryApp" ng-controller="InventoryController">
 <div class="navbar">
     <div class="logo">
         <a href="home.jsp" class="logo-link">
@@ -56,17 +58,17 @@
         <div class="profile-icon"><i class="fas fa-user-circle"></i></div>
     </div>
 </div>
-
 <div class="container-fluid p-0" style="height: 100vh;">
     <div class="d-flex" style="height: 100%;">
         
         <!-- Sidebar -->
-        <div class="sidebar bg-light p-3" style="width: 250px;">
+        <div class="sidebar">
             <%@ include file="sidebar.jsp" %>
         </div>
 
         <!-- Main Content -->
-        <div class="flex-grow-1 p-3" style="overflow-y: auto;">
+        <div class="content">
+            <div class="flex-grow-1 p-3" style="overflow-y: auto;">
             <div class="card p-4">
                 <div class="d-flex justify-content-between align-items-center mb-4">
                     <h2 class="h4 font-weight-bold">Inventory Management</h2>
@@ -93,58 +95,45 @@
 
                 <!-- Product Table -->
                 <div class="table-responsive">
-                    <table class="table table-hover">
-                        <thead>
-                            <tr>
-                                <th>Product Name</th>
-                                <th>Category</th>
-                                <th>Cost Price</th>
-                                <th>Selling Price</th>
-                                <th>Stock</th>
-                                <th>Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <c:choose>
-                                <c:when test="${not empty products}">
-                                    <c:forEach var="product" items="${products}">
-                                        <tr>
-                                            <td>
-                                                <c:choose>
-                                                    <c:when test="${not empty product.imagePath}">
-                                                        <img src="${product.imagePath}" alt="${product.name}"/>
-                                                    </c:when>
-                                                    <c:otherwise>
-                                                        <img src="images/placeholder.png" alt="${product.name}"/>
-                                                    </c:otherwise>
-                                                </c:choose>
-                                                <c:out value="${product.name}"/>
-                                            </td>
-                                            <td><c:out value="${product.category}"/></td>
-                                            <td>&#8377; <c:out value="${product.costPrice}"/></td>
-                                            <td>&#8377; <c:out value="${product.price}"/></td>
-                                            <td><c:out value="${product.stock}"/></td>
-                                            <td>
-                                                <a href="ProductController?action=edit&id=${product.id}" class="action-icons text-primary" title="Edit">
-                                                    <i class="fas fa-edit"></i>
-                                                </a>
-                                                <a href="ProductController?action=delete&id=${product.id}" class="action-icons text-danger" title="Delete" onclick="return confirm('Are you sure?');">
-                                                    <i class="fas fa-trash-alt"></i>
-                                                </a>
-                                            </td>
-                                        </tr>
-                                    </c:forEach>
-                                </c:when>
-                                <c:otherwise>
-                                    <tr>
-                                        <td colspan="6" class="text-center text-muted p-4">
-                                            <i class="fas fa-box-open mr-2"></i> No products found.
-                                        </td>
-                                    </tr>
-                                </c:otherwise>
-                            </c:choose>
-                        </tbody>
-                    </table>
+                   <table class="table table-hover" ng-init="loadProducts()">
+						    <thead>
+						        <tr>
+						            <th>Product Name</th>
+						            <th>Category</th>
+						            <th>Cost Price</th>
+						            <th>Selling Price</th>
+						            <th>Stock</th>
+						            <th>Actions</th>
+						        </tr>
+						    </thead>
+						    <tbody>
+						        <tr ng-repeat="p in products">
+						            <td>
+						                <img ng-src="{{p.imagePath ? p.imagePath : 'images/placeholder.png'}}" 
+						                     alt="{{p.name}}" width="30" height="30">
+						                {{p.name}}
+						            </td>
+						            <td>{{p.category}}</td>
+						            <td>&#8377; {{p.costPrice}}</td>
+						            <td>&#8377; {{p.sellingPrice}}</td>
+						            <td>{{p.stock}}</td>
+						            <td>
+						                <a href="" ng-click="editProduct(p)" class="text-primary">
+						                    <i class="fas fa-edit"></i>
+						                </a>
+						                <a href="" ng-click="deleteProduct(p.id)" class="text-danger">
+						                    <i class="fas fa-trash-alt"></i>
+						                </a>
+						            </td>
+						        </tr>
+						        <tr ng-if="products.length === 0">
+						            <td colspan="6" class="text-center text-muted p-4">
+						                <i class="fas fa-box-open mr-2"></i> No products found.
+						            </td>
+						        </tr>
+						    </tbody>
+						</table>
+
                 </div>
 
                 <div class="text-right mt-3">
@@ -154,9 +143,9 @@
                 </div>
             </div>
         </div>
+        </div>
     </div>
 </div>
-
 
 
 <!-- Add Product Modal -->
@@ -170,7 +159,8 @@
                 </button>
             </div>
             
-            <form action="ProductController" method="post" enctype="multipart/form-data">
+            <form id="addProductForm" ng-submit="addProduct()" enctype="multipart/form-data">
+            
                 <input type="hidden" name="action" value="add">
                 
                 <div class="modal-body">
@@ -228,23 +218,6 @@
 <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-    const fileInput = document.getElementById('productImageFile');
-    const imagePathHidden = document.getElementById('imagePathHidden');
-
-    if(fileInput) {
-        fileInput.addEventListener('change', function(e) {
-            const fileName = e.target.files.length > 0 ? e.target.files[0].name : 'Choose file';
-            const label = document.querySelector('label[for="productImageFile"]');
-            if(label) label.innerText = fileName;
-
-            if(imagePathHidden && e.target.files.length > 0){
-                imagePathHidden.value = "images/" + fileName; // server should handle actual path
-            }
-        });
-    }
-});
-</script>
+<%@ include file="jslink.jsp" %>
 </body>
 </html>

@@ -115,12 +115,14 @@ body {
    LEFT SIDEBAR
    ============================= */
 .sidebar {
+	
   width: 220px;
   background: #2c3e50;
   color: white;
   padding-top: 20px;
   box-shadow: 2px 0 6px rgba(0,0,0,0.1);
   flex-shrink: 0;
+  min-height: 100vh; 
   overflow-y: auto;
 }
 
