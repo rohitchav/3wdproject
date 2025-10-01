@@ -30,7 +30,7 @@ public class InventoryServlet extends HttpServlet {
         } else {
             lang = (String) request.getSession().getAttribute("vlang");
         }
-
+        lang = "EN";
         boolean isEN = "EN".equalsIgnoreCase(lang);
 
         // ---------------------------

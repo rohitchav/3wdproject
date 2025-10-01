@@ -4,7 +4,7 @@
 
 		    <ul>
 				 <li>
-				    <a href="home.jsp"> 
+				    <a href="HomeServlet"> 
 				        <i class="fa-solid fa-home"></i> 
 				        <c:out value="${lblDashboard}"/>
 				    </a>
