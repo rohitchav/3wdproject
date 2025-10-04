@@ -51,7 +51,7 @@ app.controller("InventoryController", function($scope, $http) {
         });
     };
 
-    // Add product
+/*    // Add product
     $scope.addProduct = function() {
         let fd = new FormData(document.getElementById("addProductForm"));
         $http.post("ProductController?action=add", fd, {
@@ -65,7 +65,49 @@ app.controller("InventoryController", function($scope, $http) {
                 alert("Failed to add product");
             }
         });
-    };
+		this.reset();
+    };*/
+	
+	// Add product
+	$scope.addProduct = function() {
+	    let form = document.getElementById("addProductForm");
+	    let fd = new FormData(form);
+
+	    $http.post("ProductController?action=add", fd, {
+	        headers: { 'Content-Type': undefined }
+	    }).then(function(response) {
+	        if (response.data.success) {
+	            // ✅ Reload product list dynamically
+	            $scope.loadProducts();
+
+	            // ✅ Hide the modal
+	            $("#addProductModal").modal("hide");
+
+	            // ✅ Show confirmation
+	            alert("Product added successfully");
+
+	            // ✅ Reset the form fields
+	            form.reset();
+
+	            // ✅ Clear file label text (if file upload field exists)
+	            const label = document.querySelector('label[for="productImageFile"]');
+	            if (label) label.innerText = "Choose file";
+
+	            // ✅ Reset hidden image path if used
+	            const imagePathHidden = document.getElementById('imagePathHidden');
+	            if (imagePathHidden) imagePathHidden.value = '';
+
+	            // ✅ Also reset AngularJS model (if any)
+	            $scope.product = {};
+	        } else {
+	            alert("Failed to add product");
+	        }
+	    }).catch(function(error) {
+	        console.error("Error adding product:", error);
+	    });
+	};
+
+
 
 	$scope.openEditModal = function(product) {
 	    $scope.$applyAsync(function() {
@@ -148,8 +190,78 @@ app.controller("InventoryController", function($scope, $http) {
 				
 			}
 	}
-     
 	
+
+
+
+	    $scope.downloadLowStockReport = function() {
+	        $http.get("ProductController?action=lowStock").then(function(response) {
+	            let products = response.data;
+
+	            if (!products || products.length === 0) {
+	                alert("No products with low stock.");
+	                return;
+	            }
+
+	            let reportHtml = `
+	                <html>
+	                <head>
+	                    <title>Low Stock Report</title>
+	                    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+	                    <style>
+	                        body { font-size: 1.2em; }
+	                        table { pointer-events: none; }
+	                        th, td { text-align: center; }
+	                    </style>
+	                </head>
+	                <body>
+	                    <div class="container mt-4">
+	                        <h2 style="text-align:center">Kirana Store</h2>
+	                        <h3>Low Stock Report</h3>
+	                        <table class="table table-bordered table-striped mt-3">
+	                            <thead>
+	                                <tr>
+	                                    <th>Product Name</th>
+	                                    <th>Category</th>
+	                                    <th>Cost Price</th>
+	                                    <th>Selling Price</th>
+	                                    <th>Stock</th>
+	                                </tr>
+	                            </thead>
+	                            <tbody>
+	                                ${products.map(p => `
+	                                    <tr>
+	                                        <td>${p.name}</td>
+	                                        <td>${p.category}</td>
+	                                        <td>₹ ${p.costPrice}</td>
+	                                        <td>₹ ${p.sellingPrice}</td>
+	                                        <td>${p.stock}</td>
+	                                    </tr>
+	                                `).join('')}
+	                            </tbody>
+	                        </table>
+	                    </div>
+	                </body>
+	                </html>
+	            `;
+
+				let printWindow = window.open('', '', 'height=1000,width=1200'); // optional
+				if (printWindow) {
+				    printWindow.document.write(reportHtml);
+				    printWindow.document.close();
+
+				    // ensure print styles are applied before printing
+				    printWindow.focus();
+				    printWindow.print();
+				    printWindow.close();
+				}
+	        }, function() {
+	            alert("Failed to fetch low stock products.");
+	        });
+	    };
+
+
+
 
 
 });

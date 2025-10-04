@@ -1,7 +1,7 @@
 package com.pos.kiranastore.controller;
 
-
 import java.io.IOException;
+
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -13,49 +13,63 @@ import com.pos.kiranastore.util.ConstantVariables;
 
 @WebServlet("/InventoryServlet")
 public class InventoryServlet extends HttpServlet {
-    private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 1L;
 
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) 
-            throws ServletException, IOException {
+	protected void doGet(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
 
-        // ---------------------------
-        // Language handling
-        // ---------------------------
-        String lang = request.getParameter("lang");
-        if (lang != null) {
-            request.getSession().setAttribute("vlang", lang);
-        } else if(request.getSession().getAttribute("vlang") == null) {
-            lang = "EN";  // default language
-            request.getSession().setAttribute("vlang", lang);
-        } else {
-            lang = (String) request.getSession().getAttribute("vlang");
-        }
-        boolean isEN = "EN".equalsIgnoreCase(lang);
+		// ---------------------------
+		// Language handling
+		// ---------------------------
+		String lang = request.getParameter("lang");
+		if (lang != null) {
+			request.getSession().setAttribute("vlang", lang);
+		} else if (request.getSession().getAttribute("vlang") == null) {
+			lang = "EN"; // default language
+			request.getSession().setAttribute("vlang", lang);
+		} else {
+			lang = (String) request.getSession().getAttribute("vlang");
+		}
+		boolean isEN = "EN".equalsIgnoreCase(lang);
 
-        // ---------------------------
-        // Set labels
-        // ---------------------------
-        request.setAttribute("lblHead", isEN ? ConstantVariables.lblhead : ConstantVariables.lblhead_MR);
-        request.setAttribute("lblBilling", isEN ? ConstantVariables.lblBilling : ConstantVariables.lblBilling_MR);
-        request.setAttribute("lblCart", isEN ? ConstantVariables.lblCart : ConstantVariables.lblCart_MR);
-        request.setAttribute("lblLogout", isEN ? ConstantVariables.lblLogout : ConstantVariables.lblLogout_MR);
-        request.setAttribute("lblSearchPlaceholder", isEN ? ConstantVariables.lblSearchPlaceholder : ConstantVariables.lblSearchPlaceholder_MR);
+		// ---------------------------
+		// Set labels
+		// ---------------------------
+		request.setAttribute("lblHead", isEN ? ConstantVariables.lblhead : ConstantVariables.lblhead_MR);
+		request.setAttribute("lblBilling", isEN ? ConstantVariables.lblBilling : ConstantVariables.lblBilling_MR);
+		request.setAttribute("lblCart", isEN ? ConstantVariables.lblCart : ConstantVariables.lblCart_MR);
+		request.setAttribute("lblLogout", isEN ? ConstantVariables.lblLogout : ConstantVariables.lblLogout_MR);
+		request.setAttribute("lblSearchPlaceholder",
+				isEN ? ConstantVariables.lblSearchPlaceholder : ConstantVariables.lblSearchPlaceholder_MR);
 
-        request.setAttribute("lblDashboard", isEN ? ConstantVariables.lblDashboard : ConstantVariables.lblDashboard_MR);
-        request.setAttribute("lblInventory", isEN ? ConstantVariables.lblInventory : ConstantVariables.lblInventory_MR);
-        request.setAttribute("lblCustomers", isEN ? ConstantVariables.lblCustomers : ConstantVariables.lblCustomers_MR);
-        request.setAttribute("lblDebts", isEN ? ConstantVariables.lblDebts : ConstantVariables.lblDebts_MR);
-        request.setAttribute("lblPurchases", isEN ? ConstantVariables.lblPurchases : ConstantVariables.lblPurchases_MR);
+		request.setAttribute("lblDashboard", isEN ? ConstantVariables.lblDashboard : ConstantVariables.lblDashboard_MR);
+		request.setAttribute("lblInventory", isEN ? ConstantVariables.lblInventory : ConstantVariables.lblInventory_MR);
+		request.setAttribute("lblCustomers", isEN ? ConstantVariables.lblCustomers : ConstantVariables.lblCustomers_MR);
+		request.setAttribute("lblDebts", isEN ? ConstantVariables.lblDebts : ConstantVariables.lblDebts_MR);
+		request.setAttribute("lblPurchases", isEN ? ConstantVariables.lblPurchases : ConstantVariables.lblPurchases_MR);
 
-        // ---------------------------
-        // Forward to JSP
-        // ---------------------------
-        RequestDispatcher rd = request.getRequestDispatcher("/inventory.jsp");
-        rd.forward(request, response);
-    }
+		// Inventory Page Labels
+		request.setAttribute("lblInventoryPageTitle",
+				isEN ? ConstantVariables.lblInventoryPageTitle : ConstantVariables.lblInventoryPageTitle_MR);
+		request.setAttribute("lblAddNewProduct",
+				isEN ? ConstantVariables.lblAddNewProduct : ConstantVariables.lblAddNewProduct_MR);
+		request.setAttribute("lblLowStockReport",
+				isEN ? ConstantVariables.lblLowStockReport : ConstantVariables.lblLowStockReport_MR);
+		request.setAttribute("lblDeleteAllProducts",
+				isEN ? ConstantVariables.lblDeleteAllProducts : ConstantVariables.lblDeleteAllProducts_MR);
+		request.setAttribute("lblProductList",
+				isEN ? ConstantVariables.lblProductList : ConstantVariables.lblProductList_MR);
+		request.setAttribute("lblNoProduct",
+				isEN ? ConstantVariables.lblNoProductsFound : ConstantVariables.lblNoProductsFound_MR);
+		// ---------------------------
+		// Forward to JSP
+		// ---------------------------
+		RequestDispatcher rd = request.getRequestDispatcher("/inventory.jsp");
+		rd.forward(request, response);
+	}
 
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) 
-            throws ServletException, IOException {
-        doGet(request, response);
-    }
+	protected void doPost(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		doGet(request, response);
+	}
 }

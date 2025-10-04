@@ -25,6 +25,7 @@ import com.pos.kiranastore.dao.ProductDao;
 )
 @WebServlet("/ProductController")
 public class ProductController extends HttpServlet {
+	ProductDao dao = new ProductDao();
 	private static final long serialVersionUID = 1L;
 
 	public ProductController() {
@@ -37,16 +38,18 @@ public class ProductController extends HttpServlet {
 			throws ServletException, IOException {
 
 		String action = request.getParameter("action");
-		ProductDao dao = new ProductDao();
-
 		response.setContentType("application/json");
 		response.setCharacterEncoding("UTF-8");
+		Gson gson = new Gson();
 
 		try (PrintWriter out = response.getWriter()) {
 			if ("list".equals(action)) {
 				List<Product> products = dao.getAllProducts();
-				Gson gson = new Gson();
 				out.print(gson.toJson(products));
+			} else if ("lowStock".equals(action)) {
+				int threshold = 10;
+				List<Product> lowStockProducts = dao.getLowStockProducts(threshold);
+				out.print(gson.toJson(lowStockProducts));
 			} else {
 				response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid action");
 			}
@@ -106,9 +109,6 @@ public class ProductController extends HttpServlet {
 					if (!fileName.isEmpty()) {
 						product.setImagePath("uploads/" + fileName);
 					}
-
-					// 4. Call DAO to save product
-					ProductDao dao = new ProductDao();
 					boolean isAdded = dao.addProduct(product);
 
 					// 5. Return JSON response
@@ -164,8 +164,6 @@ public class ProductController extends HttpServlet {
 					} else {
 						product.setImagePath(new ProductDao().getProductImage(id)); // ✅ preserve old image
 					}
-
-					ProductDao dao = new ProductDao();
 					boolean updated = dao.updateProduct(product);
 
 					if (updated) {
@@ -181,7 +179,6 @@ public class ProductController extends HttpServlet {
 			} else if (action.equals("delete")) {
 				try {
 					int id = Integer.parseInt(request.getParameter("id"));
-					ProductDao dao = new ProductDao();
 					boolean deleted = dao.deleteProduct(id);
 					if (deleted) {
 						out.print(gson.toJson(new Response(true, "Product deleted successfully")));
@@ -206,7 +203,9 @@ public class ProductController extends HttpServlet {
 					e.printStackTrace();
 					out.print(gson.toJson(new Response(false, "Invalid input or server error")));
 				}
-			} else {
+			}
+
+			else {
 				out.print(gson.toJson(new Response(false, "Unknown action: " + action)));
 			}
 

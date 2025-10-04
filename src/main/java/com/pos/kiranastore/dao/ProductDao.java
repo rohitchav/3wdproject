@@ -115,4 +115,25 @@ public class ProductDao {
 		return false;
 	}
 
+	public List<Product> getLowStockProducts(int threshold) throws SQLException {
+		List<Product> list = new ArrayList<>();
+		String sql = "SELECT * FROM products WHERE stock < ?";
+		try (Connection conn = DBConnection.getConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
+			ps.setInt(1, threshold);
+			ResultSet rs = ps.executeQuery();
+			while (rs.next()) {
+				Product p = new Product();
+				p.setId(rs.getInt("id"));
+				p.setName(rs.getString("name"));
+				p.setCostPrice(rs.getDouble("cost_price"));
+				p.setSellingPrice(rs.getDouble("selling_price"));
+				p.setCategory(rs.getString("category"));
+				p.setStock(rs.getInt("stock"));
+				p.setImagePath(rs.getString("image_path"));
+				list.add(p);
+			}
+		}
+		return list;
+	}
+
 }

@@ -50,13 +50,13 @@
             <div class="flex-grow-1 p-3" style="overflow-y: auto;">
             <div class="card p-4">
                 <div class="d-flex justify-content-between align-items-center mb-4">
-                    <h2 class="h4 font-weight-bold">Inventory Management</h2>
+                    <h2 class="h4 font-weight-bold">${lblInventoryPageTitle}</h2>
                     <div class="header-controls">
                         <button class="btn btn-primary btn-primary-custom" data-toggle="modal" data-target="#addProductModal">
-                            <i class="fas fa-plus"></i> Add New Product
+                            <i class="fas fa-plus"></i> ${lblAddNewProduct}
                         </button>
                         <button class="btn btn-danger" id="deleteAllButton" ng-click="deleteAllProduct()">
-                            <i class="fas fa-trash-alt"></i> Delete All
+                            <i class="fas fa-trash-alt"></i> ${lblDeleteAllProducts}
                         </button>
                     </div>
                 </div>
@@ -96,21 +96,20 @@
 						            <td>&#8377; {{p.costPrice}}</td>
 						            <td>&#8377; {{p.sellingPrice}}</td>
 						            <td>{{p.stock}}</td>
-						            <td>
-						                <button type="button" ng-click="openEditModal(p)" class="btn btn-link text-primary p-0">
-    <i class="fas fa-edit"></i>
-</button>
-						              <button type="button" ng-click="deleteProduct(p.id)" class="btn btn-danger btn-sm">
-    <i class="fas fa-trash-alt"></i> Delete
-</button>
-
-
-						                
-						            </td>
-						        </tr>
+										<td>
+											<button type="button" ng-click="openEditModal(p)"
+												class="btn btn-link text-primary p-0">
+												<i class="fas fa-edit"></i>
+											</button>
+											<button type="button" ng-click="deleteProduct(p.id)"
+												class="btn btn-danger btn-sm">
+												<i class="fas fa-trash-alt"></i>
+											</button>
+										</td>
+									</tr>
 						        <tr ng-if="products.length === 0">
 						            <td colspan="6" class="text-center text-muted p-4">
-						                <i class="fas fa-box-open mr-2"></i> No products found.
+						                <i class="fas fa-box-open mr-2"></i> ${lblNoProduct}.
 						            </td>
 						        </tr>
 						    </tbody>
@@ -119,8 +118,8 @@
                 </div>
 
                 <div class="text-right mt-3">
-                    <button class="btn btn-secondary">
-                        <i class="fas fa-download"></i> Download Low Stock Report
+                    <button class="btn btn-secondary" ng-click="downloadLowStockReport()">
+                        <i class="fas fa-download"></i> ${lblLowStockReport}
                     </button>
                 </div>
             </div>
