@@ -18,21 +18,21 @@
 				</li>
 
 				 <li>
-				    <a href="customers.jsp">
+				    <a href="CustomerServlet">
 				        <i class="fa-solid fa-users"></i> 
 				        <c:out value="${lblCustomers}"/>
 				    </a>
 				</li>
 				
 				<li>
-				    <a href="debts.jsp">
+				    <a href="DebtsServlet">
 				        <i class="fa-solid fa-file-invoice-dollar"></i> 
 				        <c:out value="${lblDebts}"/>
 				    </a>
 				</li>
 				
 				<li>
-				    <a href="purchases.jsp">
+				    <a href="PurchaseServlet">
 				        <i class="fa-solid fa-truck"></i> 
 				        <c:out value="${lblPurchases}"/>
 				    </a>
