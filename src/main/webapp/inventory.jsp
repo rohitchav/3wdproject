@@ -11,35 +11,25 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="UTF-8">
-<title>Inventory</title>
-<link rel="stylesheet" href="assets/css/home.css">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-<!-- For AngularJS 1.x -->
-<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.3/angular.min.js"></script>
+  <meta charset="UTF-8">
+  <title>Inventory</title>
+  <link rel="stylesheet" href="assets/css/home.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 
-<style>
-    body { background-color: #f8f9fa; }
-    .container-fluid { padding: 20px; }
-    .card { border: none; border-radius: 8px; box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075); }
-    .header-controls { display: flex; gap: 10px; }
-    .table img { width: 30px; height: 30px; object-fit: cover; border-radius: 4px; margin-right: 10px; vertical-align: middle; }
-    .action-icons { cursor: pointer; margin: 0 5px; font-size: 1.1em; transition: color 0.2s; }
-    .btn-primary-custom { background-color: #2979ff; border-color: #2979ff; }
-    .btn-warning-custom { background-color: #ff9800; border-color: #ff9800; color: white; }
-    html, body {
-    height: 100%;
-}
+  <!-- ✅ Load jQuery first -->
+  <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 
-.sidebar {
-    height: 100%;
-    min-height: 100vh; /* Makes sidebar full viewport height */
-    border-right: 1px solid #ddd;
-}
-    
-</style>
+  <!-- ✅ Then Bootstrap JS (depends on jQuery) -->
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
+
+  <!-- AngularJS -->
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.3/angular.min.js"></script>
+
+  <!-- Your custom JS -->
+  <script src="assets/js/inventory.js"></script>
 </head>
+
 <body ng-app="inventoryApp" ng-controller="InventoryController">
 
 <jsp:include page="navbar.jsp">
@@ -65,7 +55,7 @@
                         <button class="btn btn-primary btn-primary-custom" data-toggle="modal" data-target="#addProductModal">
                             <i class="fas fa-plus"></i> Add New Product
                         </button>
-                        <button class="btn btn-danger" id="deleteAllButton">
+                        <button class="btn btn-danger" id="deleteAllButton" ng-click="deleteAllProduct()">
                             <i class="fas fa-trash-alt"></i> Delete All
                         </button>
                     </div>
@@ -107,12 +97,15 @@
 						            <td>&#8377; {{p.sellingPrice}}</td>
 						            <td>{{p.stock}}</td>
 						            <td>
-						                <a href="" ng-click="editProduct(p)" class="text-primary">
-						                    <i class="fas fa-edit"></i>
-						                </a>
-						                <a href="" ng-click="deleteProduct(p.id)" class="text-danger">
-						                    <i class="fas fa-trash-alt"></i>
-						                </a>
+						                <button type="button" ng-click="openEditModal(p)" class="btn btn-link text-primary p-0">
+    <i class="fas fa-edit"></i>
+</button>
+						              <button type="button" ng-click="deleteProduct(p.id)" class="btn btn-danger btn-sm">
+    <i class="fas fa-trash-alt"></i> Delete
+</button>
+
+
+						                
 						            </td>
 						        </tr>
 						        <tr ng-if="products.length === 0">
@@ -202,11 +195,84 @@
         </div>
     </div>
 </div>
+<!-- Edit Product Modal -->
+<div class="modal fade" id="editProductModal" tabindex="-1" role="dialog" aria-labelledby="editProductModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="editProductModalLabel" style="color: #337ab7;">Edit Product</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      
+      <form ng-submit="updateProduct(selectedProduct)" enctype="multipart/form-data">
+        <div class="modal-body">
+        <input type="hidden" ng-model="selectedProduct.id">
+        
+          <div class="form-group">
+            <label for="editProductName">Product Name</label>
+            <input type="text" class="form-control" id="editProductName" ng-model="selectedProduct.name" required>
+          </div>
+          <div class="form-row">
+            <div class="form-group col-md-6">
+              <label for="editCostPrice">Cost Price (₹)</label>
+              <input type="number" step="0.01" class="form-control" id="editCostPrice" ng-model="selectedProduct.costPrice" required>
+            </div>
+            <div class="form-group col-md-6">
+              <label for="editSellingPrice">Selling Price (₹)</label>
+              <input type="number" step="0.01" class="form-control" id="editSellingPrice" ng-model="selectedProduct.sellingPrice" required>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group col-md-6">
+              <label for="editCategory">Category</label>
+              <select id="editCategory" class="form-control" ng-model="selectedProduct.category" required>
+                <option value="Snacks">Snacks</option>
+                <option value="Beverages">Beverages</option>
+                <option value="Dairy">Dairy</option>
+                <option value="Household">Household</option>
+                <option value="Other">Other</option>
+              </select>
+            </div>
+            <div class="form-group col-md-6">
+              <label for="editStock">Stock Quantity</label>
+              <input type="number" class="form-control" id="editStock" ng-model="selectedProduct.stock" required>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="editImageFile">Product Image (optional)</label>
+            <input type="file" class="form-control-file" id="editImageFile" file-model="selectedProduct.imageFile">
+          </div>
+        </div>
+        
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+          <button type="submit" class="btn btn-warning">Update Product</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
 
-<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
+
+
+
+<script>
+app.controller("InventoryController", function($scope, $http) {
+    console.log("InventoryController initialized");
+
+    $scope.products = [];
+
+    // Your existing functions here...
+
+    $scope.testClick = function() {
+        console.log("Angular click works!");
+    };
+});
+
+</script>
 <%@ include file="jslink.jsp" %>
 </body>
 </html>

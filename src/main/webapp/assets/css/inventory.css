@@ -1,0 +1,83 @@
+@charset "UTF-8";
+/* ================= NAVBAR ================= */
+.navbar {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #1a49d3;
+  color: white;
+  padding: 15px 30px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 1000;
+}
+
+/* ================= MAIN LAYOUT ================= */
+.container {
+  display: flex;
+  margin-top: 70px; /* push below navbar */
+  height: calc(100vh - 70px);
+  width: 100%;
+  background: #f5f6fa;
+  position: relative;
+}
+
+/* ================= SIDEBAR (LEFT) ================= */
+.sidebar {
+  width: 220px;
+  background: #2c3e50;
+  color: white;
+  padding-top: 20px;
+  box-shadow: 2px 0 6px rgba(0,0,0,0.1);
+  flex-shrink: 0;
+
+  position: fixed;
+  top: 70px;   /* below navbar */
+  left: 0;
+  bottom: 0;
+  height: calc(100vh - 70px);
+
+  overflow-y: auto;  /* scroll only if sidebar menu too long */
+}
+
+/* ================= CONTENT (MIDDLE) ================= */
+.content {
+  margin-left: 220px;      /* leave space for sidebar */
+  margin-right: 300px;     /* leave space for cart */
+  padding: 20px;
+  background: #f5f6fa;
+
+  height: calc(100vh - 70px);
+  overflow-y: auto;   /* only middle content scrolls */
+}
+
+/* ================= CART (RIGHT PANEL) ================= */
+.cart {
+  width: 300px;
+  background: #fff;
+  box-shadow: -2px 0 6px rgba(0,0,0,0.1);
+  padding: 20px;
+  flex-shrink: 0;
+
+  position: fixed;
+  top: 70px;   /* below navbar */
+  right: 0;
+  bottom: 0;
+  height: calc(100vh - 70px);
+
+  overflow-y: auto; /* allow billing section to scroll if needed */
+}
+
+/* ================= FOOTER ================= */
+.footer {
+  background: #1a49d3;
+  color: white;
+  text-align: center;
+  padding: 10px;
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+}
