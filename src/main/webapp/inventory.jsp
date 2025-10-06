@@ -12,7 +12,8 @@
 <html>
 <head>
   <meta charset="UTF-8">
-  <title>Inventory</title>
+  <title>Inventory | Kirana Store</title>
+  <link rel="icon" href="assets/images/inventory.jpg" type="image/png">
   <link rel="stylesheet" href="assets/css/common.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
