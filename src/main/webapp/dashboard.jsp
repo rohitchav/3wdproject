@@ -18,7 +18,7 @@
 </head>
 <body>
     <jsp:include page="navbar.jsp">
-      <jsp:param name="servlet" value="PurchaseServlet"/>
+      <jsp:param name="servlet" value="DashBoardServlet"/>
    </jsp:include>
     
     <div class="container">

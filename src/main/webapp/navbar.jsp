@@ -1,6 +1,6 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
-   <div class="navbar">
+   <div class="custom-navbar">
     <div class="logo">
         <a href="HomeServlet" class="logo-link">
             <img src="assets/images/logo.jpg" alt="icon">

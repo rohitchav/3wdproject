@@ -13,7 +13,7 @@
 <head>
   <meta charset="UTF-8">
   <title>Inventory</title>
-  <link rel="stylesheet" href="assets/css/home.css">
+  <link rel="stylesheet" href="assets/css/common.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 
@@ -37,13 +37,9 @@
 </jsp:include>
 
 
-<div class="container-fluid p-0" style="height: 100vh;">
-    <div class="d-flex" style="height: 100%;">
+       
         
-        <!-- Sidebar -->
-        <div class="sidebar">
-            <%@ include file="sidebar.jsp" %>
-        </div>
+        <%@include file = "sidebar.jsp" %>>
 
         <!-- Main Content -->
         <div class="content">
@@ -125,9 +121,7 @@
             </div>
         </div>
         </div>
-    </div>
-</div>
-
+  
 
 <!-- Add Product Modal -->
 <div class="modal fade" id="addProductModal" tabindex="-1" role="dialog" aria-labelledby="addProductModalLabel" aria-hidden="true">
@@ -254,24 +248,6 @@
   </div>
 </div>
 
-
-
-
-
-<script>
-app.controller("InventoryController", function($scope, $http) {
-    console.log("InventoryController initialized");
-
-    $scope.products = [];
-
-    // Your existing functions here...
-
-    $scope.testClick = function() {
-        console.log("Angular click works!");
-    };
-});
-
-</script>
 <%@ include file="jslink.jsp" %>
 </body>
 </html>

@@ -21,6 +21,9 @@ public class ConstantVariables {
 	public static String lblAllCategories_MR = "सर्व श्रेण्या";
 
 	// Sidebar
+	public static String lblHome = "Home";
+	public static String lblHome_MR = "होम";
+
 	public static String lblDashboard = "Dashboard";
 	public static String lblDashboard_MR = "डॅशबोर्ड";
 

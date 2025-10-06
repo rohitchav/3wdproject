@@ -52,7 +52,7 @@ public class PurchaseServlet extends HttpServlet {
 		request.setAttribute("lblLogout", isEN ? ConstantVariables.lblLogout : ConstantVariables.lblLogout_MR);
 		request.setAttribute("lblSearchPlaceholder",
 				isEN ? ConstantVariables.lblSearchPlaceholder : ConstantVariables.lblSearchPlaceholder_MR);
-
+		request.setAttribute("lblHome", isEN ? ConstantVariables.lblHome : ConstantVariables.lblHome_MR);
 		request.setAttribute("lblDashboard", isEN ? ConstantVariables.lblDashboard : ConstantVariables.lblDashboard_MR);
 		request.setAttribute("lblInventory", isEN ? ConstantVariables.lblInventory : ConstantVariables.lblInventory_MR);
 		request.setAttribute("lblCustomers", isEN ? ConstantVariables.lblCustomers : ConstantVariables.lblCustomers_MR);

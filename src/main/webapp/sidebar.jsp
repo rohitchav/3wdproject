@@ -6,10 +6,15 @@
 				 <li>
 				    <a href="HomeServlet"> 
 				        <i class="fa-solid fa-home"></i> 
+				        <c:out value="${lblHome}"/>
+				    </a>
+				</li>
+				 <li>
+				    <a href="DashBoardSevlet"> 
+				        <i class="fa-solid fa-chart-pie"></i>
 				        <c:out value="${lblDashboard}"/>
 				    </a>
 				</li>
-				
 				 <li>
 				    <a href="InventoryServlet"> 
 				        <i class="fa-solid fa-boxes-stacked"></i> 
