@@ -1,6 +1,8 @@
 package com.pos.kiranastore.controller;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.sql.SQLException;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -9,70 +11,74 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.pos.kiranastore.util.ConstantVariables;
+import com.google.gson.Gson;
+import com.pos.kiranastore.bean.Customer;
+import com.pos.kiranastore.dao.CustomerDao;
 
-/**
- * Servlet implementation class CustomerServlet
- */
 @WebServlet("/CustomerServlet")
 public class CustomerServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
+	CustomerDao dao = new CustomerDao();
 
-	/**
-	 * @see HttpServlet#HttpServlet()
-	 */
 	public CustomerServlet() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
 
-	/**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
-	 *      response)
-	 */
+	// ✅ Handles page load
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		// TODO Auto-generated method stub
+
 		String lang = request.getParameter("lang");
 		if (lang != null) {
 			request.getSession().setAttribute("vlang", lang);
 		} else if (request.getSession().getAttribute("vlang") == null) {
-			lang = "EN"; // default language
+			lang = "EN";
 			request.getSession().setAttribute("vlang", lang);
 		} else {
 			lang = (String) request.getSession().getAttribute("vlang");
 		}
-		boolean isEN = "EN".equalsIgnoreCase(lang);
-
-		// ---------------------------
-		// Set labels
-		// ---------------------------
-		request.setAttribute("lblHead", isEN ? ConstantVariables.lblhead : ConstantVariables.lblhead_MR);
-		request.setAttribute("lblBilling", isEN ? ConstantVariables.lblBilling : ConstantVariables.lblBilling_MR);
-		request.setAttribute("lblCart", isEN ? ConstantVariables.lblCart : ConstantVariables.lblCart_MR);
-		request.setAttribute("lblLogout", isEN ? ConstantVariables.lblLogout : ConstantVariables.lblLogout_MR);
-		request.setAttribute("lblSearchPlaceholder",
-				isEN ? ConstantVariables.lblSearchPlaceholder : ConstantVariables.lblSearchPlaceholder_MR);
-
-		request.setAttribute("lblHome", isEN ? ConstantVariables.lblHome : ConstantVariables.lblHome_MR);
-		request.setAttribute("lblDashboard", isEN ? ConstantVariables.lblDashboard : ConstantVariables.lblDashboard_MR);
-		request.setAttribute("lblInventory", isEN ? ConstantVariables.lblInventory : ConstantVariables.lblInventory_MR);
-		request.setAttribute("lblCustomers", isEN ? ConstantVariables.lblCustomers : ConstantVariables.lblCustomers_MR);
-		request.setAttribute("lblDebts", isEN ? ConstantVariables.lblDebts : ConstantVariables.lblDebts_MR);
-		request.setAttribute("lblPurchases", isEN ? ConstantVariables.lblPurchases : ConstantVariables.lblPurchases_MR);
 
 		RequestDispatcher rd = request.getRequestDispatcher("/customer.jsp");
 		rd.forward(request, response);
 	}
 
-	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
-	 *      response)
-	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		doGet(request, response);
-	}
 
+		// Read JSON data from request body
+		StringBuilder sb = new StringBuilder();
+		BufferedReader reader = request.getReader();
+		String line;
+		while ((line = reader.readLine()) != null) {
+			sb.append(line);
+		}
+
+		String json = sb.toString();
+		System.out.println("Received JSON: " + json);
+
+		// Convert JSON → Java object
+		Gson gson = new Gson();
+		Customer customer = gson.fromJson(json, Customer.class);
+
+		if (customer == null) {
+			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+			response.getWriter().write("{\"status\":\"error\",\"message\":\"Invalid JSON\"}");
+			return;
+		}
+
+		Customer customerBean = new Customer();
+		customerBean.setName(customer.getName());
+		customerBean.setPhone(customer.getPhone());
+		customerBean.setAddress(customer.getAddress());
+
+		try {
+			dao.addCustomer(customerBean);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		response.setContentType("application/json");
+		response.getWriter().write("{\"status\":\"success\"}");
+	}
 }

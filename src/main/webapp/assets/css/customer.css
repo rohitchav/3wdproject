@@ -114,21 +114,20 @@ hr {
 
 /* Modal Background */
 .modal-overlay {
-  display: none; /* Hide by default */
   position: fixed;
   top: 0; left: 0;
   width: 100%;
   height: 100%;
   background: rgba(0,0,0,0.3);
+  display: flex; /* Set the display type once here */
   align-items: center;
   justify-content: center;
   z-index: 1000;
 }
 
-.modal-overlay.ng-show {
-  display: flex !important;
+.modal-overlay.ng-hide {
+  display: none !important;
 }
-
 
 /* Modal Box */
 .modal {
