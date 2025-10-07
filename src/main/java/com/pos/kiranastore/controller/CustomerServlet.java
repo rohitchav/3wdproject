@@ -3,6 +3,7 @@ package com.pos.kiranastore.controller;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.List;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -28,14 +29,20 @@ public class CustomerServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 
-		String lang = request.getParameter("lang");
-		if (lang != null) {
-			request.getSession().setAttribute("vlang", lang);
-		} else if (request.getSession().getAttribute("vlang") == null) {
-			lang = "EN";
-			request.getSession().setAttribute("vlang", lang);
-		} else {
-			lang = (String) request.getSession().getAttribute("vlang");
+		String action = request.getParameter("action");
+		if ("getAll".equals(action)) {
+			try {
+				List<Customer> customers = dao.getAllCustomers();
+				Gson gson = new Gson();
+				String json = gson.toJson(customers);
+
+				response.setContentType("application/json");
+				response.getWriter().write(json);
+			} catch (SQLException e) {
+				e.printStackTrace();
+				response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+			}
+			return;
 		}
 
 		RequestDispatcher rd = request.getRequestDispatcher("/customer.jsp");

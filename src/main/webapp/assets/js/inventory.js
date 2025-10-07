@@ -47,26 +47,12 @@ app.controller("InventoryController", function($scope, $http) {
     // Load products
     $scope.loadProducts = function() {
         $http.get("ProductController?action=list").then(function(response) {
+			
             $scope.products = response.data;
         });
     };
 
-/*    // Add product
-    $scope.addProduct = function() {
-        let fd = new FormData(document.getElementById("addProductForm"));
-        $http.post("ProductController?action=add", fd, {
-            headers: {'Content-Type': undefined}
-        }).then(function(response) {
-            if (response.data.success) {
-                $scope.loadProducts();
-                $("#addProductModal").modal("hide");
-				alert( "Product added successfully");
-            } else {
-                alert("Failed to add product");
-            }
-        });
-		this.reset();
-    };*/
+
 	
 	// Add product
 	$scope.addProduct = function() {

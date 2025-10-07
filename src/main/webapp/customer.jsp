@@ -47,10 +47,10 @@
             </div>
 
             <!-- Example Static Customer -->
-            <div class="customer-list">
+            <div class="customer-list" ng-repeat="c in customers">
                 <div class="customer-card">
-                    <h3 class="customer-name">Rohit Chavan</h3>
-                    <p class="phone-number">9326981878</p>
+                    <h3 class="customer-name">{{c.name}}</h3>
+                    <p class="phone-number">{{c.phone}}</p>
                     <hr>
                     <p class="balance-label">Outstanding Balance</p>
                     <p class="balance-amount">₹0.00</p>

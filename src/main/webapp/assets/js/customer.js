@@ -1,6 +1,15 @@
 angular.module('customerApp', [])
-  .controller('CustomerController', function($scope, $http) {  // ✅ inject $http
-    console.log("Hello");  // Make sure this logs
+  .controller('CustomerController', function($scope, $http) {
+	
+	$scope.loadCustomers = function() {
+	       $http.get('CustomerServlet?action=getAll')
+	           .then(function(response) {
+	               $scope.customers = response.data;
+	           }, function(error) {
+	               console.error('Error fetching customers', error);
+	           });
+	   }
+
 
     $scope.showModal = false;
     $scope.newCustomer = {};
@@ -23,9 +32,13 @@ angular.module('customerApp', [])
           console.log("Response:", response.data);
           alert("Customer added successfully!");
           $scope.closeModal();
+		  $scope.loadCustomers();
         }, function(error) {
           console.error("Error:", error);
           alert("Error while adding customer.");
         });
+		
+		
     };
+	$scope.loadCustomers();
   });
