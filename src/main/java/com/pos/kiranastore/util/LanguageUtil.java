@@ -60,5 +60,12 @@ public class LanguageUtil {
 				isEN ? ConstantVariables.lblProductList : ConstantVariables.lblProductList_MR);
 		request.setAttribute("lblNoProduct",
 				isEN ? ConstantVariables.lblNoProductsFound : ConstantVariables.lblNoProductsFound_MR);
+
+		request.setAttribute("lblCustomerTitle",
+				isEN ? ConstantVariables.lblCutomerPageTitle : ConstantVariables.lblCutomerPageTitle_MR);
+		request.setAttribute("lblAddCustomer",
+				isEN ? ConstantVariables.lblAddCustomer : ConstantVariables.lblAddCustomer_MR);
+		request.setAttribute("lblOutstanding",
+				isEN ? ConstantVariables.lblOutstanding : ConstantVariables.lblOutstanding_MR);
 	}
 }

@@ -100,4 +100,13 @@ public class ConstantVariables {
 	public static String lblNoProductsFound = "No products found";
 	public static String lblNoProductsFound_MR = "कोणतेही उत्पादने सापडली नाहीत";
 
+	public static String lblCutomerPageTitle = " Customer Management";
+	public static String lblCutomerPageTitle_MR = " ग्राहक व्यवस्थापन";
+
+	public static String lblAddCustomer = "Add New Customer";
+	public static String lblAddCustomer_MR = "नवीन ग्राहक जोडा";
+
+	public static String lblOutstanding = "Outstanding Balance";
+	public static String lblOutstanding_MR = "शिल्लक उधारी";
+
 }

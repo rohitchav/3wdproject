@@ -158,6 +158,106 @@ body {
   overflow-y: auto;
 }
 
+
+
+.container {
+    display: flex;
+    gap: 20px;
+    padding: 20px;
+    flex-wrap: wrap;
+}
+
+/* Products Section */
+.products-section {
+    flex: 3;
+    background: #fff;
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+/* Search Bar */
+.search-bar {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.search-bar input, .search-bar select {
+    padding: 8px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    flex: 1;
+}
+
+/* Products Cards */
+.products {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.product-card {
+    width: 180px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 10px;
+    text-align: center;
+    position: relative;
+    background: #f9f9f9;
+}
+
+.product-card img {
+    width: 100%;
+    height: 120px;
+    object-fit: cover;
+    border-radius: 5px;
+}
+
+.stock {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    background: #eee;
+    padding: 2px 5px;
+    font-size: 12px;
+    border-radius: 5px;
+}
+
+/* Add Button */
+.add-btn {
+    background-color: #0b5ed7;
+    color: #fff;
+    border: none;
+    padding: 8px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.add-btn:hover {
+    background-color: #084298;
+}
+
+/* Cart Section */
+.cart-section {
+    flex: 1;
+    background: #fff;
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.cart-section h3 {
+    margin-bottom: 10px;
+}
+
+.cart-item {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 8px;
+}
+
+
 /* Responsive */
 @media (max-width: 768px) {
   .sidebar {

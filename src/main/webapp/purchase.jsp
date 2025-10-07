@@ -29,21 +29,23 @@
 
     <%@ include file="sidebar.jsp" %>
 
-    <!-- Main Container -->
+    <!-- Main Purchase Section -->
     <div class="purchase-container">
-
-        <!-- Header with border and button -->
-        <div class="purchase-header-bordered">
+        <div class="header-purchase">
             <h2><i class="fas fa-file-invoice"></i> Purchase Management</h2>
-            <button class="add-button" ng-click="openModal()">+ Add Purchase</button>
+            <div class="search-add">
+                <input type="text" placeholder="Search purchases..." class="search-box"
+                       ng-model="searchQuery" ng-change="searchPurchases()">
+                <button class="add-button" ng-click="openModal()">+ Add Purchase</button>
+            </div>
         </div>
 
-        <!-- Cards -->
-        <div class="purchase-cards">
-            <div class="purchase-card" ng-repeat="p in purchases">
+        <!-- Purchase Cards -->
+        <div class="purchase-list" ng-repeat="p in purchases | filter:searchQuery">
+            <div class="purchase-card">
                 <h3 class="supplier-name">{{ p.supplier }}</h3>
-                <hr class="card-divider">
-                <p><strong>Amount:</strong> <span class="amount">₹{{ p.amount }}</span></p>
+                <hr>
+                <p><strong>Amount:</strong> ₹{{ p.amount }}</p>
                 <p><strong>Date:</strong> {{ p.date }}</p>
 
                 <div class="bill-image">
@@ -86,71 +88,7 @@
     </div>
 </div>
 
-<script>
-angular.module('purchaseApp', [])
-.directive('fileModel', ['$parse', function ($parse) {
-    return {
-        restrict: 'A',
-        link: function(scope, element, attrs) {
-            var model = $parse(attrs.fileModel);
-            var modelSetter = model.assign;
-            element.bind('change', function() {
-                scope.$apply(function() {
-                    modelSetter(scope, element[0].files[0]);
-                });
-            });
-        }
-    };
-}])
-.controller('PurchaseController', function($scope, $http) {
-    $scope.showModal = false;
-    $scope.purchases = [];
-
-    $scope.loadPurchases = function() {
-        $http.get("PurchaseServlet?action=list").then(function(response) {
-            $scope.purchases = response.data;
-        });
-    };
-
-    $scope.openModal = function() {
-        $scope.newPurchase = {};
-        $scope.showModal = true;
-    };
-
-    $scope.closeModal = function() {
-        $scope.showModal = false;
-    };
-
-    $scope.submitPurchase = function() {
-        var fd = new FormData();
-        fd.append("supplier", $scope.newPurchase.supplier);
-        fd.append("amount", $scope.newPurchase.amount);
-        fd.append("billFile", $scope.newPurchase.billFile);
-
-        $http.post("PurchaseServlet", fd, {
-            transformRequest: angular.identity,
-            headers: { 'Content-Type': undefined }
-        }).then(function(response) {
-            $scope.loadPurchases();
-            $scope.closeModal();
-        });
-    };
-
-    $scope.viewBill = function(path) {
-        window.open(path, '_blank');
-    };
-
-    $scope.deletePurchase = function(id) {
-        if(confirm("Are you sure you want to delete this purchase?")) {
-            $http.post("PurchaseServlet?action=delete", {id: id}).then(function(response) {
-                $scope.purchases = $scope.purchases.filter(p => p.id !== id);
-            });
-        }
-    };
-
-    $scope.loadPurchases();
-});
-</script>
+<script type="text/javascript" src="assets/js/purchase.js"></script>
 
 </body>
 </html>

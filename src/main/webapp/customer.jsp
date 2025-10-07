@@ -39,12 +39,12 @@
         <!-- Main Customer Section -->
         <div class="customer-container">
             <div class="header-customer">
-                <h2><span class="icon">👥</span> Customer Management</h2>
+                <h2><span class="icon">👥</span>${lblCustomerTitle}</h2>
                 <div class="search-add">
                    <input type="text" placeholder="Search customers..." class="search-box"
                      ng-model="searchQuery" ng-change="searchCustomers()">
 
-                    <button class="add-button" ng-click="openModal()">Add New Customer</button>
+                    <button class="add-button" ng-click="openModal()"> ${lblAddCustomer}</button>
                 </div>
             </div>
 
@@ -57,7 +57,7 @@
 			
 			  <div class="balance-row">
 			    <div>
-			      <p class="balance-label">Outstanding Balance</p>
+			      <p class="balance-label">${lblOutstanding}</p>
 			      <p class="balance-amount">₹0.00</p>
 			    </div>
 			
@@ -72,7 +72,7 @@
         <!-- ✅ Modal must be INSIDE Angular block -->
         <div class="modal-overlay" ng-show="showModal">
             <div class="modal">
-                <h3>Add New Customer</h3>
+                <h3>${lblAddCustomer}</h3>
                 <form ng-submit="addCustomer()">
                     <label>Customer Name</label>
                     <input type="text" ng-model="newCustomer.name" required>
