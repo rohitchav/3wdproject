@@ -67,15 +67,19 @@
 }
 
 /* Each Card */
+
 .customer-card {
+  position: relative; /* required for absolute positioning */
   background: #fff;
   border: 1px solid #e0e0e0;
   border-radius: 8px;
   padding: 16px;
-  width: 260px;              /* fixed width ensures horizontal layout */
+  width: 280px;
+  height: 140px; /* you can adjust height */
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);
   transition: box-shadow 0.3s, transform 0.2s;
 }
+
 
 .customer-card:hover {
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.30);
@@ -111,6 +115,45 @@ hr {
   font-size: 14px;
   margin-top: 4px;
 }
+
+/* Balance row container */
+.balance-row {
+  display: flex;
+  justify-content: space-between;  /* Push balance left, button right */
+  align-items: center;
+  margin-top: 8px;
+}
+
+/* Balance text */
+.balance-label {
+  font-size: 13px;
+  color: #666;
+  margin: 0;
+}
+
+.balance-amount {
+  font-weight: bold;
+  color: green;
+  font-size: 14px;
+  margin: 4px 0 0 0;
+}
+
+/* Delete button inline */
+.btn-delete {
+  background-color: #dc3545;
+  color: white;
+  border: none;
+  padding: 6px 10px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 13px;
+  transition: background-color 0.3s;
+}
+
+.btn-delete:hover {
+  background-color: #b02a37;
+}
+
 
 
 

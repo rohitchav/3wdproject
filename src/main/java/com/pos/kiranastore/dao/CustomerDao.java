@@ -28,7 +28,7 @@ public class CustomerDao {
 
 	public List<Customer> getAllCustomers() throws SQLException {
 		List<Customer> customers = new ArrayList<>();
-		String query = "SELECT * FROM customers";
+		String query = "SELECT * FROM customers where status = 'A'";
 		try (Connection conn = DBConnection.getConnection();
 				PreparedStatement ps = conn.prepareStatement(query);
 				ResultSet rs = ps.executeQuery()) {
@@ -43,6 +43,38 @@ public class CustomerDao {
 			}
 		}
 		return customers;
+	}
+
+	public boolean deleteCustomer(int id) throws SQLException {
+		String sql = "UPDATE customers SET status='B' WHERE id = ?";
+		try (Connection conn = DBConnection.getConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
+			ps.setInt(1, id);
+			int rows = ps.executeUpdate();
+			return rows > 0;
+		}
+	}
+
+	public List<Customer> searchCustomers(String query) {
+		List<Customer> list = new ArrayList<>();
+		try (Connection con = DBConnection.getConnection()) {
+			String sql = "SELECT * FROM customers WHERE (name LIKE ? OR phone LIKE ?) AND status='A'";
+			PreparedStatement ps = con.prepareStatement(sql);
+			ps.setString(1, "%" + query + "%");
+			ps.setString(2, "%" + query + "%");
+			ResultSet rs = ps.executeQuery();
+
+			while (rs.next()) {
+				Customer c = new Customer();
+				c.setId(rs.getInt("id"));
+				c.setName(rs.getString("name"));
+				c.setPhone(rs.getString("phone"));
+				c.setAddress(rs.getString("address"));
+				list.add(c);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return list;
 	}
 
 }

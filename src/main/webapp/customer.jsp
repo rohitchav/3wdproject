@@ -41,20 +41,31 @@
             <div class="header-customer">
                 <h2><span class="icon">👥</span> Customer Management</h2>
                 <div class="search-add">
-                    <input type="text" placeholder="Search customers..." class="search-box">
+                   <input type="text" placeholder="Search customers..." class="search-box"
+                     ng-model="searchQuery" ng-change="searchCustomers()">
+
                     <button class="add-button" ng-click="openModal()">Add New Customer</button>
                 </div>
             </div>
 
             <!-- Example Static Customer -->
             <div class="customer-list" ng-repeat="c in customers">
-                <div class="customer-card">
-                    <h3 class="customer-name">{{c.name}}</h3>
-                    <p class="phone-number">{{c.phone}}</p>
-                    <hr>
-                    <p class="balance-label">Outstanding Balance</p>
-                    <p class="balance-amount">₹0.00</p>
-                </div>
+			<div class="customer-card">
+			  <h3 class="customer-name">{{c.name}}</h3>
+			  <p class="phone-number">{{c.phone}}</p>
+			  <hr>
+			
+			  <div class="balance-row">
+			    <div>
+			      <p class="balance-label">Outstanding Balance</p>
+			      <p class="balance-amount">₹0.00</p>
+			    </div>
+			
+			    <button type="button" ng-click="deleteCustomer(c.id)" class="btn-delete">
+			      <i class="fas fa-trash-alt"></i>
+			    </button>
+			  </div>
+			</div>
             </div>
         </div>
 
