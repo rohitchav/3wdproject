@@ -1,0 +1,98 @@
+.container {
+    margin-left: 220px;
+    padding: 20px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Top Filter Buttons */
+.dashboard-filters {
+    display: flex;
+    justify-content: flex-end;
+    gap: 15px;
+    margin-top: 75px;
+    margin-bottom: 25px;
+}
+
+.dashboard-filters button {
+    border: 1px solid #ccc;
+    background: #f8f9fa;
+    color: #333;
+    padding: 8px 16px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 500;
+    transition: 0.2s;
+}
+
+.dashboard-filters button:hover {
+    background: #e3f2fd;
+    border-color: #1976d2;
+    color: #1976d2;
+}
+
+.dashboard-filters button.active {
+    background: #1976d2;
+    color: white;
+    border-color: #1976d2;
+}
+
+.dashboard-cards {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.card {
+    flex: 1 1 220px;
+    background: #fff;
+    border-radius: 10px;
+    padding: 25px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    text-align: center;
+    transition: 0.3s;
+}
+
+.card h3 {
+    margin-top: 0;
+    margin-bottom: 15px;
+    font-size: 1.2rem;
+    color: #333;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+.card p {
+    font-size: 1.8rem;
+    font-weight: 600;
+    margin: 0;
+}
+
+.card:hover {
+    box-shadow: 0 6px 15px rgba(0,0,0,0.15);
+}
+
+.total-sales { background-color: #e3f2fd; color: #1976d2; }
+.transactions { background-color: #f1f8e9; color: #388e3c; }
+.items-sold { background-color: #fff3e0; color: #f57c00; }
+.avg-bill { background-color: #fce4ec; color: #d81b60; }
+
+@media (max-width: 768px) {
+    .dashboard-cards {
+        flex-direction: column;
+    }
+}
+
+.dashboard-main-container {
+    display: flex;
+    background-color: #f9f9f9;
+    min-height: 100vh;
+}
+
+.dashboard-wrapper {
+    flex: 1;
+    padding: 30px;
+    margin-left: 220px; /* space for sidebar */
+}
+
