@@ -129,4 +129,6 @@ public class ConstantVariables {
 	
 	public static String lblAddNewPurchase = "Add New Purchase";
 	public static String lblAddNewPurchase_MR = "नवीन खरेदी जोडा";
+	
+	
 }
