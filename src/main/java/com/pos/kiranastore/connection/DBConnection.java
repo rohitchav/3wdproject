@@ -14,7 +14,7 @@ public class DBConnection {
 		try {
 			if (connection == null || connection.isClosed()) {
 				Class.forName("com.mysql.cj.jdbc.Driver");
-				connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/kiranaPOS", "root", "12345678");
+				connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/kiranaPOS", "root", "pass@123");
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
