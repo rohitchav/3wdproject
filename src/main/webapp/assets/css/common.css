@@ -147,27 +147,36 @@ body {
 /* =============================
    MAIN CONTENT
    ============================= */
+/* Main Content Wrapper */
 .content {
-  position: absolute;
-  top: 70px;
-  left: 220px;
-  right: 0;
-  bottom: 0;
-  padding: 20px;
-  background: #f5f6fa;
-  overflow-y: auto;
+    position: absolute;
+    top: 90px;
+    left: 220px;
+    right: 0;
+    bottom: 0;
+    background: #f5f6fa;
+    overflow-y: auto;
+    padding: 0; /* remove internal top padding */
 }
 
-
-
+/* Container inside main content */
 .container {
     display: flex;
     gap: 20px;
     padding: 20px;
     flex-wrap: wrap;
+    width: 100%;
 }
 
-/* Products Section */
+
+.products-section h2 {
+    margin-bottom: 20px;
+}
+.content {
+    padding-top: 0;
+}
+
+
 .products-section {
     flex: 3;
     background: #fff;

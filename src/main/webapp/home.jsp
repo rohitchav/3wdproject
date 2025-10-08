@@ -19,7 +19,9 @@
    
 	<%@ include file="navbar.jsp" %>
 	<%@ include file="sidebar.jsp" %>
-	<%@ include file="maincontent.jsp" %>
+	<div class="content">
+        <%@ include file="maincontent.jsp" %>
+    </div>
 	
 </body>
 </html>
