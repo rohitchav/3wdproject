@@ -1,0 +1,124 @@
+/* Container Wrapper */
+.debts-wrapper {
+    margin-left: 220px; /* space for sidebar */
+    margin-top: 90px;
+    padding: 20px;
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+/* Header + Buttons Row */
+.debts-header {
+    display: flex;
+    justify-content: space-between; /* Heading left, buttons right */
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.debts-header h2 {
+    font-size: 20px;
+    color: #1a1a1a;
+}
+
+/* Dashboard-style Buttons */
+.dashboard-filters {
+    display: flex;
+    gap: 15px;
+}
+
+.dashboard-filters button {
+    border: 1px solid #ccc;
+    background: #f8f9fa;
+    color: #333;
+    padding: 8px 16px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 500;
+    transition: 0.2s;
+}
+
+.dashboard-filters button:hover {
+    background: #e3f2fd;
+    border-color: #1976d2;
+    color: #1976d2;
+}
+
+.dashboard-filters button.active {
+    background: #1976d2;
+    color: white;
+    border-color: #1976d2;
+}
+
+/* Debts Cards */
+.debts-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.debts-card {
+    background: #fefefe;
+    border: 1px solid #e0e0e0;
+    border-radius: 10px;
+    padding: 16px;
+    width: 280px;
+    height: 140px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    transition: box-shadow 0.3s;
+}
+
+.debts-card:hover {
+    box-shadow: 0 6px 12px rgba(0,0,0,0.30);
+}
+
+.customer-name {
+    font-size: 16px;
+    font-weight: 600;
+    color: #0056d2;
+    margin: 0;
+}
+
+.phone-number {
+    font-size: 14px;
+    color: #666;
+    margin: 4px 0 8px 0;
+}
+
+hr {
+    border: none;
+    border-top: 1px solid #eee;
+    margin: 10px 0;
+}
+
+.balance-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.balance-label {
+    font-size: 13px;
+    color: #666;
+    margin: 0;
+}
+
+.balance-amount {
+    font-weight: bold;
+    font-size: 14px;
+    color: green;
+    margin: 4px 0 0 0;
+}
+
+.btn-delete {
+    background-color: #dc3545;
+    color: white;
+    border: none;
+    padding: 6px 10px;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.btn-delete:hover {
+    background-color: #b02a37;
+}

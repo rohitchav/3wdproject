@@ -13,6 +13,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Purchase | Kirana Store</title>
+    <link rel="icon" href="assets/images/purchase.png" type="image/png">
     <link rel="stylesheet" href="assets/css/common.css">
     <link rel="stylesheet" href="assets/css/purchase.css">
 
