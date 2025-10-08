@@ -117,5 +117,17 @@ public class LanguageUtil {
 				isEN ? ConstantVariables.lblTotalExpenses : ConstantVariables.lblTotalExpenses_MR);
 		request.setAttribute("lblNetLoss",
 				isEN ? ConstantVariables.lblNetLoss : ConstantVariables.lblNetLoss_MR);
+		
+		// Billing labels
+		request.setAttribute("lblAllCategory",
+				isEN ? ConstantVariables.lblAllCategory : ConstantVariables.lblAllCategory_MR);
+		request.setAttribute("lblAdd",
+				isEN ? ConstantVariables.lblAdd : ConstantVariables.lblAdd_MR);
+		request.setAttribute("lblGenerateBill",
+				isEN ? ConstantVariables.lblGenerateBill : ConstantVariables.lblGenerateBill_MR);
+		request.setAttribute("lblSubTotal",
+				isEN ? ConstantVariables.lblSubTotal : ConstantVariables.lblSubTotal_MR);
+		request.setAttribute("lblDiscount",
+				isEN ? ConstantVariables.lblDiscount : ConstantVariables.lblDiscount_MR);
 	}
 }

@@ -64,6 +64,12 @@ public class ConstantVariables {
 
 	public static String lblTotal = "Total";
 	public static String lblTotal_MR = "एकूण";
+	
+	public static String lblSubTotal = "Subtotal";
+	public static String lblSubTotal_MR = "उपएकूण";
+	
+	public static String lblDiscount = "Discount";
+	public static String lblDiscount_MR = "सवलत";
 
 	// Add more labels for home page or product categories as needed
 	public static String lblCategoryFruits = "Fruits";
@@ -179,4 +185,17 @@ public class ConstantVariables {
 	
 	public static String lblNetLoss = "Net Loss";
 	public static String lblNetLoss_MR = "निव्वळ तोटा";
+	
+	
+	// Billing Page
+	public static String lblAllCategory = "All Categories";
+	public static String lblAllCategory_MR = "सर्व श्रेणी";
+	
+	public static String lblAdd = "Add";
+	public static String lblAdd_MR = "जोडा";
+	
+	public static String lblGenerateBill = "Generate Bill";
+	public static String lblGenerateBill_MR = "बिल तयार करा"; 
+	
+	 
 }

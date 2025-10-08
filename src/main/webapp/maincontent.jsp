@@ -16,7 +16,7 @@
         <div class="search-bar">
             <input type="text" id="searchInput" placeholder="Search for products...">
             <select id="categorySelect">
-                <option value="all">All Categories</option>
+                <option value="all">${lblAllCategory}</option>
                 <option value="Dairy">Dairy</option>
                 <option value="Household">Household</option>
             </select>
@@ -32,14 +32,14 @@
 	        <h3>{{p.name}}</h3>
 	        <p class="category">{{p.category}}</p>
 	        <p class="price">₹{{p.sellingPrice}}</p>
-	        <button class="add-btn" ng-click="addToCart(p)">Add</button>
+	        <button class="add-btn" ng-click="addToCart(p)">${lblAdd}</button>
 	    </div>
 	</div>
 
     </div>
 
  <div class="cart-container">
-    <h2><i class="fa fa-shopping-cart"></i> Current Bill</h2>
+    <h2><i class="fa fa-shopping-cart"></i>${lblCurrentBill}</h2>
     <hr>
 
     <!-- Dynamic Cart Items -->
@@ -59,17 +59,17 @@
 
     <!-- Bill Summary -->
     <div class="bill-summary" ng-if="cart.length > 0">
-        <p>Subtotal: <span>₹{{getTotal() | number:2}}</span></p>
-        <p>Discount: <span>₹{{discount | number:2}}</span></p>
+        <p> ${lblSubTotal} : <span>₹{{getTotal() | number:2}}</span></p>
+        <p> ${lblDiscount} :<span>₹{{discount | number:2}}</span></p>
         <hr>
-        <p class="total">Total: <span>₹{{getTotal() - discount | number:2}}</span></p>
+        <p class="total">${lblTotal} : <span>₹{{getTotal() - discount | number:2}}</span></p>
     </div>
 
     <p ng-if="cart.length == 0">Your cart is empty.</p>
 
     <div class="buttons" ng-if="cart.length > 0">
-         <button class="generate-btn" ng-click="generateBill()">Generate Bill</button>
-        <button class="clear-btn" ng-click="clearCart()">Clear Cart</button>
+         <button class="generate-btn" ng-click="generateBill()"> ${lblGenerateBill}</button>
+        <button class="clear-btn" ng-click="clearCart()"> ${lblClearCart}</button>
     </div>
 
   <!-- Invoice Modal -->
