@@ -1,53 +1,69 @@
-let cart = [];
+var app = angular.module("BillingApp", []);
 
-// Add product to cart
-function addToCart(name, price) {
-    const itemIndex = cart.findIndex(item => item.name === name);
-    if (itemIndex > -1) {
-        cart[itemIndex].quantity += 1;
-    } else {
-        cart.push({ name, price, quantity: 1 });
-    }
-    renderCart();
-}
+app.controller("BillingController", function($scope, $http) {
 
-// Render current bill
-function renderCart() {
-    const cartDiv = document.getElementById("cartItems");
-    if (cart.length === 0) {
-        cartDiv.innerHTML = "Your cart is empty.";
-        return;
-    }
-    let html = "";
-    let total = 0;
-    cart.forEach(item => {
-        html += `<div class="cart-item">
-                    <span>${item.name} x${item.quantity}</span>
-                    <span>₹${item.price * item.quantity}</span>
-                 </div>`;
-        total += item.price * item.quantity;
-    });
-    html += `<hr><div class="cart-item"><strong>Total</strong><strong>₹${total}</strong></div>`;
-    cartDiv.innerHTML = html;
-}
+    $scope.products = [];
+    $scope.cart = [];
 
-// Search and filter products
-document.getElementById("searchInput").addEventListener("input", filterProducts);
-document.getElementById("categorySelect").addEventListener("change", filterProducts);
+    console.log("BillingController initialized");
 
-function filterProducts() {
-    const searchText = document.getElementById("searchInput").value.toLowerCase();
-    const category = document.getElementById("categorySelect").value;
+    // Load product list
+    $scope.loadProducts = function() {
+        $http.get("ProductController?action=list")
+            .then(function(response) {
+                $scope.products = response.data;
+                console.log($scope.products);
+            })
+            .catch(function(error) {
+                console.error("Error loading products:", error);
+            });
+    };
 
-    const products = document.querySelectorAll(".product-card");
-    products.forEach(product => {
-        const name = product.dataset.name.toLowerCase();
-        const prodCategory = product.dataset.category;
-        if ((name.includes(searchText) || searchText === "") &&
-            (category === "all" || category === prodCategory)) {
-            product.style.display = "block";
+    // ✅ Add product to cart
+    $scope.addToCart = function(p) {
+        // Check if product already in cart
+        let existing = $scope.cart.find(item => item.name === p.name);
+        if (existing) {
+            existing.qty += 1;
         } else {
-            product.style.display = "none";
+            $scope.cart.push({
+                name: p.name,
+                price: p.sellingPrice,
+                image: p.imagePath,
+                qty: 1
+            });
         }
-    });
-}
+    };
+
+
+    $scope.removeFromCart = function(item) {
+        let index = $scope.cart.indexOf(item);
+        if (index !== -1) {
+            $scope.cart.splice(index, 1);
+        }
+    };
+
+    // ✅ Increase quantity
+    $scope.incrementQty = function(item) {
+        item.qty += 1;
+    };
+
+    // ✅ Decrease quantity
+    $scope.decrementQty = function(item) {
+        if (item.qty > 1) {
+            item.qty -= 1;
+        }
+    };
+
+    // ✅ Calculate total
+    $scope.getTotal = function() {
+        return $scope.cart.reduce((total, item) => total + (item.price * item.qty), 0);
+    };
+
+    // ✅ Clear cart
+    $scope.clearCart = function() {
+        $scope.cart = [];
+    };
+
+    $scope.loadProducts();
+});

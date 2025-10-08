@@ -14,6 +14,7 @@
     <link rel="stylesheet" href="assets/css/style.css">
      <link rel="stylesheet" href="assets/css/common.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+      <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.3/angular.min.js"></script>
 </head>
 <body>
    
