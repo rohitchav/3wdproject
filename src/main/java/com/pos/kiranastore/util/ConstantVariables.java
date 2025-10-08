@@ -126,4 +126,7 @@ public class ConstantVariables {
 	
 	public static String lblDeleteBill = "Delete";
 	public static String lblDeleteBill_MR = "हटवा";
+	
+	public static String lblAddNewPurchase = "Add New Purchase";
+	public static String lblAddNewPurchase_MR = "नवीन खरेदी जोडा";
 }

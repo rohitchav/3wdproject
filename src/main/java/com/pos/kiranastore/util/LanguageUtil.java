@@ -82,5 +82,7 @@ public class LanguageUtil {
 				isEN ? ConstantVariables.lblViewBill : ConstantVariables.lblViewBill_MR);
 		request.setAttribute("lblDeleteBill",
 				isEN ? ConstantVariables.lblDeleteBill : ConstantVariables.lblDeleteBill_MR);
+		request.setAttribute("lblAddNewPurchase",
+				isEN ? ConstantVariables.lblAddNewPurchase : ConstantVariables.lblAddNewPurchase_MR);
 	}
 }

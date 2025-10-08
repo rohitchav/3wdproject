@@ -68,7 +68,7 @@
     <!-- Add Purchase Modal -->
     <div class="modal-overlay" ng-show="showModal">
         <div class="modal">
-            <h3>Add New Purchase</h3>
+            <h3>${lblAddNewPurchase}</h3>
             <form ng-submit="submitPurchase()" enctype="multipart/form-data">
                 <label>Supplier Name</label>
                 <input type="text" ng-model="newPurchase.supplier" required>
