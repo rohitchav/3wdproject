@@ -36,7 +36,7 @@
             <div class="search-add">
                 <input type="text" placeholder="Search purchases..." class="search-box"
                        ng-model="searchQuery" ng-change="searchPurchases()">
-                <button class="add-button" ng-click="openModal()">+ ${lblAddPurchase}</button>
+                <button class="add-button" ng-click="openModal()"> ${lblAddPurchase}</button>
             </div>
         </div>
 

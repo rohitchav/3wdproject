@@ -109,6 +109,8 @@ public class ConstantVariables {
 	public static String lblOutstanding = "Outstanding Balance";
 	public static String lblOutstanding_MR = "शिल्लक उधारी";
 	
+	
+	// Purchase Page
 	public static String lblPurchaseTitle = "Purchase Management";
 	public static String lblPurchaseTitle_MR = "खरेदी व्यवस्थापन";
 
@@ -131,4 +133,50 @@ public class ConstantVariables {
 	public static String lblAddNewPurchase_MR = "नवीन खरेदी जोडा";
 	
 	
+	// Dashboard Page
+	
+	public static String lblToday = "Today";
+	public static String lblToday_MR = "आज";
+	
+	public static String lblLast7Day = "Last 7 Days";
+	public static String lblLast7Day_MR = "शेवटचे ७ दिवस";
+	
+	public static String lblThisMonth = "This Month";
+	public static String lblThisMonth_MR = "या महिन्यात";	
+	
+	public static String lblAllTime = "All Time";
+	public static String lblAllTime_MR = "सर्व वेळ";
+	
+	public static String lblTranscationSummary = "Transaction Summary";
+	public static String lblTranscationSummary_MR = "व्यवहार सारांश";
+	
+	public static String lblTotalSale = "Total Sales";
+	public static String lblTotalSale_MR = "एकूण विक्री";
+	
+	public static String lblTransaction = "Transactions";
+	public static String lblTransaction_MR = "व्यवहार";
+	
+	public static String lblItemSold = "Items Sold";
+	public static String lblItemSold_MR = "वस्तू विकल्या";
+	
+	public static String lblAvgBill = "Avg. Bill Value";
+	public static String lblAvgBill_MR = "सरासरी बिल मूल्य";
+	
+	public static String lblProfitLoss = "Profit & Loss Summary";
+	public static String lblProfitLoss_MR = "नफा आणि तोटा सारांश";
+	
+	public static String lbltotalRevenue = "Total Revenue";
+	public static String lbltotalRevenue_MR = "एकूण महसूल";
+	
+	public static String lblCostGooodSold = "Cost of Goods Sold";
+	public static String lblCostGooodSold_MR = "विक्री केलेल्या वस्तूंची किंमत";
+	
+	public static String lblGrossProfit = "Gross Profit";
+	public static String lblGrossProfit_MR = "एकूण नफा";
+	
+	public static String lblTotalExpenses = "Total Expenses (Purchases)";
+	public static String lblTotalExpenses_MR = "एकूण खर्च (खरेदी)";
+	
+	public static String lblNetLoss = "Net Loss";
+	public static String lblNetLoss_MR = "निव्वळ तोटा";
 }

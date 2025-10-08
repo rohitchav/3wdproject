@@ -84,5 +84,38 @@ public class LanguageUtil {
 				isEN ? ConstantVariables.lblDeleteBill : ConstantVariables.lblDeleteBill_MR);
 		request.setAttribute("lblAddNewPurchase",
 				isEN ? ConstantVariables.lblAddNewPurchase : ConstantVariables.lblAddNewPurchase_MR);
+		
+		
+		//Dashboard Labels
+		request.setAttribute("lblToday",
+				isEN ? ConstantVariables.lblToday : ConstantVariables.lblToday_MR);
+		request.setAttribute("lblLast7Day",
+				isEN ? ConstantVariables.lblLast7Day : ConstantVariables.lblLast7Day_MR);
+		request.setAttribute("lblThisMonth",
+				isEN ? ConstantVariables.lblThisMonth : ConstantVariables.lblThisMonth_MR);
+		request.setAttribute("lblAllTime",
+				isEN ? ConstantVariables.lblAllTime : ConstantVariables.lblAllTime_MR);
+		request.setAttribute("lblTranscationSummary",
+				isEN ? ConstantVariables.lblTranscationSummary : ConstantVariables.lblTranscationSummary_MR);
+		request.setAttribute("lblTotalSale",
+				isEN ? ConstantVariables.lblTotalSale : ConstantVariables.lblTotalSale_MR);
+		request.setAttribute("lblTransaction",
+				isEN ? ConstantVariables.lblTransaction : ConstantVariables.lblTransaction_MR);
+		request.setAttribute("lblItemSold",
+				isEN ? ConstantVariables.lblItemSold : ConstantVariables.lblItemSold_MR);
+		request.setAttribute("lblAvgBill",
+				isEN ? ConstantVariables.lblAvgBill : ConstantVariables.lblAvgBill_MR);
+		request.setAttribute("lblProfitLoss",
+				isEN ? ConstantVariables.lblProfitLoss : ConstantVariables.lblProfitLoss_MR);
+		request.setAttribute("lbltotalRevenue",
+				isEN ? ConstantVariables.lbltotalRevenue : ConstantVariables.lbltotalRevenue_MR);
+		request.setAttribute("lblCostGooodSold",
+				isEN ? ConstantVariables.lblCostGooodSold : ConstantVariables.lblCostGooodSold_MR);
+		request.setAttribute("lblGrossProfit",
+				isEN ? ConstantVariables.lblGrossProfit : ConstantVariables.lblGrossProfit_MR);
+		request.setAttribute("lblTotalExpenses",
+				isEN ? ConstantVariables.lblTotalExpenses : ConstantVariables.lblTotalExpenses_MR);
+		request.setAttribute("lblNetLoss",
+				isEN ? ConstantVariables.lblNetLoss : ConstantVariables.lblNetLoss_MR);
 	}
 }
