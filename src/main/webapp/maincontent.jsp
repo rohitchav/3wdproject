@@ -1,8 +1,6 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
-
-
 <div class="container" ng-app="BillingApp" ng-controller="BillingController">
     
     <!-- Products Section -->
@@ -55,7 +53,7 @@
     <!-- ✅ Bill Summary -->
     <div class="bill-summary" ng-if="cart.length > 0">
         <p>Subtotal: <span>₹{{getTotal()}}</span></p>
-        <p>Discount: <input type="number" style="width:40px"></p>
+        <p>Discount: <span>₹0</span></p>
         <hr>
         <p class="total">Total: <span>₹{{getTotal()}}</span></p>
     </div>
