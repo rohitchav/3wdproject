@@ -108,5 +108,22 @@ public class ConstantVariables {
 
 	public static String lblOutstanding = "Outstanding Balance";
 	public static String lblOutstanding_MR = "शिल्लक उधारी";
+	
+	public static String lblPurchaseTitle = "Purchase Management";
+	public static String lblPurchaseTitle_MR = "खरेदी व्यवस्थापन";
 
+	public static String lblAddPurchase = "Add Purchase";
+	public static String lblAddPurchase_MR = "खरेदी जोडा";
+	
+	public static String lblPurchaseAmount = "Amount";
+	public static String lblPurchaseAmount_MR = "रक्कम";
+	
+	public static String lblPurchaseDate = "Date";
+	public static String lblPurchaseDate_MR = "दिनांक";
+	
+	public static String lblViewBill = "View Bill";
+	public static String lblViewBill_MR = "बिल पहा";
+	
+	public static String lblDeleteBill = "Delete";
+	public static String lblDeleteBill_MR = "हटवा";
 }

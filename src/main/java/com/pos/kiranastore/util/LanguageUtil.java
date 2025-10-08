@@ -67,5 +67,20 @@ public class LanguageUtil {
 				isEN ? ConstantVariables.lblAddCustomer : ConstantVariables.lblAddCustomer_MR);
 		request.setAttribute("lblOutstanding",
 				isEN ? ConstantVariables.lblOutstanding : ConstantVariables.lblOutstanding_MR);
+		
+		
+		// Purchase Labels
+		request.setAttribute("lblPurchaseTitle",
+				isEN ? ConstantVariables.lblPurchaseTitle : ConstantVariables.lblPurchaseTitle_MR);	
+		request.setAttribute("lblAddPurchase",
+				isEN ? ConstantVariables.lblAddPurchase : ConstantVariables.lblAddPurchase_MR);
+		request.setAttribute("lblPurchaseAmount",
+				isEN ? ConstantVariables.lblPurchaseAmount : ConstantVariables.lblPurchaseAmount_MR);
+		request.setAttribute("lblPurchaseDate",
+				isEN ? ConstantVariables.lblPurchaseDate : ConstantVariables.lblPurchaseDate_MR);
+		request.setAttribute("lblViewBill",
+				isEN ? ConstantVariables.lblViewBill : ConstantVariables.lblViewBill_MR);
+		request.setAttribute("lblDeleteBill",
+				isEN ? ConstantVariables.lblDeleteBill : ConstantVariables.lblDeleteBill_MR);
 	}
 }

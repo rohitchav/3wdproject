@@ -32,11 +32,11 @@
     <!-- Main Purchase Section -->
     <div class="purchase-container">
         <div class="header-purchase">
-            <h2><i class="fas fa-file-invoice"></i> Purchase Management</h2>
+            <h2><i class="fas fa-file-invoice"></i> ${lblPurchaseTitle}</h2>
             <div class="search-add">
                 <input type="text" placeholder="Search purchases..." class="search-box"
                        ng-model="searchQuery" ng-change="searchPurchases()">
-                <button class="add-button" ng-click="openModal()">+ Add Purchase</button>
+                <button class="add-button" ng-click="openModal()">+ ${lblAddPurchase}</button>
             </div>
         </div>
 
@@ -45,8 +45,8 @@
             <div class="purchase-card">
                 <h3 class="supplier-name">{{ p.supplier }}</h3>
                 <hr>
-                <p><strong>Amount:</strong> ₹{{ p.amount }}</p>
-                <p><strong>Date:</strong> {{ p.date }}</p>
+                <p><strong>${lblPurchaseAmount} :</strong> ₹{{ p.amount }}</p>
+                <p><strong>${lblPurchaseDate} :</strong> {{ p.date }}</p>
 
                 <div class="bill-image">
                     <img ng-if="p.billPath" ng-src="{{p.billPath}}" alt="Bill Image">
@@ -54,8 +54,8 @@
                 </div>
 
                 <div class="card-buttons">
-                    <button class="view-btn" ng-if="p.billPath" ng-click="viewBill(p.billPath)">View Bill</button>
-                    <button class="delete-btn" ng-click="deletePurchase(p.id)">Delete</button>
+                    <button class="view-btn" ng-if="p.billPath" ng-click="viewBill(p.billPath)">${lblViewBill}</button>
+                    <button class="delete-btn" ng-click="deletePurchase(p.id)">${lblDeleteBill}</button>
                 </div>
             </div>
         </div>
