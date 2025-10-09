@@ -129,5 +129,11 @@ public class LanguageUtil {
 				isEN ? ConstantVariables.lblSubTotal : ConstantVariables.lblSubTotal_MR);
 		request.setAttribute("lblDiscount",
 				isEN ? ConstantVariables.lblDiscount : ConstantVariables.lblDiscount_MR);
+		
+		// Customers Debts
+		request.setAttribute("lblCustomerDebts",
+				isEN ? ConstantVariables.lblCustomerDebts : ConstantVariables.lblCustomerDebts_MR);
+		request.setAttribute("lblOutstandingAmount",
+				isEN ? ConstantVariables.lblOutstandingAmount : ConstantVariables.lblOutstandingAmount_MR);
 	}
 }

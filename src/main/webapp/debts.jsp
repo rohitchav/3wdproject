@@ -34,7 +34,7 @@
 
         <!-- Heading -->
         <div class="debts-header">
-            <h2><i class="fas fa-money-bill-wave"></i> Customer Debts</h2>
+            <h2><i class="fas fa-money-bill-wave"></i> ${lblCustomerDebts}</h2>
         </div>
 
         <!-- Customer Cards -->
@@ -45,7 +45,7 @@
                 <hr>
                 <div class="balance-row">
                     <div>
-                        <p class="balance-label">Outstanding Amount</p>
+                        <p class="balance-label">${lblOutstandingAmount}</p>
                         <p class="balance-amount">₹{{c.udharAmount}}</p>
                     </div>
                     <button type="button" class="btn-delete" ng-click="deleteCustomer(c.id)">

@@ -197,5 +197,11 @@ public class ConstantVariables {
 	public static String lblGenerateBill = "Generate Bill";
 	public static String lblGenerateBill_MR = "बिल तयार करा"; 
 	
-	 
+	
+	// Customer Debts
+	public static String lblCustomerDebts = "Customer debts";
+	public static String lblCustomerDebts_MR = "ग्राहक उधारी"; 
+	
+	public static String lblOutstandingAmount = "Outstanding Amount";
+	public static String lblOutstandingAmount_MR = "थकबाकी रक्कम"; 
 }
