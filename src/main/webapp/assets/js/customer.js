@@ -24,6 +24,7 @@ angular.module('customerApp', [])
 	       $http.get('CustomerServlet?action=getAll')
 	           .then(function(response) {
 	               $scope.customers = response.data;
+				   console.log($scope.customers);
 	           }, function(error) {
 	               console.error('Error fetching customers', error);
 	           });

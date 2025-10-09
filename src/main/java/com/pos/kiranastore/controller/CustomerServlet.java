@@ -2,6 +2,7 @@ package com.pos.kiranastore.controller;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
 
@@ -14,6 +15,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.google.gson.Gson;
 import com.pos.kiranastore.bean.Customer;
+import com.pos.kiranastore.connection.DBConnection;
 import com.pos.kiranastore.dao.CustomerDao;
 
 @WebServlet("/CustomerServlet")
@@ -35,7 +37,6 @@ public class CustomerServlet extends HttpServlet {
 			if ("getAll".equals(action)) {
 				List<Customer> customers = dao.getAllCustomers();
 				String json = new Gson().toJson(customers);
-
 				response.setContentType("application/json");
 				response.getWriter().write(json);
 				return;
@@ -116,6 +117,23 @@ public class CustomerServlet extends HttpServlet {
 				response.getWriter().write("{\"status\":\"error\"}");
 			}
 			return;
+		} else if ("updateOutstanding".equals(action)) {
+			int customerId = Integer.parseInt(request.getParameter("customerId"));
+			double amount = Double.parseDouble(request.getParameter("amount"));
+
+			try (Connection conn = DBConnection.getConnection()) {
+
+				boolean updated = dao.updateOutstanding(customerId, amount);
+
+				if (updated) {
+					response.getWriter().write("{\"status\":\"success\"}");
+				} else {
+					response.getWriter().write("{\"status\":\"failed\"}");
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+				response.getWriter().write("{\"status\":\"error\"}");
+			}
 		}
 
 	}

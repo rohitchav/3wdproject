@@ -42,6 +42,7 @@ app.controller("BillingController", function($scope, $http) {
     $scope.discount = 5;
     $scope.upiData = "";
 	$scope.newCustomer = {};
+	$scope.selectedCustomer = {};
 
     const VPA = "9326981878@amazonpay";
     const PAYEE_NAME = "Yashwanti Kirana Store";
@@ -76,7 +77,7 @@ app.controller("BillingController", function($scope, $http) {
 	        grandTotal: $scope.getTotal() - $scope.discount,
 	        paymentMethod: paymentMethod,
 	        items: $scope.cart.map(item => ({
-	            productId: item.id,   // make sure your product has 'id'
+	            productId: item.id,   
 	            productName: item.name,
 	            qty: item.qty,
 	            price: item.price,
@@ -86,7 +87,6 @@ app.controller("BillingController", function($scope, $http) {
 
 	    $http.post("BillingController?action=save", billData)
 	        .then(function(response) {
-	            // Show success alert
 	            alert("Bill Saved");
 	            
 	        })
@@ -94,11 +94,44 @@ app.controller("BillingController", function($scope, $http) {
 	            console.error("Error saving bill:", error);
 	        });
 	};
+	
+	$scope.confirmCredit = function() {
+	  
+	    
+	    const grandTotal = $scope.getTotal() - $scope.discount;
+		console.log("Selected Customer ID:", $scope.selectedCustomer.id );
+	    
+	    $http({
+	        method: 'POST',
+	        url: 'CustomerServlet?action=updateOutstanding',
+	        params: {
+	            customerId: $scope.selectedCustomer.id ,
+	            amount: grandTotal
+	        }
+	    }).then(function(response) {
+	        if (response.data.status === "success") {
+	            let selectedCustomer = $scope.customers.find(c => c.id === $scope.selectedCustomer.id);
+	            alert("Credit assigned successfully to " + (selectedCustomer ? selectedCustomer.name : 'customer'));
+	            $scope.showCustomerCredit = false;
+	            $scope.showInvoice = false;
+	            $scope.cart = [];
+	            $scope.selectedCustomer.id = null; 
+	        } else {
+	            alert("Failed to update outstanding balance.");
+	        }
+	    }).catch(function(error) {
+	        console.error("Error:", error);
+	        alert("Something went wrong!");
+	    });
+	};
+
+     
 
 	$scope.loadCustomers = function() {
 	       $http.get('CustomerServlet?action=getAll')
 	           .then(function(response) {
 	               $scope.customers = response.data;
+				   console.log($scope.customers)
 	           }, function(error) {
 	               console.error('Error fetching customers', error);
 	           });
@@ -121,7 +154,7 @@ app.controller("BillingController", function($scope, $http) {
 	        existing.qty += 1;
 	    } else {
 	        $scope.cart.push({
-	            id: p.id,             // <-- store product ID
+	            id: p.id,             
 	            name: p.name,
 	            price: p.sellingPrice,
 	            image: p.imagePath,
@@ -203,13 +236,12 @@ app.controller("BillingController", function($scope, $http) {
 	$scope.addCustomer = function() {
 	     console.log("Customer Added:", $scope.newCustomer);
 
-	     // ✅ Use $http to send POST request to servlet
 	     $http.post('CustomerServlet?action=add', $scope.newCustomer)
 	       .then(function(response) {
 	         console.log("Response:", response.data);
 	         alert("Customer added successfully!");
 	         $scope.closeModal();
-		  $scope.loadCustomers();
+		     $scope.loadCustomers();
 	       }, function(error) {
 	         console.error("Error:", error);
 	         alert("Error while adding customer.");

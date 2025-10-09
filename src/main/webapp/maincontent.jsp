@@ -1,17 +1,11 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-
-<!-- 1. Include the QR Code Library here -->
 <script src="https://cdn.rawgit.com/davidshimjs/qrcodejs/gh-pages/qrcode.min.js"></script>
 
 <div class="container" ng-app="BillingApp" ng-controller="BillingController">
     
-    <!-- Products Section -->
     <div class="products-section">
-        <!-- ... (Products section remains the same) ... -->
         
         <div class="search-bar">
             <input type="text" id="searchInput" placeholder="Search for products...">
@@ -25,7 +19,6 @@
         <div class="products" id="productList">
 	    <div class="product-card" ng-repeat="p in products" data-category="{{p.category}}" data-name="{{p.name}}">
 	        <div class="product-image">
-	            <!-- Assuming image path is correct -->
 	            <img ng-src="{{p.imagePath}}" alt="{{p.name}}">
 	            <span class="stock">{{p.stock}}</span>
 	        </div>
@@ -42,7 +35,6 @@
     <h2><i class="fa fa-shopping-cart"></i>${lblCurrentBill}</h2>
     <hr>
 
-    <!-- Dynamic Cart Items -->
     <div class="cart-item" ng-repeat="item in cart">
         <img ng-src="{{item.image}}" alt="{{item.name}}">
         <div class="item-details">
@@ -57,7 +49,6 @@
         <button class="delete-btn" ng-click="removeFromCart(item)">🗑️</button>
     </div>
 
-    <!-- Bill Summary -->
     <div class="bill-summary" ng-if="cart.length > 0">
         <p> ${lblSubTotal} : <span>₹{{getTotal() | number:2}}</span></p>
         <p> ${lblDiscount} :<span>₹{{discount | number:2}}</span></p>
@@ -72,7 +63,6 @@
         <button class="clear-btn" ng-click="clearCart()"> ${lblClearCart}</button>
     </div>
 
-  <!-- Invoice Modal -->
   <div id="invoiceModal" class="invoice-modal" ng-show="showInvoice">
     <div class="invoice">
         <h2>Invoice</h2>
@@ -115,30 +105,35 @@
      </div>
 
 
-        <!-- Show Payment Buttons -->
-		<div class="payment-buttons" ng-if="!showCustomerCredit">
+        <div class="payment-buttons" ng-if="!showCustomerCredit">
 		    <button class="cash" ng-click="payCash()">Paid in Cash</button>
 		    <button class="upi" ng-click="payUPI()">Paid by UPI</button>
 		    <button class="card" ng-click="payCard()">Paid by Card</button>
 		    <button class="credit" ng-click="addToCredit()">Add to Credit</button>
 		</div>
 		
-		<!-- Show Credit Customer Selection -->
-		<div class="credit-selection" ng-if="showCustomerCredit">
-		    <label>Select Customer for Credit</label>
-		    <div class="credit-dropdown">
-		        <select ng-model="selectedCustomer" ng-options="customer.name for customer in customers">
-		            <option value="">-- Select Customer --</option>
-		        </select>
-		        <button class="add-button"  ng-click="openModal()" title="Add Customer">➕</button>
-		    </div>
-		
-		    <div class="credit-actions">
-		        <button class="back" ng-click="showCustomerCreditBack()">Back</button>
-		        <button class="confirm-credit" ng-click="confirmCredit()">Confirm Credit</button>
-		    </div>
-		</div>
+	<div class="credit-selection" ng-if="showCustomerCredit">
+    <label>Select Customer for Credit</label>
+    <div class="credit-dropdown">
+	  <select
+	    ng-model="selectedCustomer.id"
+	    ng-options="customer.id as customer.name for customer in customers track by customer.id">
+	    <option value="">-- Select Customer --</option>
+	</select>
 
+
+
+<p>Selected Customer ID: {{selectedCustomer.id}}</p> <!-- Live Debug -->
+
+
+        <button class="add-button"  ng-click="openModal()" title="Add Customer">➕</button>
+    </div>
+
+    <div class="credit-actions">
+        <button class="back" ng-click="showCustomerCreditBack()">Back</button>
+        <button class="confirm-credit" ng-click="confirmCredit()">Confirm Credit</button>
+    </div>
+</div>
 
         <div class="invoice-actions" ng-if="!showCustomerCredit">
             <button class="download" ng-click="printInvoice()">Print Invoice</button>
@@ -170,9 +165,4 @@
   </div>
 
 
-</div><!-- Cart Container -->
-
-
-
-
-<script src="assets/js/maincontent.js"></script>
+</div><script src="assets/js/maincontent.js"></script>

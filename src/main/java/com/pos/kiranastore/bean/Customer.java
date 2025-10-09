@@ -6,7 +6,7 @@ public class Customer {
 	private String name;
 	private String phone;
 	private String address;
-	private double balance;
+	private double outstanding;
 
 	public int getId() {
 		return id;
@@ -40,12 +40,12 @@ public class Customer {
 		this.address = address;
 	}
 
-	public double getBalance() {
-		return balance;
+	public double getOutstanding() {
+		return outstanding;
 	}
 
-	public void setBalance(double balance) {
-		this.balance = balance;
+	public void setOutstanding(double outstanding) {
+		this.outstanding = outstanding;
 	}
 
 }

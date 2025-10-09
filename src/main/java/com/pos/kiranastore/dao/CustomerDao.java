@@ -39,9 +39,11 @@ public class CustomerDao {
 				c.setName(rs.getString("name"));
 				c.setPhone(rs.getString("phone"));
 				c.setAddress(rs.getString("address"));
+				c.setOutstanding(rs.getDouble("outstanding"));
 				customers.add(c);
 			}
 		}
+
 		return customers;
 	}
 
@@ -75,6 +77,25 @@ public class CustomerDao {
 			e.printStackTrace();
 		}
 		return list;
+	}
+
+	public boolean updateOutstanding(int customerId, double amount) {
+		boolean success = false;
+		String sql = "UPDATE customers SET outstanding = outstanding + ? WHERE id = ?";
+
+		try (Connection conn = DBConnection.getConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
+
+			ps.setDouble(1, amount);
+			ps.setInt(2, customerId);
+
+			int rows = ps.executeUpdate();
+			success = rows > 0;
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return success;
 	}
 
 }

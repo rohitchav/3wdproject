@@ -58,7 +58,7 @@
 			  <div class="balance-row">
 			    <div>
 			      <p class="balance-label">${lblOutstanding}</p>
-			      <p class="balance-amount">₹0.00</p>
+			      <p class="balance-amount">₹{{c.outstanding}}.00</p>
 			    </div>
 			
 			    <button type="button" ng-click="deleteCustomer(c.id)" class="btn-delete">
