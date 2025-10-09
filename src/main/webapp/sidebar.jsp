@@ -10,7 +10,7 @@
 				    </a>
 				</li>
 				 <li>
-				    <a href="DashboardSevlet"> 
+				    <a href="DashboardServlet"> 
 				        <i class="fa-solid fa-chart-pie"></i>
 				        <c:out value="${lblDashboard}"/>
 				    </a>
