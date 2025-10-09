@@ -109,22 +109,62 @@
             <h3>Grand Total: ₹{{getTotal() - discount | number:2}}</h3>
         </div>
 
-        <div class="qr-section">
-            <!-- 2. Replaced static image with dynamic QR code directive -->
-            <qr-code data="upiData"></qr-code> 
-            <p>Scan to Pay using UPI</p>
-        </div>
+      <div class="qr-section" ng-if="!showCustomerCredit">
+         <qr-code data="upiData"></qr-code> 
+          <p>Scan to Pay using UPI</p>
+     </div>
 
-        <div class="payment-buttons">
-            <button class="cash" ng-click="payCash()">Paid in Cash</button>
-            <button class="upi" ng-click="payUPI()">Paid by UPI</button>
-            <button class="card" ng-click="payCard()">Paid by Card</button>
-            <button class="credit" ng-click="addToCredit()">Add to Credit</button>
-        </div>
 
-        <div class="invoice-actions">
+        <!-- Show Payment Buttons -->
+		<div class="payment-buttons" ng-if="!showCustomerCredit">
+		    <button class="cash" ng-click="payCash()">Paid in Cash</button>
+		    <button class="upi" ng-click="payUPI()">Paid by UPI</button>
+		    <button class="card" ng-click="payCard()">Paid by Card</button>
+		    <button class="credit" ng-click="addToCredit()">Add to Credit</button>
+		</div>
+		
+		<!-- Show Credit Customer Selection -->
+		<div class="credit-selection" ng-if="showCustomerCredit">
+		    <label>Select Customer for Credit</label>
+		    <div class="credit-dropdown">
+		        <select ng-model="selectedCustomer" ng-options="customer.name for customer in customers">
+		            <option value="">-- Select Customer --</option>
+		        </select>
+		        <button class="add-button"  ng-click="openModal()" title="Add Customer">➕</button>
+		    </div>
+		
+		    <div class="credit-actions">
+		        <button class="back" ng-click="showCustomerCreditBack()">Back</button>
+		        <button class="confirm-credit" ng-click="confirmCredit()">Confirm Credit</button>
+		    </div>
+		</div>
+
+
+        <div class="invoice-actions" ng-if="!showCustomerCredit">
             <button class="download" ng-click="printInvoice()">Print Invoice</button>
             <button class="cancel" ng-click="closeInvoice()">Cancel</button>
+        </div>
+        
+        
+            <div class="modal-overlay" ng-show="showModal">
+            <div class="modal">
+                <h3>${lblAddCustomer}</h3>
+                <form ng-submit="addCustomer()">
+                    <label>Customer Name</label>
+                    <input type="text" ng-model="newCustomer.name" required>
+
+                    <label>Phone Number</label>
+                    <input type="text" ng-model="newCustomer.phone" required>
+
+                    <label>Address (Optional)</label>
+                    <input type="text" ng-model="newCustomer.address">
+
+                    <div class="modal-buttons">
+                        <button type="button" class="cancel-btn" ng-click="closeModal()">Cancel</button>
+                        <button type="submit" class="add-btn">Add Customer</button>
+                    </div>
+                </form>
+            </div>
         </div>
     </div>
   </div>

@@ -367,6 +367,91 @@ body {
 }
 
 
+/* Centered layout similar to invoice modal */
+.credit-selection {
+    margin-top: 20px;
+    text-align: center;
+}
+
+/* Label styling */
+.credit-selection label {
+    font-size: 16px;
+    font-weight: 600;
+    display: block;
+    margin-bottom: 10px;
+}
+
+/* Dropdown + Add button wrapper */
+.credit-dropdown {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+/* Dropdown styling */
+.credit-dropdown select {
+    padding: 10px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    min-width: 200px;
+    background-color: #fff;
+}
+
+/* Add Customer (➕) button */
+.credit-dropdown button {
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    padding: 9px 12px;
+    font-size: 18px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.credit-dropdown button:hover {
+    background-color: #0056b3;
+}
+
+/* Back and Confirm buttons */
+.credit-actions {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+}
+
+.credit-actions .back,
+.credit-actions .confirm-credit {
+    padding: 10px 16px;
+    font-size: 14px;
+    font-weight: 500;
+    border-radius: 6px;
+    cursor: pointer;
+    border: none;
+    transition: background-color 0.3s;
+}
+
+.credit-actions .back {
+    background-color: #6c757d;
+    color: white;
+}
+
+.credit-actions .back:hover {
+    background-color: #5a6268;
+}
+
+.credit-actions .confirm-credit {
+    background-color: #28a745;
+    color: white;
+}
+
+.credit-actions .confirm-credit:hover {
+    background-color: #218838;
+}
+
 
 /* Responsive */
 @media (max-width: 768px) {

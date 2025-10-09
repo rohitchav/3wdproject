@@ -37,9 +37,11 @@ app.controller("BillingController", function($scope, $http) {
 
     $scope.products = [];
     $scope.cart = [];
+	$scope.customers = [];
     $scope.showInvoice = false;
     $scope.discount = 5;
     $scope.upiData = "";
+	$scope.newCustomer = {};
 
     const VPA = "9326981878@amazonpay";
     const PAYEE_NAME = "Yashwanti Kirana Store";
@@ -93,7 +95,14 @@ app.controller("BillingController", function($scope, $http) {
 	        });
 	};
 
-
+	$scope.loadCustomers = function() {
+	       $http.get('CustomerServlet?action=getAll')
+	           .then(function(response) {
+	               $scope.customers = response.data;
+	           }, function(error) {
+	               console.error('Error fetching customers', error);
+	           });
+	   }
 	
     $scope.loadProducts = function() {
         $http.get("ProductController?action=list")
@@ -167,17 +176,56 @@ app.controller("BillingController", function($scope, $http) {
 
 	$scope.payCash = function() { 
 	    $scope.saveBillToDatabase("CASH");
+		$scope.cart = [];
+		$scope.showInvoice = false; 
 	};
 	$scope.payUPI = function() { 
 	    $scope.saveBillToDatabase("UPI");
+		$scope.cart = [];
+		$scope.showInvoice = false; 
 	};
 	$scope.payCard = function() { 
 	    $scope.saveBillToDatabase("CARD");
+		$scope.cart = [];
+		$scope.showInvoice = false; 
 	};
-	$scope.addToCredit = function() { 
-	    $scope.saveBillToDatabase("CREDIT");
-	};
+	$scope.showCustomerCredit = false;
 
+	$scope.addToCredit = function () {
+	    $scope.showCustomerCredit = true;
+		$scope.loadCustomers();
+	};
+	
+	$scope.showCustomerCreditBack = function(){
+		$scope.showCustomerCredit = false;
+	}
+	
+	$scope.addCustomer = function() {
+	     console.log("Customer Added:", $scope.newCustomer);
+
+	     // ✅ Use $http to send POST request to servlet
+	     $http.post('CustomerServlet?action=add', $scope.newCustomer)
+	       .then(function(response) {
+	         console.log("Response:", response.data);
+	         alert("Customer added successfully!");
+	         $scope.closeModal();
+		  $scope.loadCustomers();
+	       }, function(error) {
+	         console.error("Error:", error);
+	         alert("Error while adding customer.");
+	       });
+		
+		
+	   };
+
+	   $scope.openModal = function() {
+	        $scope.newCustomer = {};
+	        $scope.showModal = true;
+	      };
+
+	      $scope.closeModal = function() {
+	        $scope.showModal = false;
+	      };
 
     const generateQrCodeBase64 = function(text) {
         if (typeof QRCode === 'undefined') {
