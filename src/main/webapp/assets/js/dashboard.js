@@ -1,75 +1,41 @@
 /**
- * 
+ * Dashboard Module - Kirana POS
+ * Fetches live stats from DashBoardSevlet and updates dashboard cards
  */
-angular.module('dashboardApp', [])
-.controller('DashboardController', function($scope, $http) {
-    $scope.stats = {};
+var app = angular.module('dashboardApp', []);
 
-    // Fetch dashboard statistics from servlet
-    $http.get("DashboardServlet?action=stats").then(function(response) {
-        $scope.stats = response.data;
-    });
-});
+app.controller('DashboardController', function($scope, $http) {
 
-angular.module('dashboardApp', [])
-.controller('DashboardController', function($scope, $http) {
-    $scope.stats = {};
-    $scope.filter = 'today'; // Default filter
-
-    $scope.loadStats = function(range) {
-        $scope.filter = range;
-
-        $http.get("DashboardServlet?action=stats&range=" + range)
-        .then(function(response) {
-            $scope.stats = response.data;
-        }, function(error) {
-            console.error("Error loading dashboard stats:", error);
-        });
-    };
-
-    // Load default stats
-    $scope.loadStats('today');
-});
-
-
-angular.module('dashboardApp', [])
-.controller('DashboardController', function($scope, $http) {
-    $scope.filter = 'today';
-    $scope.stats = { totalSales: 0, transactions: 0, itemsSold: 0, avgBill: 0 };
-
-    $scope.loadStats = function(period) {
-        $scope.filter = period;
-        $http.get("DashboardServlet?action=getStats&period=" + period)
-        .then(function(response) {
-            $scope.stats = response.data;
-        });
-    };
-
-    // Load today's stats initially
-    $scope.loadStats('today');
-});
-
-
-
-angular.module('dashboardApp', [])
-.controller('DashboardController', function($scope, $http) {
+    // 🔹 Default values to prevent blank screen before data loads
     $scope.filter = 'today';
     $scope.stats = {
-        totalSales: 0, transactions: 0, itemsSold: 0, avgBill: 0,
-        totalRevenue: 0, cogs: 0, grossProfit: 0, totalExpenses: 0, netLoss: 0
+        totalSales: 0,
+        transactions: 0,
+        itemsSold: 0,
+        avgBill: 0,
+        totalRevenue: 0,
+        cogs: 0,
+        grossProfit: 0,
+        totalExpenses: 0,
+        netLoss: 0
     };
 
+    // 🔹 Load statistics based on selected time period
     $scope.loadStats = function(period) {
         $scope.filter = period;
-        $http.get("DashboardServlet?action=getStats&period=" + period)
-        .then(function(response) {
-            $scope.stats = response.data;
-        }, function(error) {
-            console.error("Error loading stats:", error);
-        });
+
+        // AJAX call to Dashboard servlet
+        $http.get("DashBoardSevlet?action=getStats&period=" + period)
+            .then(function(response) {
+                console.log("✅ Dashboard data fetched:", response.data);
+                $scope.stats = response.data; // Bind JSON to scope
+            })
+            .catch(function(error) {
+                console.error("❌ Error fetching dashboard stats:", error);
+                alert("Unable to load dashboard data. Check console for details.");
+            });
     };
 
+    // 🔹 Initialize with today's stats
     $scope.loadStats('today');
 });
-
-
