@@ -161,4 +161,20 @@ public class ProductDao {
 		return success;
 	}
 
+	public int getProductStock(int productId) throws Exception {
+		int stock = 0;
+		String sql = "SELECT stock FROM products WHERE id = ?";
+
+		try (Connection conn = DBConnection.getConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
+
+			ps.setInt(1, productId);
+			try (ResultSet rs = ps.executeQuery()) {
+				if (rs.next()) {
+					stock = rs.getInt("stock");
+				}
+			}
+		}
+		return stock;
+	}
+
 }

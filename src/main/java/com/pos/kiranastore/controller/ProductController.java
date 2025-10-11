@@ -206,31 +206,32 @@ public class ProductController extends HttpServlet {
 				}
 			} else if ("updateStock".equals(action)) {
 				try {
-					// Read JSON array from request body
 					String json = request.getReader().lines().collect(Collectors.joining());
 					Product[] products = new Gson().fromJson(json, Product[].class);
 
+					// Check stock
+					for (Product p : products) {
+						int availableQty = dao.getProductStock(p.getId());
+						if (p.getQty() > availableQty) {
+							response.getWriter()
+									.write("{\"status\":\"error\",\"message\":\"Requested quantity for product "
+											+ p.getName() + " exceeds available stock.\"}");
+							return;
+						}
+					}
+
 					boolean success = dao.updateStock(products);
 
-					response.setContentType("application/json");
-					response.setCharacterEncoding("UTF-8");
 					if (success) {
 						response.getWriter().write("{\"status\":\"success\"}");
 					} else {
 						response.getWriter().write("{\"status\":\"error\",\"message\":\"Stock update failed\"}");
 					}
-					response.getWriter().flush();
+
 				} catch (Exception e) {
 					e.printStackTrace();
-					response.setContentType("application/json");
-					response.setCharacterEncoding("UTF-8");
 					response.getWriter().write("{\"status\":\"error\",\"message\":\"" + e.getMessage() + "\"}");
-					response.getWriter().flush();
 				}
-			}
-
-			else {
-				out.print(gson.toJson(new Response(false, "Unknown action: " + action)));
 			}
 
 		}

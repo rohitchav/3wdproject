@@ -35,19 +35,20 @@
     <h2><i class="fa fa-shopping-cart"></i>${lblCurrentBill}</h2>
     <hr>
 
-    <div class="cart-item" ng-repeat="item in cart">
-        <img ng-src="{{item.image}}" alt="{{item.name}}">
-        <div class="item-details">
-            <p class="item-name">{{item.name}}</p>
-            <p class="item-price">₹{{item.price * item.qty}}</p>
-        </div>
-        <div class="item-qty">
-            <button ng-click="decrementQty(item)">-</button>
-            <input type="text" ng-model="item.qty" readonly>
-            <button ng-click="incrementQty(item)">+</button>
-        </div>
-        <button class="delete-btn" ng-click="removeFromCart(item)">🗑️</button>
+   <div class="cart-item" ng-repeat="item in cart">
+    <img ng-src="{{item.image}}" alt="{{item.name}}">
+    <div class="item-details">
+        <p class="item-name">{{item.name}}</p>
+        <p class="item-price">₹{{item.price * item.qty | number:2}}</p>
     </div>
+    <div class="item-qty">
+        <button ng-click="decreaseQty(item)" ng-disabled="item.qty <= 1">-</button>
+        <input type="text" ng-model="item.qty" readonly>
+        <button ng-click="increaseQty(item)" ng-disabled="item.qty >= item.stock">+</button>
+    </div>
+    <button class="delete-btn" ng-click="removeFromCart(item)">🗑️</button>
+</div>
+
 
     <div class="bill-summary" ng-if="cart.length > 0">
         <p> ${lblSubTotal} : <span>₹{{getTotal() | number:2}}</span></p>

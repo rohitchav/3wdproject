@@ -1,123 +1,211 @@
 @charset "UTF-8";
 
+/* ================= THEME VARIABLES ================= */
+:root {
+    --primary-color: #007bff; /* Blue for primary actions/highlights */
+    --secondary-color: #6c757d; /* Gray for subtle elements */
+    --background-light: #f8f9fa; /* Light gray background */
+    --card-bg: #ffffff; /* White card background */
+    --shadow-light: 0 4px 12px rgba(0, 0, 0, 0.08); /* Modern, soft shadow */
+    --shadow-hover: 0 8px 16px rgba(0, 0, 0, 0.15);
+}
+
 /* ================= MAIN CONTAINER ================= */
 .dashboard-main-container {
-  display: flex;
-  background-color: #f5f6fa;
-  min-height: 100vh;
-  margin-top:80px;
+    display: flex;
+    background-color: var(--background-light);
+    min-height: 100vh;
+    /* Adjust margin based on your 'navbar.jsp' height, assuming 80px */
+    margin-top: 80px; 
 }
 
 .dashboard-wrapper {
-  flex: 1;
-  padding: 25px 30px;
-  margin-left: 220px;
+    flex: 1;
+    padding: 30px; /* Increased padding */
+    margin-left: 220px;
 }
 
 /* ================= FILTER BUTTONS ================= */
 .dashboard-filters {
-  display: flex;
-  justify-content: flex-end;
-  gap: 10px;
-  margin-bottom: 25px;
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-bottom: 30px;
 }
 
 .dashboard-filters button {
-  border: 1px solid #ccc;
-  background: #f8f9fa;
-  color: #333;
-  padding: 8px 14px;
-  border-radius: 6px;
-  cursor: pointer;
-  font-weight: 500;
-  transition: all 0.3s ease;
+    border: none; /* Removed border for flat design */
+    background: var(--card-bg);
+    color: var(--secondary-color);
+    padding: 10px 18px;
+    border-radius: 8px; /* Slightly more rounded */
+    cursor: pointer;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05); /* Subtle button shadow */
 }
 
 .dashboard-filters button:hover {
-  background: #e3f2fd;
-  border-color: #1976d2;
-  color: #1976d2;
+    background: #e9ecef; /* Light hover background */
+    color: var(--primary-color);
 }
 
 .dashboard-filters button.active {
-  background: #1976d2;
-  color: white;
-  border-color: #1976d2;
+    background: var(--primary-color); /* Stronger active color */
+    color: white;
+    box-shadow: 0 4px 8px rgba(0, 123, 255, 0.3); /* Primary color shadow for active state */
 }
 
 /* ================= SECTION BOX ================= */
 .dashboard-section {
-  background: #fff;
-  border: 1px solid #dcdfe3;
-  border-radius: 10px;
-  padding: 25px 30px;
-  margin-bottom: 30px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    background: var(--card-bg);
+    border: 1px solid #e9ecef; /* Very light border */
+    border-radius: 12px; /* More rounded corners */
+    padding: 30px;
+    margin-bottom: 30px;
+    box-shadow: var(--shadow-light);
 }
 
 .section-title {
-  font-size: 1.4rem;
-  color: #333;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  margin-bottom: 20px;
+    font-size: 1.5rem; /* Slightly larger title */
+    color: #343a40; /* Darker, more professional text */
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 25px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #e9ecef; /* Separator line */
+    font-weight: 600;
+}
+.section-title i {
+    color: var(--primary-color); /* Icon color matches primary theme */
 }
 
-/* ================= CARDS ================= */
+/* ================= CARDS (CSS GRID) ================= */
 .dashboard-cards {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 20px;
+    display: grid;
+    gap: 20px;
+}
+
+.four-col-grid {
+    grid-template-columns: repeat(4, 1fr);
+}
+
+.five-col-grid {
+    grid-template-columns: repeat(5, 1fr);
 }
 
 .card {
-  flex: 1 1 calc(20% - 20px);
-  background: #fff;
-  border-radius: 10px;
-  padding: 25px;
-  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
-  text-align: center;
-  border: 1px solid #eee;
-  transition: 0.3s ease;
+    background: var(--card-bg);
+    border-radius: 10px;
+    padding: 20px; /* Slightly reduced padding */
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.05); /* Lighter card shadow */
+    text-align: center;
+    border-left: 5px solid var(--primary-color); /* Accent border on the left */
+    transition: all 0.3s ease;
 }
 
 .card:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+    transform: translateY(-5px); /* More pronounced lift on hover */
+    box-shadow: var(--shadow-hover);
 }
 
 .card h3 {
-  margin-top: 0;
-  margin-bottom: 12px;
-  font-size: 1.1rem;
-  color: #444;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
+    margin-top: 0;
+    margin-bottom: 15px;
+    font-size: 0.95rem; /* Smaller, clearer label */
+    color: var(--secondary-color);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    font-weight: 500;
+}
+.card h3 i {
+    font-size: 1.1rem;
 }
 
 .card p {
-  font-size: 1.6rem;
-  font-weight: 600;
-  margin: 0;
+    font-size: 2.2rem; /* Larger, emphasized data point */
+    font-weight: 700;
+    margin: 0;
+    color: #343a40;
 }
 
-/* ================= CARD COLOR THEMES ================= */
-.total-sales { background-color: #e3f2fd; color: #1976d2; }
-.transactions { background-color: #f1f8e9; color: #388e3c; }
-.items-sold { background-color: #fff3e0; color: #f57c00; }
-.avg-bill { background-color: #fce4ec; color: #d81b60; }
+/* ================= CARD COLOR THEMES (Accent Borders) ================= */
+/* The main card background is kept white for a cleaner look. 
+   Colors are now used as accent borders and for the text/icons. */
 
-.revenue { background-color: #e0f7fa; color: #0097a7; }
-.cogs { background-color: #fffde7; color: #fbc02d; }
-.gross-profit { background-color: #e8f5e9; color: #388e3c; }
-.expenses { background-color: #f3e5f5; color: #7b1fa2; }
-.net-loss { background-color: #ffebee; color: #d32f2f; }
+.total-sales { border-left-color: #1976d2; }
+.total-sales h3, .total-sales h3 i { color: #1976d2; }
 
-@media (max-width: 900px) {
-  .dashboard-cards {
-    flex-direction: column;
-  }
+.transactions { border-left-color: #388e3c; }
+.transactions h3, .transactions h3 i { color: #388e3c; }
+
+.items-sold { border-left-color: #f57c00; }
+.items-sold h3, .items-sold h3 i { color: #f57c00; }
+
+.avg-bill { border-left-color: #d81b60; }
+.avg-bill h3, .avg-bill h3 i { color: #d81b60; }
+
+
+.revenue { border-left-color: #0097a7; }
+.revenue h3, .revenue h3 i { color: #0097a7; }
+
+.cogs { border-left-color: #fbc02d; }
+.cogs h3, .cogs h3 i { color: #fbc02d; }
+
+/* Highlight for Gross Profit (Positive Metric) */
+.gross-profit { 
+    border: 1px solid #c8e6c9; /* Light green border */
+    border-left: 5px solid #4caf50; /* Stronger accent */
+    background-color: #e8f5e9; /* Very light green fill */
+}
+.gross-profit h3, .gross-profit h3 i, .gross-profit p { 
+    color: #388e3c; 
+}
+
+
+.expenses { border-left-color: #7b1fa2; }
+.expenses h3, .expenses h3 i { color: #7b1fa2; }
+
+/* Highlight for Net Loss (Negative Metric) */
+.net-loss { 
+    border: 1px solid #ffcdd2; /* Light red border */
+    border-left: 5px solid #e53935; /* Stronger accent */
+    background-color: #ffebee; /* Very light red fill */
+}
+.net-loss h3, .net-loss h3 i, .net-loss p { 
+    color: #d32f2f; 
+}
+
+
+/* ================= MEDIA QUERIES (Responsiveness) ================= */
+@media (max-width: 1200px) {
+    /* For medium screens, 4-col goes to 2-col, 5-col goes to 3-col */
+    .four-col-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    .five-col-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+@media (max-width: 992px) {
+    .dashboard-wrapper {
+        margin-left: 0; /* Full width when sidebar is likely collapsed/hidden */
+        padding: 20px;
+    }
+}
+
+@media (max-width: 768px) {
+    /* For small screens, all grids collapse to 1 column */
+    .four-col-grid, .five-col-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .dashboard-filters {
+        justify-content: center; /* Center filters on mobile */
+        flex-wrap: wrap;
+    }
 }
