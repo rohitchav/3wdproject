@@ -8,7 +8,10 @@
         </a>
     </div>
     <div class="nav-options">
-        <button class="billing-btn"><c:out value="${lblBilling}"/></button>
+		  <button class="billing-btn" onclick="window.location.href='BillingServlet'">
+		    <c:out value="${lblBilling}"/>
+		</button>
+
         <i class="fas fa-shopping-cart cart-icon"></i>
        <c:set var="targetServlet" value="${param.servlet}" />
 
