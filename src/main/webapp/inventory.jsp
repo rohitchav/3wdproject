@@ -129,7 +129,7 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="addProductModalLabel" style="color: #337ab7;">Add New Product</h5>
+                <h5 class="modal-title" id="addProductModalLabel" style="color: #337ab7;">${lblAddNewProduct}</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -141,22 +141,22 @@
                 
                 <div class="modal-body">
                     <div class="form-group">
-                        <label for="productName">Product Name</label>
+                        <label for="productName"> ${lblProductName }</label>
                         <input type="text" class="form-control" id="productName" name="name" placeholder="Enter product name" required>
                     </div>
                     <div class="form-row">
                         <div class="form-group col-md-6">
-                            <label for="costPrice">Cost Price (&#8377;)</label>
+                            <label for="costPrice">${lblCostPrice} (&#8377;)</label>
                             <input type="number" step="0.01" class="form-control" id="costPrice" name="costPrice" placeholder="0.00" required>
                         </div>
                         <div class="form-group col-md-6">
-                            <label for="sellingPrice">Selling Price (&#8377;)</label>
+                            <label for="sellingPrice">${lblSellingPrice } (&#8377;)</label>
                             <input type="number" step="0.01" class="form-control" id="sellingPrice" name="price" placeholder="0.00" required>
                         </div>
                     </div>
                     <div class="form-row">
                         <div class="form-group col-md-6">
-                            <label for="category">Category</label>
+                            <label for="category">${lblCategory}</label>
                             <select id="category" name="category" class="form-control" required>
                                 <option value="" selected>-- Select a Category --</option>
                                 <option value="Snacks">Snacks</option>
@@ -167,12 +167,12 @@
                             </select>
                         </div>
                         <div class="form-group col-md-6">
-                            <label for="stockQuantity">Stock Quantity</label>
+                            <label for="stockQuantity">${lblStockQuantity}</label>
                             <input type="number" class="form-control" id="stockQuantity" name="stock" placeholder="0" required>
                         </div>
                     </div>
                     <div class="form-group">
-                        <label for="productImageFile">Product Image</label>
+                        <label for="productImageFile">${lblProductImage}</label>
                         <div class="custom-file">
                             <input type="file" class="custom-file-input" id="productImageFile" name="imageFile" accept="image/*">
                             <label class="custom-file-label" for="productImageFile">Choose file</label>
@@ -182,8 +182,8 @@
                 </div>
                 
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                    <button type="submit" class="btn btn-warning btn-warning-custom">Add Product</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">${lblcancel }</button>
+                    <button type="submit" class="btn btn-warning btn-warning-custom">${lblAddNewProduct}</button>
                 </div>
             </form>
         </div>

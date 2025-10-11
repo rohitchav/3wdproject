@@ -105,7 +105,27 @@ public class ConstantVariables {
 
 	public static String lblNoProductsFound = "No products found";
 	public static String lblNoProductsFound_MR = "कोणतेही उत्पादने सापडली नाहीत";
-
+	
+	public static String lblProductName = "Product Name";
+	public static String lblProductName_MR = "उत्पादनाचे नाव";
+	
+	public static String lblCostPrice = "Cost Price (₹)";
+	public static String lblCostPrice_MR = "किंमत (₹)";
+	
+	public static String lblSellingPrice = "Selling Price (₹)";
+	public static String lblSellingPrice_MR = "विक्री किंमत (₹)";
+	
+	public static String lblCategory = "Category";
+	public static String lblCategory_MR = "श्रेणी";
+	
+	public static String lblStockQuantity = "Stock Quantity";
+	public static String lblStockQuantity_MR = "स्टॉक प्रमाण";
+	
+	public static String lblProductImage = "Product Image";
+	public static String lblProductImage_MR = "उत्पादन प्रतिमा";
+		
+	
+// Customer
 	public static String lblCutomerPageTitle = " Customer Management";
 	public static String lblCutomerPageTitle_MR = " ग्राहक व्यवस्थापन";
 
@@ -138,6 +158,14 @@ public class ConstantVariables {
 	public static String lblAddNewPurchase = "Add New Purchase";
 	public static String lblAddNewPurchase_MR = "नवीन खरेदी जोडा";
 	
+	public static String lblSupplierName = "Supplier Name";
+	public static String lblSupplierName_MR = "पुरवठादाराचे नाव";
+	
+	public static String lblBillPhoto = "Bill Photo";
+	public static String lblBillPhoto_MR = "बिल फोटो";
+	
+	public static String lblSave = "Save";
+	public static String lblSave_MR = "जतन करा";
 	
 	// Dashboard Page
 	
@@ -197,6 +225,14 @@ public class ConstantVariables {
 	public static String lblGenerateBill = "Generate Bill";
 	public static String lblGenerateBill_MR = "बिल तयार करा"; 
 	
+	// Customer 
+	public static String lblCustomerName = "Customer Name";
+	public static String lblCustomerName_MR = "ग्राहकाचे नाव"; 
+	
+	public static String lblAddress= " Address (Optinal)";
+	public static String lblAddress_MR = "पत्ता (ऑप्टिनल)"; 
+	
+	 
 	
 	// Customer Debts
 	public static String lblCustomerDebts = "Customer debts";
@@ -204,4 +240,23 @@ public class ConstantVariables {
 	
 	public static String lblOutstandingAmount = "Outstanding Amount";
 	public static String lblOutstandingAmount_MR = "थकबाकी रक्कम"; 
+	
+	public static String lblPayDebts = " Pay Debts";
+	public static String lblPayDebts_MR = "कर्ज भरा"; 
+	
+	public static String lblcancel = " Cancel";
+	public static String lblcancel_MR = "रद्द करा"; 
+	
+	public static String lblPay = " Pay";
+	public static String lblPay_MR = "पैसे द्या"; 
+	
+	public static String lblMobile = " Mobile No";
+	public static String lblMobile_MR = "मोबाईल क्र"; 
+	
+	public static String lblName = " Name";
+	public static String lblName_MR = "नाव"; 
+	
+	public static String lblPaidAmount = " Paid Amount";
+	public static String lblPaidAmount_MR = "देय रक्कम"; 
+	
 }

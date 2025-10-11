@@ -71,18 +71,18 @@
         <div class="modal">
             <h3>${lblAddNewPurchase}</h3>
             <form ng-submit="submitPurchase()" enctype="multipart/form-data">
-                <label>Supplier Name</label>
+                <label> ${lblSupplierName}</label>
                 <input type="text" ng-model="newPurchase.supplier" required>
 
-                <label>Purchase Amount (₹)</label>
+                <label> ${lblPurchaseAmount}</label>
                 <input type="number" ng-model="newPurchase.amount" step="0.01" required>
 
-                <label>Bill Photo</label>
+                <label> ${lblBillPhoto}</label>
                 <input type="file" file-model="newPurchase.billFile">
 
                 <div class="modal-buttons">
-                    <button type="button" class="cancel-btn" ng-click="closeModal()">Cancel</button>
-                    <button type="submit" class="add-btn">Save</button>
+                    <button type="button" class="cancel-btn" ng-click="closeModal()">${lblcancel}</button>
+                    <button type="submit" class="add-btn">${lblSave}</button>
                 </div>
             </form>
         </div>

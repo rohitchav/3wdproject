@@ -74,18 +74,18 @@
             <div class="modal">
                 <h3>${lblAddCustomer}</h3>
                 <form ng-submit="addCustomer()">
-                    <label>Customer Name</label>
+                    <label> ${lblCustomerName}</label>
                     <input type="text" ng-model="newCustomer.name" required>
 
-                    <label>Phone Number</label>
+                    <label>${lblMobile}</label>
                     <input type="text" ng-model="newCustomer.phone" required>
 
-                    <label>Address (Optional)</label>
+                    <label>${lblAddress}</label>
                     <input type="text" ng-model="newCustomer.address">
 
                     <div class="modal-buttons">
-                        <button type="button" class="cancel-btn" ng-click="closeModal()">Cancel</button>
-                        <button type="submit" class="add-btn">Add Customer</button>
+                        <button type="button" class="cancel-btn" ng-click="closeModal()"> ${lblcancel}</button>
+                        <button type="submit" class="add-btn"> ${lblAddCustomer}</button>
                     </div>
                 </form>
             </div>

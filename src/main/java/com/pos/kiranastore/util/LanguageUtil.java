@@ -67,6 +67,18 @@ public class LanguageUtil {
 				isEN ? ConstantVariables.lblAddCustomer : ConstantVariables.lblAddCustomer_MR);
 		request.setAttribute("lblOutstanding",
 				isEN ? ConstantVariables.lblOutstanding : ConstantVariables.lblOutstanding_MR);
+		request.setAttribute("lblProductName",
+				isEN ? ConstantVariables.lblProductName : ConstantVariables.lblProductName_MR);
+		request.setAttribute("lblCostPrice",
+				isEN ? ConstantVariables.lblCostPrice : ConstantVariables.lblCostPrice_MR);
+		request.setAttribute("lblSellingPrice",
+				isEN ? ConstantVariables.lblSellingPrice : ConstantVariables.lblSellingPrice_MR);
+		request.setAttribute("lblCategory",
+				isEN ? ConstantVariables.lblCategory : ConstantVariables.lblCategory_MR);
+		request.setAttribute("lblStockQuantity",
+				isEN ? ConstantVariables.lblStockQuantity : ConstantVariables.lblStockQuantity_MR);
+		request.setAttribute("lblProductImage",
+				isEN ? ConstantVariables.lblProductImage : ConstantVariables.lblProductImage_MR);
 		
 		
 		// Purchase Labels
@@ -84,6 +96,12 @@ public class LanguageUtil {
 				isEN ? ConstantVariables.lblDeleteBill : ConstantVariables.lblDeleteBill_MR);
 		request.setAttribute("lblAddNewPurchase",
 				isEN ? ConstantVariables.lblAddNewPurchase : ConstantVariables.lblAddNewPurchase_MR);
+		request.setAttribute("lblSupplierName",
+				isEN ? ConstantVariables.lblSupplierName : ConstantVariables.lblSupplierName_MR);
+		request.setAttribute("lblBillPhoto",
+				isEN ? ConstantVariables.lblBillPhoto : ConstantVariables.lblBillPhoto_MR);
+		request.setAttribute("lblSave",
+				isEN ? ConstantVariables.lblSave : ConstantVariables.lblSave_MR);
 		
 		
 		//Dashboard Labels
@@ -130,10 +148,28 @@ public class LanguageUtil {
 		request.setAttribute("lblDiscount",
 				isEN ? ConstantVariables.lblDiscount : ConstantVariables.lblDiscount_MR);
 		
+		// Customer
+		request.setAttribute("lblCustomerName",
+				isEN ? ConstantVariables.lblCustomerName : ConstantVariables.lblCustomerName_MR);
+		request.setAttribute("lblAddress",
+				isEN ? ConstantVariables.lblAddress : ConstantVariables.lblAddress_MR);
+		
 		// Customers Debts
 		request.setAttribute("lblCustomerDebts",
 				isEN ? ConstantVariables.lblCustomerDebts : ConstantVariables.lblCustomerDebts_MR);
 		request.setAttribute("lblOutstandingAmount",
 				isEN ? ConstantVariables.lblOutstandingAmount : ConstantVariables.lblOutstandingAmount_MR);
+		request.setAttribute("lblPayDebts",
+				isEN ? ConstantVariables.lblPayDebts : ConstantVariables.lblPayDebts_MR);
+		request.setAttribute("lblcancel",
+				isEN ? ConstantVariables.lblcancel : ConstantVariables.lblcancel_MR);
+		request.setAttribute("lblPay",
+				isEN ? ConstantVariables.lblPay : ConstantVariables.lblPay_MR);
+		request.setAttribute("lblMobile",
+				isEN ? ConstantVariables.lblMobile : ConstantVariables.lblMobile_MR);
+		request.setAttribute("lblName",
+				isEN ? ConstantVariables.lblName : ConstantVariables.lblName_MR);
+		request.setAttribute("lblPaidAmount",
+				isEN ? ConstantVariables.lblPaidAmount : ConstantVariables.lblPaidAmount_MR);
 	}
 }

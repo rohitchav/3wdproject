@@ -34,4 +34,25 @@ public class DebtsDAO {
         }
         return debtors;
     }
+
+    public boolean payDebt(int customerId, double paidAmount) {
+        String sql = "UPDATE customers SET outstanding = outstanding - ? WHERE id = ? AND outstanding >= ?";
+        boolean success = false;
+
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setDouble(1, paidAmount);
+            ps.setInt(2, customerId);
+            ps.setDouble(3, paidAmount);
+
+            int rows = ps.executeUpdate();
+            success = rows > 0;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return success;
+    }
 }
