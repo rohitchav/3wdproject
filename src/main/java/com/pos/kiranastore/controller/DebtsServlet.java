@@ -1,6 +1,7 @@
 package com.pos.kiranastore.controller;
 
 import java.io.IOException;
+import java.util.List;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -9,40 +10,27 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-/**
- * Servlet implementation class DebtsServlet
- */
+import com.pos.kiranastore.bean.Customer;
+import com.pos.kiranastore.dao.DebtsDAO;
+
 @WebServlet("/DebtsServlet")
 public class DebtsServlet extends HttpServlet {
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
+    DebtsDAO dao = new DebtsDAO();
 
-	/**
-	 * @see HttpServlet#HttpServlet()
-	 */
-	public DebtsServlet() {
-		super();
-		// TODO Auto-generated constructor stub
-	}
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
 
-	/**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
-	 *      response)
-	 */
-	protected void doGet(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
+        // Load debtors and set as request attribute for JSP
+        List<Customer> debtors = dao.getDebtors();
+        request.setAttribute("debtors", debtors);
 
-		RequestDispatcher rd = request.getRequestDispatcher("/debts.jsp");
-		rd.forward(request, response);
-	}
+        RequestDispatcher rd = request.getRequestDispatcher("/debts.jsp");
+        rd.forward(request, response);
+    }
 
-	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
-	 *      response)
-	 */
-	protected void doPost(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		doGet(request, response);
-	}
-
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        doGet(request, response);
+    }
 }
