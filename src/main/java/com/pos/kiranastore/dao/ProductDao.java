@@ -136,4 +136,29 @@ public class ProductDao {
 		return list;
 	}
 
+	public boolean updateStock(Product[] products) {
+		boolean success = false;
+
+		try (Connection conn = DBConnection.getConnection();
+				PreparedStatement ps = conn.prepareStatement("UPDATE products SET stock = stock - ? WHERE id = ?")) {
+
+			for (Product p : products) {
+				System.out.println(p.getQty() + "  " + p.getId());
+				ps.setInt(1, p.getQty()); // Quantity to subtract
+				ps.setInt(2, p.getId()); // Product ID
+				ps.addBatch();
+			}
+
+			int[] results = ps.executeBatch();
+			System.out.println("Updated Stock");
+			// Check if all updates are successful
+			success = java.util.Arrays.stream(results).allMatch(r -> r >= 0);
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return success;
+	}
+
 }

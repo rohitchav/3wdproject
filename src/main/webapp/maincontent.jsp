@@ -123,9 +123,6 @@
 
 
 
-<p>Selected Customer ID: {{selectedCustomer.id}}</p> <!-- Live Debug -->
-
-
         <button class="add-button"  ng-click="openModal()" title="Add Customer">➕</button>
     </div>
 

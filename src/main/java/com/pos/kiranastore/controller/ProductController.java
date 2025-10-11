@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.nio.file.Paths;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.MultipartConfig;
@@ -202,6 +203,29 @@ public class ProductController extends HttpServlet {
 				} catch (Exception e) {
 					e.printStackTrace();
 					out.print(gson.toJson(new Response(false, "Invalid input or server error")));
+				}
+			} else if ("updateStock".equals(action)) {
+				try {
+					// Read JSON array from request body
+					String json = request.getReader().lines().collect(Collectors.joining());
+					Product[] products = new Gson().fromJson(json, Product[].class);
+
+					boolean success = dao.updateStock(products);
+
+					response.setContentType("application/json");
+					response.setCharacterEncoding("UTF-8");
+					if (success) {
+						response.getWriter().write("{\"status\":\"success\"}");
+					} else {
+						response.getWriter().write("{\"status\":\"error\",\"message\":\"Stock update failed\"}");
+					}
+					response.getWriter().flush();
+				} catch (Exception e) {
+					e.printStackTrace();
+					response.setContentType("application/json");
+					response.setCharacterEncoding("UTF-8");
+					response.getWriter().write("{\"status\":\"error\",\"message\":\"" + e.getMessage() + "\"}");
+					response.getWriter().flush();
 				}
 			}
 
