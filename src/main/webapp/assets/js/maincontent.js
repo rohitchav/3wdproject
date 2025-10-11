@@ -1,27 +1,24 @@
-/******************************************************
- * Billing Application - Organized Version
- * Author: Rohit Hanumant Chavan
- * Description: AngularJS-based POS billing app
- ******************************************************/
-
 var app = angular.module("BillingApp", []);
 
-// ====================================================
-// QR CODE DIRECTIVE
-// ====================================================
 app.directive('qrCode', function() {
     return {
         restrict: 'E',
-        scope: { data: '=' },
-        link: function(scope, element) {
+        scope: {
+            data: '=' 
+        },
+        link: function(scope, element, attrs) {
+            let qr = null;
+
             scope.$watch('data', function(newVal) {
                 if (newVal) {
-                    element.empty();
+                    element.empty(); 
+                    
                     if (typeof QRCode === 'undefined') {
-                        console.error("QRCode library missing.");
+                        console.error("QRCode library not found. Please ensure <script src='https://cdn.rawgit.com/davidshimjs/qrcodejs/gh-pages/qrcode.min.js'></script> is included.");
                         return;
                     }
-                    new QRCode(element[0], {
+
+                    qr = new QRCode(element[0], {
                         text: newVal,
                         width: 150,
                         height: 150,
@@ -35,17 +32,15 @@ app.directive('qrCode', function() {
     };
 });
 
-// ====================================================
-// MAIN CONTROLLER
-// ====================================================
+
 app.controller("BillingController", function($scope, $http) {
 
     $scope.products = [];
     $scope.cart = [];
-    $scope.customers = [];
     $scope.showInvoice = false;
-    $scope.discount = 5;
+    $scope.discount = 0;
     $scope.upiData = "";
+    $scope.customers = [];
     $scope.newCustomer = {};
     $scope.selectedCustomer = {};
     $scope.showCustomerCredit = false;
@@ -55,84 +50,74 @@ app.controller("BillingController", function($scope, $http) {
 
     console.log("BillingController initialized");
 
-    // UPI PAYMENT STRING
     $scope.generateUpiString = function(amount) {
+        const grandTotal = amount; 
         const nameEncoded = encodeURIComponent(PAYEE_NAME);
-        return `upi://pay?pa=${VPA}&pn=${nameEncoded}&am=${amount.toFixed(2)}&cu=INR`;
+        
+        let upiUri = `upi://pay?pa=${VPA}&pn=${nameEncoded}&am=${grandTotal.toFixed(2)}&cu=INR`;
+        return upiUri;
     };
 
-    // BILL NUMBER GENERATOR
+
     $scope.getNextBillNo = function() {
         let lastNo = localStorage.getItem('lastBillNumber');
         let currentNo = (lastNo === null) ? 1 : (parseInt(lastNo) + 1);
+
         localStorage.setItem('lastBillNumber', currentNo);
+        
         return currentNo;
     };
 
-    // LOAD PRODUCTS
+
     $scope.loadProducts = function() {
         $http.get("ProductController?action=list")
-            .then(response => $scope.products = response.data)
-            .catch(error => console.error("Error loading products:", error));
+            .then(function(response) {
+                $scope.products = response.data;
+           
+            })
+            .catch(function(error) {
+                console.error("Error loading products:", error);
+            });
     };
 
-    // ADD TO CART WITH STOCK VALIDATION
-    $scope.addToCart = function(product) {
-        let existing = $scope.cart.find(item => item.id === product.id);
+    $scope.addToCart = function(p) {
+        let existing = $scope.cart.find(item => item.name === p.name);
         if (existing) {
-            if (existing.qty < product.stock) {
-                existing.qty += 1;
-                $scope.updateTotal(existing);
-            } else alert("Cannot add more than available stock (" + product.stock + ")");
+            existing.qty += 1;
         } else {
-            if (product.stock > 0) {
-                $scope.cart.push({
-                    id: product.id,
-                    name: product.name,
-                    price: product.sellingPrice,
-                    image: product.imagePath,
-                    qty: 1,
-                    stock: product.stock,
-                    total: product.sellingPrice
-                });
-            } else alert("Product out of stock!");
+            $scope.cart.push({
+                name: p.name,
+                price: p.sellingPrice,
+                image: p.imagePath,
+                qty: 1
+            });
         }
     };
 
-    // CART QUANTITY INCREMENT
-    $scope.increaseQty = function(item) {
-        if (item.qty < item.stock) {
-            item.qty += 1;
-            $scope.updateTotal(item);
-        } else alert("Cannot exceed available stock (" + item.stock + ")");
-    };
-
-    // CART QUANTITY DECREMENT
-    $scope.decreaseQty = function(item) {
-        if (item.qty > 1) {
-            item.qty -= 1;
-            $scope.updateTotal(item);
-        }
-    };
-
-    // UPDATE ITEM TOTAL
-    $scope.updateTotal = function(item) {
-        item.total = item.qty * item.price;
-    };
-
-    // REMOVE FROM CART
     $scope.removeFromCart = function(item) {
         let index = $scope.cart.indexOf(item);
-        if (index !== -1) $scope.cart.splice(index, 1);
+        if (index !== -1) {
+            $scope.cart.splice(index, 1);
+        }
     };
 
-    // GET CART GRAND TOTAL
+    $scope.incrementQty = function(item) {
+        item.qty += 1;
+    };
+
+    $scope.decrementQty = function(item) {
+        if (item.qty > 1) {
+            item.qty -= 1;
+        }
+    };
+
     $scope.getTotal = function() {
-        return $scope.cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
+        return $scope.cart.reduce((total, item) => total + (item.price * item.qty), 0);
     };
 
-    // CLEAR CART
-    $scope.clearCart = function() { $scope.cart = []; };
+    $scope.clearCart = function() {
+        $scope.cart = [];
+    };
 
     // UPDATE STOCK AFTER BILL
     $scope.updateStock = function() {
@@ -154,14 +139,24 @@ app.controller("BillingController", function($scope, $http) {
         }).catch(() => alert("Error updating stock!"));
     };
 
-    // BILL GENERATION
-    $scope.generateBill = function() {
-        $scope.billNo = $scope.getNextBillNo();
-        $scope.billDate = new Date().toISOString().slice(0, 19).replace('T', ' ');
-        $scope.showInvoice = true;
-        $scope.upiData = $scope.generateUpiString($scope.getTotal() - $scope.discount);
-    };
+	$scope.generateBill = function() {
+	    $scope.billNo = $scope.getNextBillNo(); 
+	    $scope.billDate = new Date().toLocaleString();
+	    $scope.showInvoice = true; 
+	    
+        const grandTotal = $scope.getTotal() - $scope.discount;
+        
+        $scope.upiData = $scope.generateUpiString(grandTotal); 
+	};
 
+	$scope.closeInvoice = function() {
+	    $scope.showInvoice = false; 
+	};
+
+	const formatCurrency = (num) => {
+	    return "₹" + num.toFixed(2);
+	};
+    
     // SAVE BILL TO DATABASE
     $scope.saveBillToDatabase = function(paymentMethod) {
         const billData = {
@@ -184,29 +179,9 @@ app.controller("BillingController", function($scope, $http) {
             .catch(error => console.error("Error saving bill:", error));
     };
 
-    $scope.closeInvoice = () => { $scope.showInvoice = false; };
-
-    // PAYMENT HANDLERS
-    $scope.payCash = function() {
-        $scope.saveBillToDatabase("CASH");
-        $scope.updateStock();
-        $scope.showInvoice = false;
-        $scope.closeModal();
-    };
-    $scope.payUPI = function() {
-        $scope.saveBillToDatabase("UPI");
-        $scope.updateStock();
-        $scope.clearCart();
-        $scope.showInvoice = false;
-        $scope.closeModal();
-    };
-    $scope.payCard = function() {
-        $scope.saveBillToDatabase("CARD");
-        $scope.updateStock();
-        $scope.clearCart();
-        $scope.showInvoice = false;
-        $scope.closeModal();
-    };
+	$scope.payCash = function() { $scope.saveBillToDatabase("CASH"); $scope.updateStock(); $scope.showInvoice = false; $scope.closeModal(); };
+	$scope.payUPI = function() { $scope.saveBillToDatabase("UPI"); $scope.updateStock(); $scope.clearCart(); $scope.showInvoice = false; $scope.closeModal(); };
+	$scope.payCard = function() { $scope.saveBillToDatabase("CARD"); $scope.updateStock(); $scope.clearCart(); $scope.showInvoice = false; $scope.closeModal(); };
 
     // CUSTOMER MANAGEMENT
     $scope.loadCustomers = function() {
@@ -244,6 +219,261 @@ app.controller("BillingController", function($scope, $http) {
         }).catch(() => alert("Something went wrong!"));
     };
 
-    // INITIAL DATA LOAD
+
+    const generateQrCodeBase64 = function(text) {
+        if (typeof QRCode === 'undefined') {
+            return ''; 
+        }
+
+        const tempDiv = document.createElement('div');
+        tempDiv.style.display = 'none';
+        document.body.appendChild(tempDiv);
+
+        const qr = new QRCode(tempDiv, {
+            text: text,
+            width: 150,
+            height: 150,
+            colorDark: "#000000",
+            colorLight: "#ffffff",
+            correctLevel: QRCode.CorrectLevel.H
+        });
+
+        let dataURL = '';
+        const canvas = tempDiv.querySelector('canvas');
+        if (canvas) {
+            dataURL = canvas.toDataURL("image/png");
+        }
+        
+        document.body.removeChild(tempDiv);
+        
+        return dataURL;
+    };
+
+	$scope.printInvoice = function() {
+	    let billNo = $scope.billNo;
+	    let billDate = $scope.billDate;
+	    let cart = $scope.cart;
+	    let discount = $scope.discount;
+	    let total = $scope.getTotal();
+        const grandTotal = total - discount;
+        const upiString = $scope.generateUpiString(grandTotal);
+        const qrCodeDataUrl = generateQrCodeBase64(upiString);
+
+	    const formatCurrency = num => "₹" + num.toFixed(2);
+
+		let invoiceHtml = `
+		    <!DOCTYPE html>
+		    <html>
+		    <head>
+		        <meta charset="UTF-8">
+		        <title>Invoice #INV-${billNo}</title>
+		        <style>
+		            /* RESET & BASE STYLES */
+		            body { 
+		                font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; 
+		                font-size: 10pt; 
+		                margin: 0;
+		                padding: 0;
+		                color: #333;
+		            }
+		            .container {
+		                width: 90%; 
+		                max-width: 800px; 
+		                margin: 20px auto;
+		                padding: 20px;
+		                box-sizing: border-box; 
+		            }
+
+		            /* HEADER */
+		            .company-name {
+		                font-size: 1.8em;
+		                text-align: center;
+		                margin-bottom: 5px;
+		                color: #2c3e50; 
+		            }
+		            .invoice-title {
+		                font-size: 1.2em;
+		                text-align: center;
+		                margin-bottom: 20px;
+		                color: #34495e;
+		                border-bottom: 1px solid #bdc3c7; 
+		                padding-bottom: 5px;
+		            }
+		            .invoice-details {
+		                display: flex; 
+		                justify-content: space-between;
+		                margin-bottom: 20px;
+		                font-size: 1em;
+		            }
+		            .invoice-details p {
+		                margin: 2px 0;
+		            }
+		            .invoice-details strong {
+		                font-weight: 600;
+		                color: #34495e;
+		            }
+
+		            /* TABLE STYLES */
+		            table { 
+		                width: 100%; 
+		                border-collapse: collapse; 
+		                margin-top: 15px; 
+		                font-size: 1em;
+		            }
+		            th, td { 
+		                padding: 10px 15px; 
+		                border-bottom: 1px solid #ecf0f1; 
+		            }
+		            th { 
+		                background-color: #3498db; 
+		                color: white; 
+		                text-align: left; 
+		                font-weight: 600;
+		            }
+		            td {
+		                text-align: left;
+		            }
+		            td.numeric { 
+		                text-align: right; 
+		            }
+
+                    /* PAYMENT & TOTALS LAYOUT */
+                    .payment-layout {
+                        display: flex;
+                        justify-content: space-between;
+                        align-items: flex-start;
+                        margin-top: 30px;
+                    }
+                    
+                    /* QR SECTION */
+                    .qr-section-print {
+                        width: 45%; 
+                        text-align: center;
+                        padding: 15px;
+                        border: 1px dashed #bdc3c7;
+                        border-radius: 8px;
+                        background-color: #f7f9fb;
+                    }
+                    .qr-section-print strong {
+                        color: #2c3e50;
+                        font-size: 1.1em;
+                        display: block;
+                        margin-bottom: 5px;
+                    }
+                    .qr-section-print img {
+                        width: 150px;
+                        height: 150px;
+                        margin: 10px auto;
+                        display: block;
+                    }
+
+
+		            /* TOTALS SECTION */
+		            .totals-container { 
+		                width: 50%; 
+                        padding: 15px; 
+                        border: 1px solid #bdc3c7; 
+                        border-radius: 8px;
+                        background-color: #fdfefe;
+		            }
+		            .totals-container p { 
+		                display: flex;
+		                justify-content: space-between;
+		                margin: 8px 0; 
+		                font-weight: normal; 
+		                font-size: 1.1em;
+		            }
+		            .totals-container strong {
+		                font-weight: bold;
+		                color: #2c3e50;
+		            }
+		            .grand-total {
+		                margin-top: 10px !important;
+		                padding-top: 10px;
+		                border-top: 2px solid #3498db; 
+		            }
+		            .grand-total span:last-child {
+		                font-size: 1.4em; /* Slightly larger for emphasis */
+		                color: #0d6efd; /* Blue emphasis */
+		                font-weight: 900;
+		            }
+
+		            /* FOOTER */
+		            .clear { clear: both; }
+		            .footer { 
+		                text-align: center; 
+		                margin-top: 60px; 
+		                font-size: 0.9em; 
+		                color: #7f8c8d; 
+		                font-style: italic; 
+		            }
+		        </style>
+		    </head>
+		    <body>
+		        <div class="container">
+		            <h1 class="company-name">Kirana Store</h1>
+		            <h2 class="invoice-title">Invoice</h2>
+		            
+		            <div class="invoice-details">
+		                <p><strong>Bill No:</strong>Invoice No: ${billNo}</p>
+		                <p><strong>Date:</strong> ${billDate}</p>
+		            </div>
+		            
+		            <table>
+		                <thead>
+		                    <tr>
+		                        <th>Item</th>
+		                        <th class="numeric">Qty</th>
+		                        <th class="numeric">Price</th>
+		                        <th class="numeric">Total</th>
+		                    </tr>
+		                </thead>
+		                <tbody>
+		                    ${cart.map(item => `
+		                        <tr>
+		                            <td>${item.name}</td>
+		                            <td class="numeric">${item.qty}</td>
+		                            <td class="numeric">${formatCurrency(item.price)}</td>
+		                            <td class="numeric">${formatCurrency(item.price * item.qty)}</td>
+		                        </tr>
+		                    `).join('')}
+		                </tbody>
+		            </table>
+
+                    <div class="payment-layout">
+                        <div class="qr-section-print">
+                            <strong>Scan to Pay (UPI)</strong>
+                            <img src="${qrCodeDataUrl}" alt="UPI QR Code" onerror="this.style.display='none'">
+                            <p>Amount: ${formatCurrency(grandTotal)}</p>
+                            <p style="font-size: 0.8em; margin-top: 10px;">VPA: ${VPA}</p>
+                        </div>
+
+                        <div class="totals-container">
+                            <p><span>Subtotal:</span> <span>${formatCurrency(total)}</span></p>
+                            <p><span>Discount:</span> <span>- ${formatCurrency(discount)}</span></p>
+                            <p class="grand-total"><strong><span>Grand Total:</span></strong> <span>${formatCurrency(grandTotal)}</span></p>
+                        </div>
+                    </div>
+
+		            <div class="clear"></div>
+
+		            <div class="footer">
+		                Thank you for shopping with us! Please come again.
+		            </div>
+		        </div>
+		    </body>
+		    </html>
+		`;
+
+		    let printWindow = window.open('', '', 'height=1000,width=1200');
+		    if (printWindow) {
+		        printWindow.document.write(invoiceHtml);
+		        printWindow.document.close();
+		        printWindow.focus();
+		        printWindow.print();
+		    }
+	};
+
     $scope.loadProducts();
+    $scope.loadCustomers();
 });
