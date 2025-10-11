@@ -113,6 +113,26 @@ public class ConstantVariables {
 	public static String lblCustomerForCredit = "Select  customer for Credit";
 	public static String lblCustomerForCredit_MR = "क्रेडिटसाठी ग्राहक निवडा";
 	
+	public static String lblSnacks = "Snacks";
+	public static String lblSnacks_MR = "नाश्ता";
+	
+	public static String lblBeverages = "Beverages";
+	public static String lblBeverages_MR = "शीतपेये";
+	
+	public static String lblDairy = "Dairy";
+	public static String lblDairy_MR = "दुग्धालय";
+	
+	public static String lblHousehold = "Household";
+	public static String lblHousehold_MR = "घरगुती";
+	
+	public static String lblOther = "Other";
+	public static String lblOther_MR = "इतर";
+	
+	public static String lblStock = "Stock";
+	public static String lblStock_MR = "साठा";
+	
+	public static String lblAction = "Action";
+	public static String lblAction_MR = "कृती";
 	
 
 	// Add more labels for home page or product categories as needed

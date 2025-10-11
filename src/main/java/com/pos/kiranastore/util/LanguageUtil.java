@@ -107,6 +107,20 @@ public class LanguageUtil {
 				isEN ? ConstantVariables.lblConfirmCredit : ConstantVariables.lblConfirmCredit_MR);
 		request.setAttribute("lblCustomerForCredit",
 				isEN ? ConstantVariables.lblCustomerForCredit : ConstantVariables.lblCustomerForCredit_MR);
+		request.setAttribute("lblSnacks",
+				isEN ? ConstantVariables.lblSnacks : ConstantVariables.lblSnacks_MR);
+		request.setAttribute("lblBeverages",
+				isEN ? ConstantVariables.lblBeverages : ConstantVariables.lblBeverages_MR);
+		request.setAttribute("lblDairy",
+				isEN ? ConstantVariables.lblDairy : ConstantVariables.lblDairy_MR);
+		request.setAttribute("lblHousehold",
+				isEN ? ConstantVariables.lblHousehold : ConstantVariables.lblHousehold_MR);
+		request.setAttribute("lblOther",
+				isEN ? ConstantVariables.lblOther : ConstantVariables.lblOther_MR);
+		request.setAttribute("lblStock",
+				isEN ? ConstantVariables.lblStock : ConstantVariables.lblStock_MR);
+		request.setAttribute("lblAction",
+				isEN ? ConstantVariables.lblAction : ConstantVariables.lblAction_MR);
 		
 		
 		// Purchase Labels

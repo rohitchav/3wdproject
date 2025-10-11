@@ -11,11 +11,11 @@
             <input type="text" id="searchInput" placeholder="Search for products...">
             <select id="categorySelect">
                 <option value="all">${lblAllCategory}</option>
-                  <option value="Snacks">Snacks</option>
-                                <option value="Beverages">Beverages</option>
-                                <option value="Dairy">Dairy</option>
-                                <option value="Household">Household</option>
-                                <option value="Other">Other</option>
+                  <option value="Snacks"> ${lblSnacks} </option>
+                                <option value="Beverages"> ${lblBeverages} </option>
+                                <option value="Dairy"> ${lblDairy} </option>
+                                <option value="Household"> ${lblHousehold} </option>
+                                <option value="Other"> ${lblOther} </option>
             </select>
         </div>
 

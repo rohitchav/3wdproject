@@ -74,12 +74,12 @@
                    <table class="table table-hover" ng-init="loadProducts()">
 						    <thead>
 						        <tr>
-						            <th>Product Name</th>
-						            <th>Category</th>
-						            <th>Cost Price</th>
-						            <th>Selling Price</th>
-						            <th>Stock</th>
-						            <th>Actions</th>
+						            <th>${lblProductName}</th>
+						            <th>${lblCategory}</th>
+						            <th> ${lblCostPrice}</th>
+						            <th>${lblSellingPrice}</th>
+						            <th>${lblStock}</th>
+						            <th>${lblAction}</th>
 						        </tr>
 						    </thead>
 						    <tbody>
@@ -159,11 +159,11 @@
                             <label for="category">${lblCategory}</label>
                             <select id="category" name="category" class="form-control" required>
                                 <option value="" selected>-- Select a Category --</option>
-                                <option value="Snacks">Snacks</option>
-                                <option value="Beverages">Beverages</option>
-                                <option value="Dairy">Dairy</option>
-                                <option value="Household">Household</option>
-                                <option value="Other">Other</option>
+                                <option value="Snacks">${lblSnacks}</option>
+                                <option value="Beverages">${lblBeverages}</option>
+                                <option value="Dairy">${lblDairy}</option>
+                                <option value="Household">${lblHousehold}</option>
+                                <option value="Other">${lblOther} </option>
                             </select>
                         </div>
                         <div class="form-group col-md-6">
@@ -220,13 +220,13 @@
           </div>
           <div class="form-row">
             <div class="form-group col-md-6">
-              <label for="editCategory">Category</label>
+              <label for="editCategory">${lblAllCategory}</label>
               <select id="editCategory" class="form-control" ng-model="selectedProduct.category" required>
-                <option value="Snacks">Snacks</option>
-                <option value="Beverages">Beverages</option>
-                <option value="Dairy">Dairy</option>
-                <option value="Household">Household</option>
-                <option value="Other">Other</option>
+                <option value="Snacks">${lblSnacks}</option>
+                <option value="Beverages">${lblBeverages}</option>
+                <option value="Dairy">${lblDairy}</option>
+                <option value="Household">${lblHousehold}</option>
+                <option value="Other">${lblOther} </option>
               </select>
             </div>
             <div class="form-group col-md-6">
