@@ -12,10 +12,17 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.google.gson.Gson;
 import com.pos.kiranastore.bean.Bill;
-import com.pos.kiranastore.dao.BillDao;
+import com.pos.kiranastore.serviceInterface.BillService;
+import com.pos.kiranastore.services.BillServiceImp;
 
 @WebServlet("/BillingController")
 public class BillController extends HttpServlet {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	private BillService billService = new BillServiceImp();
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
@@ -34,9 +41,8 @@ public class BillController extends HttpServlet {
 			BufferedReader reader = request.getReader();
 			Gson gson = new Gson();
 			Bill bill = gson.fromJson(reader, Bill.class);
-			System.out.println(bill);
-			BillDao dao = new BillDao();
-			boolean result = dao.saveBill(bill);
+
+			boolean result = billService.saveBill(bill); // use service instead of DAO
 
 			if (result)
 				out.print("{\"status\":\"success\",\"message\":\"Bill saved successfully!\"}");

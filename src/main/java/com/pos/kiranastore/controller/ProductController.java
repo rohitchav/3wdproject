@@ -18,22 +18,15 @@ import javax.servlet.http.Part;
 import com.google.gson.Gson;
 import com.pos.kiranastore.bean.Product;
 import com.pos.kiranastore.bean.Response;
-import com.pos.kiranastore.dao.ProductDao;
+import com.pos.kiranastore.serviceInterface.ProductService;
+import com.pos.kiranastore.services.ProductServiceImp;
 
-@MultipartConfig(fileSizeThreshold = 1024 * 1024 * 2, // 2MB
-		maxFileSize = 1024 * 1024 * 10, // 10MB
-		maxRequestSize = 1024 * 1024 * 50 // 50MB
-)
 @WebServlet("/ProductController")
+@MultipartConfig(fileSizeThreshold = 1024 * 1024 * 2, maxFileSize = 1024 * 1024 * 10, maxRequestSize = 1024 * 1024 * 50)
 public class ProductController extends HttpServlet {
-	ProductDao dao = new ProductDao();
+
 	private static final long serialVersionUID = 1L;
-
-	public ProductController() {
-		super();
-	}
-
-	// Simple Response class for JSON
+	private ProductService productService = new ProductServiceImp();
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
@@ -44,16 +37,20 @@ public class ProductController extends HttpServlet {
 		Gson gson = new Gson();
 
 		try (PrintWriter out = response.getWriter()) {
+
 			if ("list".equals(action)) {
-				List<Product> products = dao.getAllProducts();
+				List<Product> products = productService.getAllProducts();
 				out.print(gson.toJson(products));
+
 			} else if ("lowStock".equals(action)) {
 				int threshold = 10;
-				List<Product> lowStockProducts = dao.getLowStockProducts(threshold);
+				List<Product> lowStockProducts = productService.getLowStockProducts(threshold);
 				out.print(gson.toJson(lowStockProducts));
+
 			} else {
 				response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid action");
 			}
+
 		} catch (Exception e) {
 			e.printStackTrace();
 			response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Server error");
@@ -64,7 +61,6 @@ public class ProductController extends HttpServlet {
 			throws ServletException, IOException {
 
 		String action = request.getParameter("action");
-
 		response.setContentType("application/json");
 		response.setCharacterEncoding("UTF-8");
 		Gson gson = new Gson();
@@ -77,163 +73,111 @@ public class ProductController extends HttpServlet {
 			}
 
 			if (action.equals("add")) {
-				try {
-					// 1. Retrieve form fields
-					String name = request.getParameter("name");
-					double costPrice = Double.parseDouble(request.getParameter("costPrice"));
-					double sellingPrice = Double.parseDouble(request.getParameter("price"));
-					String category = request.getParameter("category");
-					int stock = Integer.parseInt(request.getParameter("stock"));
-
-					// 2. Handle file upload
-					Part filePart = request.getPart("imageFile");
-					String fileName = "";
-
-					if (filePart != null && filePart.getSize() > 0) {
-						fileName = Paths.get(filePart.getSubmittedFileName()).getFileName().toString();
-
-						String uploadPath = getServletContext().getRealPath("") + File.separator + "uploads";
-						File uploadDir = new File(uploadPath);
-						if (!uploadDir.exists())
-							uploadDir.mkdir();
-
-						filePart.write(uploadPath + File.separator + fileName);
-					}
-
-					// 3. Create Product object
-					Product product = new Product();
-					product.setName(name);
-					product.setCostPrice(costPrice);
-					product.setSellingPrice(sellingPrice);
-					product.setCategory(category);
-					product.setStock(stock);
-					if (!fileName.isEmpty()) {
-						product.setImagePath("uploads/" + fileName);
-					}
-					boolean isAdded = dao.addProduct(product);
-
-					// 5. Return JSON response
-					if (isAdded) {
-						out.print(gson.toJson(new Response(true, "Product added successfully")));
-					} else {
-						out.print(gson.toJson(new Response(false, "Failed to add product")));
-					}
-
-				} catch (Exception e) {
-					e.printStackTrace();
-					out.print(gson.toJson(new Response(false, "Invalid input or server error")));
-				}
+				handleAdd(request, response, out, gson);
 
 			} else if (action.equals("update")) {
-				try {
-					int id = Integer.parseInt(request.getParameter("id"));
-					String name = request.getParameter("name");
-					double costPrice = Double.parseDouble(request.getParameter("costPrice"));
-					double sellingPrice = Double.parseDouble(request.getParameter("price"));
-					String category = request.getParameter("category");
-					int stock = Integer.parseInt(request.getParameter("stock"));
+				handleUpdate(request, response, out, gson);
 
-					// Handle file upload (optional, only if user uploads new image)
-					Part filePart = request.getPart("imageFile");
-					String fileName = "";
-					String imagePath = null;
-
-					if (filePart != null && filePart.getSize() > 0) {
-						fileName = Paths.get(filePart.getSubmittedFileName()).getFileName().toString();
-
-						String uploadPath = getServletContext().getRealPath("") + File.separator + "uploads";
-						File uploadDir = new File(uploadPath);
-						if (!uploadDir.exists())
-							uploadDir.mkdir();
-
-						filePart.write(uploadPath + File.separator + fileName);
-						imagePath = "uploads/" + fileName;
-					}
-
-					// Create Product object
-					Product product = new Product();
-					product.setId(id);
-					product.setName(name);
-					product.setCostPrice(costPrice);
-					product.setSellingPrice(sellingPrice);
-					product.setCategory(category);
-					product.setStock(stock);
-
-					// in ProductController update
-					if (imagePath != null) {
-						product.setImagePath(imagePath);
-					} else {
-						product.setImagePath(new ProductDao().getProductImage(id)); // ✅ preserve old image
-					}
-					boolean updated = dao.updateProduct(product);
-
-					if (updated) {
-						out.print(gson.toJson(new Response(true, "Product updated successfully")));
-					} else {
-						out.print(gson.toJson(new Response(false, "Failed to update product")));
-					}
-
-				} catch (Exception e) {
-					e.printStackTrace();
-					out.print(gson.toJson(new Response(false, "Invalid input or server error")));
-				}
 			} else if (action.equals("delete")) {
-				try {
-					int id = Integer.parseInt(request.getParameter("id"));
-					boolean deleted = dao.deleteProduct(id);
-					if (deleted) {
-						out.print(gson.toJson(new Response(true, "Product deleted successfully")));
-					} else {
-						out.print(gson.toJson(new Response(false, "Failed to delete product")));
-					}
-				} catch (Exception e) {
-					e.printStackTrace();
-					out.print(gson.toJson(new Response(false, "Invalid input or server error")));
-				}
+				int id = Integer.parseInt(request.getParameter("id"));
+				boolean deleted = productService.deleteProduct(id);
+				out.print(gson.toJson(
+						new Response(deleted, deleted ? "Product deleted successfully" : "Failed to delete product")));
+
 			} else if (action.equals("deleteAll")) {
-				try {
-					ProductDao dao = new ProductDao();
-					boolean deleted = dao.deleteAllProduct();
+				boolean deleted = productService.deleteAllProducts();
+				out.print(gson.toJson(
+						new Response(deleted, deleted ? "Products deleted successfully" : "Failed to delete product")));
 
-					if (deleted) {
-						out.print(gson.toJson(new Response(true, "Products deleted successfully")));
-					} else {
-						out.print(gson.toJson(new Response(false, "Failed to delete product")));
-					}
-				} catch (Exception e) {
-					e.printStackTrace();
-					out.print(gson.toJson(new Response(false, "Invalid input or server error")));
-				}
 			} else if ("updateStock".equals(action)) {
-				try {
-					String json = request.getReader().lines().collect(Collectors.joining());
-					Product[] products = new Gson().fromJson(json, Product[].class);
+				String json = request.getReader().lines().collect(Collectors.joining());
+				Product[] products = new Gson().fromJson(json, Product[].class);
 
-					// Check stock
-					for (Product p : products) {
-						int availableQty = dao.getProductStock(p.getId());
-						if (p.getQty() > availableQty) {
-							response.getWriter()
-									.write("{\"status\":\"error\",\"message\":\"Requested quantity for product "
-											+ p.getName() + " exceeds available stock.\"}");
-							return;
-						}
+				for (Product p : products) {
+					int availableQty = productService.getProductStock(p.getId());
+					if (p.getQty() > availableQty) {
+						response.getWriter().write("{\"status\":\"error\",\"message\":\"Requested quantity for product "
+								+ p.getName() + " exceeds available stock.\"}");
+						return;
 					}
-
-					boolean success = dao.updateStock(products);
-
-					if (success) {
-						response.getWriter().write("{\"status\":\"success\"}");
-					} else {
-						response.getWriter().write("{\"status\":\"error\",\"message\":\"Stock update failed\"}");
-					}
-
-				} catch (Exception e) {
-					e.printStackTrace();
-					response.getWriter().write("{\"status\":\"error\",\"message\":\"" + e.getMessage() + "\"}");
 				}
+
+				boolean success = productService.updateStock(products);
+				response.getWriter().write("{\"status\":\"" + (success ? "success" : "error") + "\"}");
 			}
 
+		} catch (Exception e) {
+			e.printStackTrace();
+			response.getWriter().write("{\"status\":\"error\",\"message\":\"" + e.getMessage() + "\"}");
 		}
+	}
+
+	private void handleAdd(HttpServletRequest request, HttpServletResponse response, PrintWriter out, Gson gson)
+			throws Exception {
+		String name = request.getParameter("name");
+		double costPrice = Double.parseDouble(request.getParameter("costPrice"));
+		double sellingPrice = Double.parseDouble(request.getParameter("price"));
+		String category = request.getParameter("category");
+		int stock = Integer.parseInt(request.getParameter("stock"));
+
+		Part filePart = request.getPart("imageFile");
+		String fileName = "";
+		if (filePart != null && filePart.getSize() > 0) {
+			fileName = Paths.get(filePart.getSubmittedFileName()).getFileName().toString();
+			String uploadPath = getServletContext().getRealPath("") + File.separator + "uploads";
+			File uploadDir = new File(uploadPath);
+			if (!uploadDir.exists())
+				uploadDir.mkdir();
+			filePart.write(uploadPath + File.separator + fileName);
+		}
+
+		Product product = new Product();
+		product.setName(name);
+		product.setCostPrice(costPrice);
+		product.setSellingPrice(sellingPrice);
+		product.setCategory(category);
+		product.setStock(stock);
+		if (!fileName.isEmpty())
+			product.setImagePath("uploads/" + fileName);
+
+		boolean isAdded = productService.addProduct(product);
+		out.print(gson.toJson(new Response(isAdded, isAdded ? "Product added successfully" : "Failed to add product")));
+	}
+
+	private void handleUpdate(HttpServletRequest request, HttpServletResponse response, PrintWriter out, Gson gson)
+			throws Exception {
+		int id = Integer.parseInt(request.getParameter("id"));
+		String name = request.getParameter("name");
+		double costPrice = Double.parseDouble(request.getParameter("costPrice"));
+		double sellingPrice = Double.parseDouble(request.getParameter("price"));
+		String category = request.getParameter("category");
+		int stock = Integer.parseInt(request.getParameter("stock"));
+
+		Part filePart = request.getPart("imageFile");
+		String fileName = "";
+		String imagePath = null;
+
+		if (filePart != null && filePart.getSize() > 0) {
+			fileName = Paths.get(filePart.getSubmittedFileName()).getFileName().toString();
+			String uploadPath = getServletContext().getRealPath("") + File.separator + "uploads";
+			File uploadDir = new File(uploadPath);
+			if (!uploadDir.exists())
+				uploadDir.mkdir();
+			filePart.write(uploadPath + File.separator + fileName);
+			imagePath = "uploads/" + fileName;
+		}
+
+		Product product = new Product();
+		product.setId(id);
+		product.setName(name);
+		product.setCostPrice(costPrice);
+		product.setSellingPrice(sellingPrice);
+		product.setCategory(category);
+		product.setStock(stock);
+		product.setImagePath(imagePath != null ? imagePath : productService.getProductImage(id));
+
+		boolean updated = productService.updateProduct(product);
+		out.print(gson
+				.toJson(new Response(updated, updated ? "Product updated successfully" : "Failed to update product")));
 	}
 }
