@@ -61,9 +61,9 @@
 			      <p class="balance-amount">₹{{c.outstanding}}.00</p>
 			    </div>
 			
-			    <button type="button" ng-click="deleteCustomer(c.id)" class="btn-delete">
+			  <!--   <button type="button" ng-click="deleteCustomer(c.id)" class="btn-delete">
 			      <i class="fas fa-trash-alt"></i>
-			    </button>
+			    </button> -->
 			  </div>
 			</div>
             </div>

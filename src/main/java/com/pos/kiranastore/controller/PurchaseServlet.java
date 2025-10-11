@@ -15,80 +15,78 @@ import javax.servlet.http.Part;
 
 import com.google.gson.Gson;
 import com.pos.kiranastore.bean.Purchase;
-import com.pos.kiranastore.dao.PurchaseDAO;
+import com.pos.kiranastore.serviceInterface.PurchaseService;
+import com.pos.kiranastore.services.PurchaseServiceImp;
 
 @WebServlet("/PurchaseServlet")
-@MultipartConfig(fileSizeThreshold = 1024 * 1024, // 1 MB
-		maxFileSize = 5 * 1024 * 1024, // 5 MB
-		maxRequestSize = 10 * 1024 * 1024) // 10 MB
+@MultipartConfig(fileSizeThreshold = 1024 * 1024, maxFileSize = 5 * 1024 * 1024, maxRequestSize = 10 * 1024 * 1024)
 public class PurchaseServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
 	private static final String UPLOAD_DIR = "uploads";
+	private PurchaseService purchaseService = new PurchaseServiceImp();
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-
 		request.setCharacterEncoding("UTF-8");
-
 		String action = request.getParameter("action");
 
-		// Delete purchase
-		if ("delete".equalsIgnoreCase(action)) {
-			int id = Integer.parseInt(request.getParameter("id"));
-			PurchaseDAO dao = new PurchaseDAO();
-			boolean deleted = dao.deletePurchase(id); // Add this method in DAO
-			response.setContentType("application/json");
-			response.setCharacterEncoding("UTF-8");
-			response.getWriter().write("{\"success\":" + deleted + "}");
-			return;
+		try {
+			if ("delete".equalsIgnoreCase(action)) {
+				int id = Integer.parseInt(request.getParameter("id"));
+				boolean deleted = purchaseService.deletePurchase(id);
+				writeJson(response, "{\"success\":" + deleted + "}");
+				return;
+			}
+
+			String supplier = request.getParameter("supplier");
+			BigDecimal amount = new BigDecimal(request.getParameter("amount"));
+
+			Part filePart = request.getPart("billFile");
+			String fileName = null;
+			String filePath = null;
+
+			if (filePart != null && filePart.getSize() > 0) {
+				fileName = new File(filePart.getSubmittedFileName()).getName();
+				String uploadPath = getServletContext().getRealPath("") + File.separator + UPLOAD_DIR;
+				File uploadDir = new File(uploadPath);
+				if (!uploadDir.exists())
+					uploadDir.mkdir();
+
+				filePath = request.getContextPath() + "/" + UPLOAD_DIR + "/" + fileName;
+				filePart.write(uploadPath + File.separator + fileName);
+			}
+
+			boolean success = purchaseService.addPurchase(supplier, amount, filePath);
+			writeJson(response, "{\"success\":" + success + "}");
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			writeJson(response, "{\"success\":false,\"message\":\"" + e.getMessage() + "\"}");
 		}
-
-		String supplier = request.getParameter("supplier");
-		BigDecimal amount = new BigDecimal(request.getParameter("amount"));
-
-		// Handle file upload
-		Part filePart = request.getPart("billFile");
-		String fileName = null;
-		String filePath = null;
-
-		if (filePart != null && filePart.getSize() > 0) {
-			fileName = new File(filePart.getSubmittedFileName()).getName();
-			String uploadPath = getServletContext().getRealPath("") + File.separator + UPLOAD_DIR;
-			File uploadDir = new File(uploadPath);
-			if (!uploadDir.exists())
-				uploadDir.mkdir();
-
-			filePath = request.getContextPath() + "/" + UPLOAD_DIR + "/" + fileName; // URL path
-			filePart.write(uploadPath + File.separator + fileName);
-		}
-
-		PurchaseDAO dao = new PurchaseDAO();
-		boolean success = dao.addPurchase(supplier, amount, filePath);
-
-		response.setContentType("application/json");
-		response.setCharacterEncoding("UTF-8");
-		response.getWriter().write("{\"success\":" + success + "}");
 	}
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-
 		String action = request.getParameter("action");
-		if ("list".equals(action)) {
-			// Return JSON list of purchases
-			PurchaseDAO dao = new PurchaseDAO();
-			List<Purchase> purchases = dao.getAllPurchases();
 
-			// Convert to JSON
-			String json = new Gson().toJson(purchases);
-			response.setContentType("application/json");
-			response.setCharacterEncoding("UTF-8");
-			response.getWriter().write(json);
-			return;
+		try {
+			if ("list".equals(action)) {
+				List<Purchase> purchases = purchaseService.getAllPurchases();
+				writeJson(response, purchases);
+				return;
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			writeJson(response, "{\"success\":false,\"message\":\"" + e.getMessage() + "\"}");
 		}
 
-		// Normal page forward
 		request.getRequestDispatcher("/purchase.jsp").forward(request, response);
+	}
+
+	private void writeJson(HttpServletResponse response, Object obj) throws IOException {
+		response.setContentType("application/json");
+		response.setCharacterEncoding("UTF-8");
+		response.getWriter().write(new Gson().toJson(obj));
 	}
 }

@@ -60,7 +60,7 @@ angular.module('customerApp', [])
 		
 		
     };
-	
+	/*
 	$scope.deleteCustomer = function(id) {
 	  if (confirm("Are you sure you want to delete this customer?")) {
 	    $http.post('CustomerServlet?action=delete&id=' + id)
@@ -77,7 +77,7 @@ angular.module('customerApp', [])
 	      });
 	  }
 	};
-
+*/
 	
 	$scope.loadCustomers();
   });

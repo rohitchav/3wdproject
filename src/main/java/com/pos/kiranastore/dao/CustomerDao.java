@@ -12,17 +12,19 @@ import com.pos.kiranastore.connection.DBConnection;
 
 public class CustomerDao {
 
-	public void addCustomer(Customer customer) throws SQLException {
-		// TODO Auto-generated method stub
-		String sql = "INSERT INTO customers (name,phone,address) VALUES (?, ?, ?)";
+	public boolean addCustomer(Customer customer) throws SQLException {
+		String sql = "INSERT INTO customers (name, phone, address) VALUES (?, ?, ?)";
 
 		try (Connection conn = DBConnection.getConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
 
 			ps.setString(1, customer.getName());
 			ps.setString(2, customer.getPhone());
 			ps.setString(3, customer.getAddress());
-			ps.executeUpdate();
-			System.out.println("Inserted");
+
+			int row = ps.executeUpdate(); // returns number of affected rows
+			System.out.println("Inserted " + row + " row(s)");
+
+			return row > 0; // return true if insert was successful
 		}
 	}
 
@@ -47,14 +49,13 @@ public class CustomerDao {
 		return customers;
 	}
 
-	public boolean deleteCustomer(int id) throws SQLException {
-		String sql = "UPDATE customers SET status='B' WHERE id = ?";
-		try (Connection conn = DBConnection.getConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
-			ps.setInt(1, id);
-			int rows = ps.executeUpdate();
-			return rows > 0;
-		}
-	}
+	/*
+	 * public boolean deleteCustomer(int id) throws SQLException { String sql =
+	 * "UPDATE customers SET status='B' WHERE id = ?"; try (Connection conn =
+	 * DBConnection.getConnection(); PreparedStatement ps =
+	 * conn.prepareStatement(sql)) { ps.setInt(1, id); int rows =
+	 * ps.executeUpdate(); return rows > 0; } }
+	 */
 
 	public List<Customer> searchCustomers(String query) {
 		List<Customer> list = new ArrayList<>();
