@@ -1,0 +1,281 @@
+@charset "UTF-8";
+
+    body {
+        font-family: 'Inter', sans-serif;
+        background-color: #f4f7f9;
+        padding: 20px;
+        display: flex;
+        justify-content: center;
+    }
+
+    .container {
+        width: 100%;
+        max-width: 950px;
+        margin-top: 90px;
+        background-color: #fff;
+        padding: 25px;
+        border-radius: 10px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+        border: none;
+        margin-left:40px;
+    }
+
+    /* --- Search Area Styling --- */
+    .search-area {
+        display: flex;
+        justify-content: flex-start; /* Changed to flex-start to match image */
+        align-items: center;
+        margin-bottom: 25px;
+        border-bottom: 1px solid #e0e0e0; 
+        padding-bottom: 15px;
+    }
+    
+    /* Center the search icon and input */
+    .search-area {
+        justify-content: space-between;
+        /* Adjusted positioning to keep search components together */
+        justify-content: flex-start;
+    }
+
+    .search-box {
+        display: flex;
+        align-items: center;
+        border: 1px solid #ccc; 
+        border-radius: 6px;
+        margin-right: 10px;
+        overflow: hidden;
+    }
+
+    .search-icon {
+        padding: 8px 12px;
+        background-color: #f0f0f0; 
+        font-size: 1.1em;
+        color: #666;
+    }
+
+    .search-input {
+        padding: 8px 12px;
+        border: none;
+        outline: none;
+        font-size: 14px;
+        width: 250px;
+    }
+
+    /* Primary Themed Button Style */
+    .search-button {
+        background-color: #0d6efd; 
+        color: white;
+        border: none;
+        padding: 9px 18px;
+        font-weight: 600;
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 14px;
+        transition: background 0.3s, transform 0.1s;
+    }
+
+    .search-button:hover {
+        background-color: #084298;
+    }
+    
+    .search-button:active {
+        transform: scale(0.98);
+    }
+
+    /* --- Table Styling --- */
+    .product-table {
+        width: 100%;
+        border-collapse: collapse; 
+    }
+
+    /* Column Header Styling (Attractive Coloring) */
+    .product-table thead th {
+        background-color: #0056d2;
+        color: white;
+        font-weight: 600;
+        text-align: left;
+        padding: 12px 10px;
+        border-bottom: 3px solid #0044a8;
+    }
+    /* Adjusted table header rounding */
+    .product-table thead th:first-child { border-top-left-radius: 8px; }
+    .product-table thead th:last-child { border-top-right-radius: 8px; }
+
+
+    /* Table Body and Cell Styling (Subtle Grey Borders) */
+    .product-table th, 
+    .product-table td {
+        border: 1px solid #e0e0e0;
+        border-top: none;
+        padding: 12px 10px;
+        vertical-align: middle; 
+        font-size: 14px;
+    }
+    
+    /* Re-add the vertical and horizontal borders */
+    .product-table th, 
+    .product-table td {
+        border-left: 1px solid #e0e0e0;
+        border-right: 1px solid #e0e0e0;
+        border-bottom: 1px solid #e0e0e0;
+    }
+    
+    /* Remove redundant side borders where appropriate */
+    .product-table td:first-child { border-left: none; }
+    .product-table td:last-child { border-right: none; }
+    .product-table th:first-child { border-left: none; }
+    .product-table th:last-child { border-right: none; }
+    
+    /* FIX: Ensure the last data row has a bottom border connecting to the Total row */
+    .product-table tbody tr:last-child td {
+        border-bottom: 1px solid #e0e0e0;
+    }
+
+
+    /* Column Alignment */
+    .product-table .sr-no { width: 5%; text-align: center; }
+    .product-table .product-name { width: 45%; }
+    .product-table .qty { width: 10%; text-align: center; }
+    .product-table .amount { width: 15%; text-align: right; font-weight: 600; }
+    .product-table .action { width: 25%; text-align: center; }
+    
+    /* Removed .empty-row CSS since the elements are removed from HTML */
+
+
+    /* --- Footer (Total) Styling --- */
+    .product-table tfoot .total-row td {
+        font-weight: 700;
+        padding: 15px 10px;
+        background-color: #eaf3ff; 
+        border-top: 2px solid #0056d2; 
+        border-bottom: none;
+        font-size: 15px;
+    }
+
+    .product-table tfoot .total-label {
+        text-align: right;
+        color: #0056d2;
+        border-left: none;
+        border-right: 1px solid #e0e0e0;
+    }
+
+    .product-table tfoot .total-amount {
+        text-align: right;
+        color: #28a745;
+        font-size: 18px;
+        border-right: 1px solid #e0e0e0;
+    }
+    
+    .product-table tfoot .total-action {
+        border-right: none;
+        border-left: 1px solid #e0e0e0;
+    }
+    
+    /* Round the bottom corners of the container */
+    .product-table tfoot tr:last-child td:first-child { border-bottom-left-radius: 8px; }
+    .product-table tfoot tr:last-child td:last-child { border-bottom-right-radius: 8px; }
+    
+    /* Delete Button Styling */
+    .delete-btn {
+        padding: 8px 15px;
+        background-color: #dc3545;
+        border: none;
+        color: white;
+        cursor: pointer;
+        font-size: 13px;
+        font-weight: 600;
+        border-radius: 6px; 
+        width: 100%;
+        max-width: 120px;
+        box-sizing: border-box;
+        transition: background-color 0.3s;
+    }
+
+    .delete-btn:hover {
+        background-color: #b02a37;
+    }
+    
+.search-area {
+    /* Keep this as is: flex container */
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    margin-bottom: 25px; 
+    border-bottom: 1px solid #e0e0e0; 
+    padding-bottom: 15px;
+    /* FIX: Temporarily increase bottom padding to make space for the suggestion box */
+    /* We'll adjust the margin on the table instead for a cleaner flow */
+}
+
+.search-box {
+    display: flex;
+    align-items: center;
+    border: 1px solid #ccc; 
+    border-radius: 6px;
+    margin-right: 10px;
+    overflow: visible; /* CRITICAL: Must be visible to show suggestions outside */
+    
+    /* CRITICAL FIX: The suggestion box is absolutely positioned relative to this element. */
+    position: relative; 
+    flex: 1; 
+}
+
+/* --- Suggestions Box Styles --- */
+.suggestions-box {
+    list-style: none;
+    position: absolute;
+    top: 100%; /* Position it immediately below the search input area */
+    left: 0;
+    width: 100%; 
+    background: #fff;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    /* CRITICAL FIX: Higher z-index ensures it renders OVER the table */
+    z-index: 10000; 
+    margin: 0;
+    padding: 0;
+    max-height: 200px;
+    overflow-y: auto;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+.suggestions-box li {
+    padding: 8px 12px;
+    cursor: pointer;
+    font-size: 14px;
+    white-space: nowrap; /* Prevents text wrap */
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.suggestions-box li:hover {
+    background-color: #eaf3ff; /* Themed hover color */
+}
+
+.buttons {
+    margin-top: 20px;
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+    margin-left: auto; 
+}
+
+.generate-btn {
+    background-color: #ff6a00;
+    color: white;
+    border: none;
+    padding: 12px;
+    font-size: 16px;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.clear-btn {
+    background-color: #f44336;
+    color: white;
+    border: none;
+    padding: 12px;
+    font-size: 16px;
+    border-radius: 6px;
+    cursor: pointer;
+}
