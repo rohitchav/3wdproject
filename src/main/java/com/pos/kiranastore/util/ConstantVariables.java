@@ -54,7 +54,7 @@ public class ConstantVariables {
 	public static String lblClearCart_MR = "कार्ट साफ करा";
 
 	public static String lblItem = "Item";
-	public static String lblItem_MR = "आयटम";
+	public static String lblItem_MR = "यादी";
 
 	public static String lblQuantity = "Quantity";
 	public static String lblQuantity_MR = "संख्या";
@@ -70,6 +70,50 @@ public class ConstantVariables {
 	
 	public static String lblDiscount = "Discount";
 	public static String lblDiscount_MR = "सवलत";
+	
+	public static String lblInvoice = "Invoice";
+	public static String lblInvoice_MR = "चलन";
+	
+	public static String lblBillNo = "Bill No";
+	public static String lblBillNo_MR = "बिल क्र";
+	
+	public static String lblDate = "Date";
+	public static String lblDate_MR = "दिनांक";
+	
+	public static String lblQTY = "Quantity";
+	public static String lblQTY_MR = "संख्या";
+	
+	public static String lblRate = "Rate";
+	public static String lblRate_MR = "दर";
+	
+	public static String lblAmount = "Amount";
+	public static String lblAmount_MR = "रक्कम";
+	
+	public static String lblPaidCash = "Paid in Cash";
+	public static String lblPaidCash_MR = "रोख रक्कम दिली";
+	
+	public static String lblPaidUPI = "Paid by UPI";
+	public static String lblPaidUPI_MR = "UPI ने पैसे दिले";
+	
+	public static String lblPaidCard = "Paid by Card";
+	public static String lblPaidCard_MR = "कार्डद्वारे पैसे दिले";
+	
+	public static String lblAddtoCredit = "Add to Credit";
+	public static String lblAddtoCredit_MR = "क्रेडिटमध्ये जोडा";
+	
+	public static String lblPrintInvoice = "Print Invoice";
+	public static String lblPrintInvoice_MR = "चलन छापा ";
+	
+	public static String lblBack = "Back";
+	public static String lblBack_MR = "मागे";
+	
+	public static String lblConfirmCredit = "Confirm Credit";
+	public static String lblConfirmCredit_MR = "क्रेडिटची पुष्टी करा";
+	
+	public static String lblCustomerForCredit = "Select  customer for Credit";
+	public static String lblCustomerForCredit_MR = "क्रेडिटसाठी ग्राहक निवडा";
+	
+	
 
 	// Add more labels for home page or product categories as needed
 	public static String lblCategoryFruits = "Fruits";

@@ -79,6 +79,34 @@ public class LanguageUtil {
 				isEN ? ConstantVariables.lblStockQuantity : ConstantVariables.lblStockQuantity_MR);
 		request.setAttribute("lblProductImage",
 				isEN ? ConstantVariables.lblProductImage : ConstantVariables.lblProductImage_MR);
+		request.setAttribute("lblInvoice",
+				isEN ? ConstantVariables.lblInvoice : ConstantVariables.lblInvoice_MR);
+		request.setAttribute("lblBillNo",
+				isEN ? ConstantVariables.lblBillNo : ConstantVariables.lblBillNo_MR);
+		request.setAttribute("lblDate",
+				isEN ? ConstantVariables.lblDate : ConstantVariables.lblDate_MR);
+		request.setAttribute("lblQTY",
+				isEN ? ConstantVariables.lblQTY : ConstantVariables.lblQTY_MR);
+		request.setAttribute("lblRate",
+				isEN ? ConstantVariables.lblRate : ConstantVariables.lblRate_MR);
+		request.setAttribute("lblAmount",
+				isEN ? ConstantVariables.lblAmount : ConstantVariables.lblAmount_MR);
+		request.setAttribute("lblPaidCash",
+				isEN ? ConstantVariables.lblPaidCash : ConstantVariables.lblPaidCash_MR);
+		request.setAttribute("lblPaidUPI",
+				isEN ? ConstantVariables.lblPaidUPI : ConstantVariables.lblPaidUPI_MR);
+		request.setAttribute("lblPaidCard",
+				isEN ? ConstantVariables.lblPaidCard : ConstantVariables.lblPaidCard_MR);
+		request.setAttribute("lblAddtoCredit",
+				isEN ? ConstantVariables.lblAddtoCredit : ConstantVariables.lblAddtoCredit_MR);
+		request.setAttribute("lblPrintInvoice",
+				isEN ? ConstantVariables.lblPrintInvoice : ConstantVariables.lblPrintInvoice_MR);
+		request.setAttribute("lblBack",
+				isEN ? ConstantVariables.lblBack : ConstantVariables.lblBack_MR);
+		request.setAttribute("lblConfirmCredit",
+				isEN ? ConstantVariables.lblConfirmCredit : ConstantVariables.lblConfirmCredit_MR);
+		request.setAttribute("lblCustomerForCredit",
+				isEN ? ConstantVariables.lblCustomerForCredit : ConstantVariables.lblCustomerForCredit_MR);
 		
 		
 		// Purchase Labels

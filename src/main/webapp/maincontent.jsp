@@ -11,8 +11,11 @@
             <input type="text" id="searchInput" placeholder="Search for products...">
             <select id="categorySelect">
                 <option value="all">${lblAllCategory}</option>
-                <option value="Dairy">Dairy</option>
-                <option value="Household">Household</option>
+                  <option value="Snacks">Snacks</option>
+                                <option value="Beverages">Beverages</option>
+                                <option value="Dairy">Dairy</option>
+                                <option value="Household">Household</option>
+                                <option value="Other">Other</option>
             </select>
         </div>
 
@@ -66,22 +69,22 @@
 
   <div id="invoiceModal" class="invoice-modal" ng-show="showInvoice">
     <div class="invoice">
-        <h2>Invoice</h2>
+        <h2> ${lblInvoice}</h2>
         <p class="store-name">Kirana Store</p>
         <p class="store-address">123 Market St, Phaltan, Maharashtra</p>
         
         <div class="bill-info">
-            <span>Bill No: #INV-{{billNo}}</span>
-            <span>Date: {{billDate}}</span>
+            <span> ${lblBillNo} : #INV-{{billNo}}</span>
+            <span> ${lblDate} : {{billDate}}</span>
         </div>
 
         <table>
             <thead>
                 <tr>
-                    <th>Item</th>
-                    <th>Qty</th>
-                    <th>Rate</th>
-                    <th>Amount</th>
+                    <th> ${lblItem }</th>
+                    <th>${lblQTY}</th>
+                    <th> ${lblRate}</th>
+                    <th> ${lblAmount}</th>
                 </tr>
             </thead>
             <tbody>
@@ -95,9 +98,9 @@
         </table>
 
         <div class="totals">
-            <p>Subtotal: ₹{{getTotal() | number:2}}</p>
-            <p>Discount: - ₹{{discount | number:2}}</p>
-            <h3>Grand Total: ₹{{getTotal() - discount | number:2}}</h3>
+            <p> ${lblSubTotal} : ₹{{getTotal() | number:2}}</p>
+            <p>${lblDiscount}  : - ₹{{discount | number:2}}</p>
+            <h3> ${lblTotal} : ₹{{getTotal() - discount | number:2}}</h3>
         </div>
 
       <div class="qr-section" ng-if="!showCustomerCredit">
@@ -107,14 +110,14 @@
 
 
         <div class="payment-buttons" ng-if="!showCustomerCredit">
-		    <button class="cash" ng-click="payCash()">Paid in Cash</button>
-		    <button class="upi" ng-click="payUPI()">Paid by UPI</button>
-		    <button class="card" ng-click="payCard()">Paid by Card</button>
-		    <button class="credit" ng-click="addToCredit()">Add to Credit</button>
+		    <button class="cash" ng-click="payCash()"> ${lblPaidCash}</button>
+		    <button class="upi" ng-click="payUPI()"> ${lblPaidUPI}</button>
+		    <button class="card" ng-click="payCard()"> ${lblPaidCard}</button>
+		    <button class="credit" ng-click="addToCredit()"> ${lblAddtoCredit}</button>
 		</div>
 		
 	<div class="credit-selection" ng-if="showCustomerCredit">
-    <label>Select Customer for Credit</label>
+    <label>${lblCustomerForCredit}</label>
     <div class="credit-dropdown">
 	  <select
 	    ng-model="selectedCustomer.id"
@@ -128,14 +131,14 @@
     </div>
 
     <div class="credit-actions">
-        <button class="back" ng-click="showCustomerCreditBack()">Back</button>
-        <button class="confirm-credit" ng-click="confirmCredit()">Confirm Credit</button>
+        <button class="back" ng-click="showCustomerCreditBack()"> ${lblBack}</button>
+        <button class="confirm-credit" ng-click="confirmCredit()"> ${lblConfirmCredit}</button>
     </div>
 </div>
 
         <div class="invoice-actions" ng-if="!showCustomerCredit">
-            <button class="download" ng-click="printInvoice()">Print Invoice</button>
-            <button class="cancel" ng-click="closeInvoice()">Cancel</button>
+            <button class="download" ng-click="printInvoice()"> ${lblPrintInvoice}</button>
+            <button class="cancel" ng-click="closeInvoice()"> ${lblcancel }</button>
         </div>
         
         
@@ -143,18 +146,18 @@
             <div class="modal">
                 <h3>${lblAddCustomer}</h3>
                 <form ng-submit="addCustomer()">
-                    <label>Customer Name</label>
+                    <label> ${lblCustomerName}</label>
                     <input type="text" ng-model="newCustomer.name" required>
 
-                    <label>Phone Number</label>
+                    <label> ${lblMobile}</label>
                     <input type="text" ng-model="newCustomer.phone" required>
 
-                    <label>Address (Optional)</label>
+                    <label>${lblAddress}</label>
                     <input type="text" ng-model="newCustomer.address">
 
                     <div class="modal-buttons">
-                        <button type="button" class="cancel-btn" ng-click="closeModal()">Cancel</button>
-                        <button type="submit" class="add-btn">Add Customer</button>
+                        <button type="button" class="cancel-btn" ng-click="closeModal()"> ${lblcancel}</button>
+                        <button type="submit" class="add-btn"> ${lblAddCustomer}</button>
                     </div>
                 </form>
             </div>
