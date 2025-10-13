@@ -290,33 +290,52 @@ app.controller("BillingTableController", function($scope, $http) {
     // CUSTOMER CREDIT
     $scope.addToCredit = function() { $scope.showCustomerCredit = true; $scope.loadCustomers(); };
     $scope.showCustomerCreditBack = function() { $scope.showCustomerCredit = false; };
-    $scope.confirmCredit = function() {
-        if (!$scope.selectedCustomer.id) {
-            alert("Please select a customer.");
-            return;
-        }
-    
-        const grandTotal = $scope.getTotal() - $scope.discount;
-        $http({
-            method: 'POST',
-            url: 'CustomerServlet?action=updateOutstanding',
-            params: { customerId: $scope.selectedCustomer.id, amount: grandTotal }
-        }).then(response => {
-            if (response.data.status === "success") {
-                let selectedCustomer = $scope.customers.find(c => c.id === $scope.selectedCustomer.id);
-                
-                // Save bill as "CREDIT" before clearing
-                $scope.saveBillToDatabase("CREDIT", $scope.selectedCustomer.id);
+	$scope.confirmCredit = function() {
+	    if (!$scope.selectedCustomer.id) {
+	        alert("Please select a customer.");
+	        return;
+	    }
 
-                alert("Credit assigned to " + (selectedCustomer ? selectedCustomer.name : 'customer'));
-                $scope.showCustomerCredit = false;
-                $scope.showInvoice = false;
-                $scope.updateStock();
-                $scope.clearCart();
-                $scope.selectedCustomer.id = null;
-            } else alert("Failed to update outstanding balance.");
-        }).catch(() => alert("Something went wrong!"));
-    };
+	    const grandTotal = $scope.getTotal() - $scope.discount;
+
+	    $http({
+	        method: 'POST',
+	        url: 'CustomerServlet?action=updateOutstanding',
+	        params: {
+	            customerId: $scope.selectedCustomer.id,
+	            amount: grandTotal
+	        }
+	    }).then(response => {
+	        console.log("Type of response.data:", typeof response.data);
+	        console.log("response.data:", response.data);
+
+	        // Parse response.data if it's a string
+	        let data = typeof response.data === 'string' ? JSON.parse(response.data) : response.data;
+
+	        console.log("Parsed data:", data);
+	        console.log("data.status:", data.status);
+
+	        if (data.status === "success") {
+	            let selectedCustomer = $scope.customers.find(c => c.id === $scope.selectedCustomer.id);
+
+	            // Save bill as "CREDIT" before clearing
+	            $scope.saveBillToDatabase("CREDIT", $scope.selectedCustomer.id);
+
+	            alert("Credit assigned to " + (selectedCustomer ? selectedCustomer.name : 'customer'));
+	            $scope.showCustomerCredit = false;
+	            $scope.showInvoice = false;
+	            $scope.updateStock();
+	            $scope.clearCart();
+	            $scope.selectedCustomer.id = null;
+	        } else {
+	            alert("Failed to update outstanding balance.");
+	        }
+	    }).catch(error => {
+	        console.error("HTTP request failed:", error);
+	        alert("Something went wrong!");
+	    });
+	};
+
 
 
     // 🛑 FIX: Returns a promise (or uses a callback) to ensure dataURL is available before printing
