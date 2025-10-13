@@ -52,7 +52,7 @@ public class DebtsServlet extends HttpServlet {
 				boolean success = debtsService.payDebt(customerId, paidAmount);
 
 				if (success) {
-					writeJson(response, "{\"status\":\"success\"}");
+					writeJson(response, success);
 				} else {
 					writeJson(response, "{\"status\":\"failed\"}");
 				}

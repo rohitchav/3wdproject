@@ -41,26 +41,33 @@ public class BillDao {
 				billId = rs.getInt(1);
 			}
 
+			// 3️⃣ Insert into bill_items
 			String sqlItem = "INSERT INTO bill_items (bill_id, product_id, product_name, qty, price, total_price) VALUES (?, ?, ?, ?, ?, ?)";
 			psItem = conn.prepareStatement(sqlItem);
 			List<BillItem> items = bill.getItems();
 			for (BillItem item : items) {
-				psItem.setInt(1, billId);
-				psItem.setInt(2, item.getProductId()); // <-- use correct product_id
+				// 🛑 **FIX: Removed redundant psItem.setInt(1, billId) and psItem.setInt(2,
+				// item.getProductId())**
+				// 🛑 **FIX: Consolidated parameter setting into one block**
 				psItem.setInt(1, billId);
 				psItem.setInt(2, item.getProductId());
 				psItem.setString(3, item.getProductName());
 				psItem.setInt(4, item.getQty());
 				psItem.setDouble(5, item.getPrice());
-				psItem.setDouble(6, item.getTotalPrice());
-				psItem.addBatch();
+
+				// Calculate total price once and set it
 				double totalPrice = item.getPrice() * item.getQty();
 				psItem.setDouble(6, totalPrice);
+
+				// 🚀 **FIX: Only ONE call to addBatch() per item!**
 				psItem.addBatch();
 			}
+
+			// 4️⃣ Execute the batch once
 			psItem.executeBatch();
 
-			psItem.executeBatch();
+			// 🛑 **FIX: Removed the second psItem.executeBatch() call that was here**
+
 			conn.commit();
 			success = true;
 

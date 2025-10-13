@@ -35,7 +35,7 @@ public class PurchaseServlet extends HttpServlet {
 			if ("delete".equalsIgnoreCase(action)) {
 				int id = Integer.parseInt(request.getParameter("id"));
 				boolean deleted = purchaseService.deletePurchase(id);
-				writeJson(response, "{\"success\":" + deleted + "}");
+				writeJson(response, deleted);
 				return;
 			}
 

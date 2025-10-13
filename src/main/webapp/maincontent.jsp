@@ -31,7 +31,9 @@
 	        <h3>{{p.name}}</h3>
 	        <p class="category">{{p.category}}</p>
 	        <p class="price">₹{{p.sellingPrice}}</p>
-	        <button class="add-btn" ng-click="addToCart(p)">${lblAdd}</button>
+	       <button class="add-btn" ng-click="addToCart(p); $event.stopPropagation()">
+        ${lblAdd}
+    </button>
 	    </div>
 	</div>
 

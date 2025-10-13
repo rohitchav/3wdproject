@@ -66,8 +66,7 @@ angular.module('purchaseApp', [])
 	        headers: {'Content-Type': 'application/x-www-form-urlencoded'},
 	        data: 'action=delete&id=' + id
 	    }).then(function(response){
-	        if(response.data.success){
-	            // Remove deleted purchase from the list
+	        if(response.data){
 	            $scope.purchases = $scope.purchases.filter(p => p.id !== id);
 	        } else {
 	            alert("Failed to delete purchase.");

@@ -35,8 +35,7 @@ angular.module('debtsApp', [])
                     + $scope.selectedCustomer.id 
                     + "&paidAmount=" + $scope.paidAmount)
         .then(function(response){
-            if(response.data.status === "success") {
-                alert("Payment successful!");
+            if(response.data) {
                 $scope.showModal = false;
                 $scope.loadDebts();
             } else {
