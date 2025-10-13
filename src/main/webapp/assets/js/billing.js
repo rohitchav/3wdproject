@@ -7,8 +7,6 @@ app.directive('qrCode', function() {
             data: '='
         },
         link: function(scope, element, attrs) {
-            let qr = null;
-
             scope.$watch('data', function(newVal) {
                 if (newVal) {
                     element.empty();
@@ -18,7 +16,7 @@ app.directive('qrCode', function() {
                         return;
                     }
 
-                    qr = new QRCode(element[0], {
+                    new QRCode(element[0], {
                         text: newVal,
                         width: 150,
                         height: 150,
@@ -35,6 +33,7 @@ app.directive('qrCode', function() {
 
 app.controller("BillingTableController", function($scope, $http) {
 
+    // ... (Your existing scope variables remain unchanged)
     $scope.products = [];
     $scope.filteredProducts = [];
     $scope.searchQuery = "";
@@ -46,10 +45,27 @@ app.controller("BillingTableController", function($scope, $http) {
     $scope.newCustomer = {};
     $scope.selectedCustomer = {};
     $scope.showCustomerCredit = false;
+    // New variable to hold the Date object for locale display
+    $scope.billDateTime = null; 
+    
+    const VPA = "9326981878@amazonpay";
+    const PAYEE_NAME = "Yashwanti Kirana Store";
+
+    // 🛑 NEW: Helper function to format date for MySQL
+    $scope.formatDateForMySql = function(date) {
+        let year = date.getFullYear();
+        let month = ('0' + (date.getMonth() + 1)).slice(-2);
+        let day = ('0' + date.getDate()).slice(-2);
+        let hours = ('0' + date.getHours()).slice(-2);
+        let minutes = ('0' + date.getMinutes()).slice(-2);
+        let seconds = ('0' + date.getSeconds()).slice(-2);
+
+        // MySQL/SQL Standard Format: YYYY-MM-DD HH:MM:SS
+        return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+    };
 
     // 🔹 Load all products from backend once
     $http.get("ProductController?action=list").then(function(response) {
-        console.log("Loaded products:", response.data);
         $scope.products = response.data;
     }, function(error) {
         console.error("Error loading products:", error);
@@ -69,50 +85,47 @@ app.controller("BillingTableController", function($scope, $http) {
         });
     };
 
-    // 🔹 Add selected product to cart
+    // 🔹 Add selected product to cart (USED FOR SEARCH SELECTION)
     $scope.selectProduct = function(product) {
         let existing = $scope.cart.find(item => item.id === product.id);
 
         if (existing) {
             existing.qty += 1;
-            existing.amount = existing.qty * existing.price; // Use existing price
+            existing.amount = existing.qty * existing.price;
         } else {
             $scope.cart.push({
                 id: product.id,
                 name: product.name,
                 qty: 1,
-                price: product.sellingPrice, // ✅ Storing Unit Price
-                amount: product.sellingPrice // Sub-total for 1 qty
+                price: product.sellingPrice,
+                amount: product.sellingPrice
             });
         }
 
-        // Clear search after selecting
         $scope.searchQuery = "";
         $scope.filteredProducts = [];
     };
 
     // 🔹 Update amount when quantity changes
     $scope.updateAmount = function(item) {
-        // Since 'item.price' is already set in selectProduct, we use that for the calculation.
         if (item.price) { 
             item.amount = item.qty * item.price;
         }
     };
 
-    // 🔹 Remove item
     $scope.removeItem = function(index) {
         $scope.cart.splice(index, 1);
     };
-
-    // 🔹 Total amount calculation (Grand Total in Main Table)
+    
+    // Total amount calculation (Grand Total in Main Table)
     $scope.getTotalAmount = function() {
         return $scope.cart.reduce((sum, item) => sum + item.amount, 0);
     };
-
-    const VPA = "9326981878@amazonpay";
-    const PAYEE_NAME = "Yashwanti Kirana Store";
-
-    console.log("BillingController initialized");
+    
+    // Helper function for raw total
+    $scope.getTotal = function() {
+        return $scope.cart.reduce((total, item) => total + (item.price * item.qty), 0);
+    };
 
     $scope.generateUpiString = function(amount) {
         const grandTotal = amount;
@@ -121,7 +134,6 @@ app.controller("BillingTableController", function($scope, $http) {
         let upiUri = `upi://pay?pa=${VPA}&pn=${nameEncoded}&am=${grandTotal.toFixed(2)}&cu=INR`;
         return upiUri;
     };
-
 
     $scope.getNextBillNo = function() {
         let lastNo = localStorage.getItem('lastBillNumber');
@@ -132,111 +144,45 @@ app.controller("BillingTableController", function($scope, $http) {
         return currentNo;
     };
 
-
-    $scope.loadProducts = function() {
-        $http.get("ProductController?action=list")
-            .then(function(response) {
-                $scope.products = response.data;
-            
-            })
-            .catch(function(error) {
-                console.error("Error loading products:", error);
-            });
-    };
-
-    // This function is redundant if selectProduct is used, but keeping it updated for consistency
-    $scope.addToCart = function(p) {
-        let existing = $scope.cart.find(item => item.name === p.name);
-        if (existing) {
-            existing.qty += 1;
-            existing.amount = existing.qty * existing.price; // Added amount update
-        } else {
-            $scope.cart.push({
-                name: p.name,
-                price: p.sellingPrice,
-                image: p.imagePath,
-                qty: 1,
-                amount: p.sellingPrice // Added initial amount
-            });
-        }
-    };
-
-    $scope.removeFromCart = function(item) {
-        let index = $scope.cart.indexOf(item);
-        if (index !== -1) {
-            $scope.cart.splice(index, 1);
-        }
-    };
-
-    $scope.incrementQty = function(item) {
-        item.qty += 1;
-        $scope.updateAmount(item); // Ensure amount is updated
-    };
-
-    $scope.decrementQty = function(item) {
-        if (item.qty > 1) {
-            item.qty -= 1;
-            $scope.updateAmount(item); // Ensure amount is updated
-        }
-    };
-
-    $scope.getTotal = function() {
-        return $scope.cart.reduce((total, item) => total + (item.price * item.qty), 0);
-    };
-
-    $scope.clearCart = function() {
-        $scope.cart = [];
-    };
-
-    // UPDATE STOCK AFTER BILL
+    // 🔹 UPDATE STOCK AFTER BILL (Promise-based for clean flow)
     $scope.updateStock = function() {
-        if ($scope.cart.length === 0) return;
+        if ($scope.cart.length === 0) return Promise.resolve();
         let stockUpdateList = $scope.cart.map(item => ({ id: item.id, qty: item.qty }));
-        $http({
+        
+        return $http({
             method: 'POST',
             url: 'ProductController?action=updateStock',
             data: stockUpdateList,
             headers: { 'Content-Type': 'application/json' }
         }).then(response => {
-            if (response.data.status === "success") {
+            let data = typeof response.data === 'string' ? JSON.parse(response.data) : response.data;
+            if (data.status === "success") {
                 stockUpdateList.forEach(update => {
                     let prod = $scope.products.find(p => p.id === update.id);
                     if (prod) prod.stock -= update.qty;
                 });
-                // $scope.clearCart(); // Clear cart is typically done on payment success
-            } else alert("Failed to update stock!");
-        }).catch(() => alert("Error updating stock!"));
+                return Promise.resolve();
+            } else {
+                alert("Failed to update stock! Bill was saved, but inventory needs manual adjustment.");
+                return Promise.reject(new Error("Stock update failed"));
+            }
+        }).catch(error => {
+             console.error("Error updating stock:", error);
+             alert("Error updating stock!");
+             return Promise.reject(error);
+        });
     };
-
-    $scope.generateBill = function() {
-        console.log("enter in billin")
-        $scope.billNo = $scope.getNextBillNo();
-        $scope.billDate = new Date().toLocaleString();
-        $scope.showInvoice = true;
-        
-        const grandTotal = $scope.getTotal() - $scope.discount;
-        
-        $scope.upiData = $scope.generateUpiString(grandTotal);
-    };
-
-    $scope.closeInvoice = function() {
-        $scope.showInvoice = false;
-    };
-
-    const formatCurrency = (num) => {
-        return "₹" + num.toFixed(2);
-    };
-
-    // SAVE BILL TO DATABASE
+    
+    // SAVE BILL TO DATABASE (Promise-based for clean flow)
     $scope.saveBillToDatabase = function(paymentMethod, customerId) {
         const billData = {
             billNo: $scope.billNo,
-            billDate: $scope.billDate,
+            billDate: $scope.billDate, // ✅ This is now YYYY-MM-DD HH:MM:SS
             subtotal: $scope.getTotal(),
             discount: $scope.discount,
             grandTotal: $scope.getTotal() - $scope.discount,
             paymentMethod: paymentMethod,
-            customerId: customerId || null, // Include customerId if provided
+            customerId: customerId || null,
             items: $scope.cart.map(item => ({
                 productId: item.id,
                 productName: item.name,
@@ -245,139 +191,119 @@ app.controller("BillingTableController", function($scope, $http) {
                 totalPrice: item.price * item.qty
             }))
         };
-        $http.post("BillingController?action=save", billData)
-            .then(() => alert("Bill Saved"))
-            .catch(error => console.error("Error saving bill:", error));
-    };
-
-    // Updated payment functions to call saveBillToDatabase before clearing the cart and closing the invoice
-    $scope.payCash = function() {
-        $scope.saveBillToDatabase("CASH");
-        $scope.updateStock();
-        $scope.showInvoice = false;
-        $scope.clearCart(); // Clear cart after successful save
-        $scope.closeModal();
-    };
-    $scope.payUPI = function() {
-        $scope.saveBillToDatabase("UPI");
-        $scope.updateStock();
-        $scope.showInvoice = false;
-        $scope.clearCart(); // Clear cart after successful save
-        $scope.closeModal();
-    };
-    $scope.payCard = function() {
-        $scope.saveBillToDatabase("CARD");
-        $scope.updateStock();
-        $scope.showInvoice = false;
-        $scope.clearCart(); // Clear cart after successful save
-        $scope.closeModal();
-    };
-
-    // CUSTOMER MANAGEMENT
-    $scope.loadCustomers = function() {
-        $http.get('CustomerServlet?action=getAll')
-            .then(response => $scope.customers = response.data)
-            .catch(error => console.error('Error fetching customers', error));
-    };
-    $scope.addCustomer = function() {
-        $http.post('CustomerServlet?action=add', $scope.newCustomer)
-            .then(() => { alert("Customer added!"); $scope.closeModal(); $scope.loadCustomers(); })
-            .catch(() => alert("Error adding customer."));
-    };
-    $scope.openModal = function() { $scope.newCustomer = {}; $scope.showModal = true; };
-    $scope.closeModal = function() { $scope.showModal = false; };
-
-    // CUSTOMER CREDIT
-    $scope.addToCredit = function() { $scope.showCustomerCredit = true; $scope.loadCustomers(); };
-    $scope.showCustomerCreditBack = function() { $scope.showCustomerCredit = false; };
-	$scope.confirmCredit = function() {
-	    if (!$scope.selectedCustomer.id) {
-	        alert("Please select a customer.");
-	        return;
-	    }
-
-	    const grandTotal = $scope.getTotal() - $scope.discount;
-
-	    $http({
-	        method: 'POST',
-	        url: 'CustomerServlet?action=updateOutstanding',
-	        params: {
-	            customerId: $scope.selectedCustomer.id,
-	            amount: grandTotal
-	        }
-	    }).then(response => {
-	        console.log("Type of response.data:", typeof response.data);
-	        console.log("response.data:", response.data);
-
-	        // Parse response.data if it's a string
-	        let data = typeof response.data === 'string' ? JSON.parse(response.data) : response.data;
-
-	        console.log("Parsed data:", data);
-	        console.log("data.status:", data.status);
-
-	        if (data.status === "success") {
-	            let selectedCustomer = $scope.customers.find(c => c.id === $scope.selectedCustomer.id);
-
-	            // Save bill as "CREDIT" before clearing
-	            $scope.saveBillToDatabase("CREDIT", $scope.selectedCustomer.id);
-
-	            alert("Credit assigned to " + (selectedCustomer ? selectedCustomer.name : 'customer'));
-	            $scope.showCustomerCredit = false;
-	            $scope.showInvoice = false;
-	            $scope.updateStock();
-	            $scope.clearCart();
-	            $scope.selectedCustomer.id = null;
-	        } else {
-	            alert("Failed to update outstanding balance.");
-	        }
-	    }).catch(error => {
-	        console.error("HTTP request failed:", error);
-	        alert("Something went wrong!");
-	    });
-	};
-
-
-
-    // 🛑 FIX: Returns a promise (or uses a callback) to ensure dataURL is available before printing
-    $scope.generateQrCodeDataUrl = function(text) {
-        return new Promise((resolve) => {
-            if (typeof QRCode === 'undefined') {
-                console.error("QRCode library not found.");
-                resolve('');
-                return;
-            }
-
-            const tempDiv = document.createElement('div');
-            tempDiv.style.display = 'none';
-            document.body.appendChild(tempDiv);
-
-            // Create QR code
-            new QRCode(tempDiv, {
-                text: text,
-                width: 150,
-                height: 150,
-                colorDark: "#000000",
-                colorLight: "#ffffff",
-                correctLevel: QRCode.CorrectLevel.H
+        
+        return $http.post("BillingController?action=save", billData)
+            .then(() => {
+                alert("Bill Saved to Database");
+                return Promise.resolve();
+            })
+            .catch(error => {
+                console.error("Error saving bill:", error);
+                alert("Error saving bill to database!");
+                return Promise.reject(error);
             });
+    };
 
-            // Wait a moment for the canvas to be rendered by the library
-            setTimeout(() => {
-                let dataURL = '';
-                const canvas = tempDiv.querySelector('canvas');
-                if (canvas) {
-                    dataURL = canvas.toDataURL("image/png");
-                }
-                document.body.removeChild(tempDiv);
-                resolve(dataURL);
-            }, 100); // 100ms should be enough time
+    $scope.generateBill = function() {
+        $scope.billNo = $scope.getNextBillNo();
+        
+        // 🛑 FIX: Store Date object for print/UI, and MySQL format for DB
+        const now = new Date();
+        $scope.billDateTime = now; 
+        $scope.billDate = $scope.formatDateForMySql(now); // DB format
+        
+        $scope.showInvoice = true;
+        
+        const grandTotal = $scope.getTotal() - $scope.discount;
+        $scope.upiData = $scope.generateUpiString(grandTotal);
+    };
+
+    $scope.closeInvoice = function() {
+        $scope.showInvoice = false;
+    };
+    
+    $scope.clearCart = function() {
+        $scope.cart = [];
+        $scope.discount = 0;
+        $scope.searchQuery = "";
+        $scope.filteredProducts = [];
+    };
+
+    // 🔹 MODIFIED PAYMENT FLOW: Use promises to sequence Save, Stock Update, and UI Clear
+    $scope.finalizeTransaction = function(paymentMethod, customerId) {
+        if ($scope.cart.length === 0) return;
+        
+        // 1. Save Bill -> 2. Update Stock -> 3. Clear UI
+        $scope.saveBillToDatabase(paymentMethod, customerId)
+            .then(() => $scope.updateStock())
+            .then(() => {
+                $scope.showInvoice = false;
+                $scope.showCustomerCredit = false;
+                $scope.clearCart();
+                $scope.selectedCustomer = {};
+                $scope.closeModal();
+            })
+            .catch(error => {
+                console.error("Transaction failed:", error);
+            });
+    };
+
+    $scope.payCash = function() { $scope.finalizeTransaction("CASH"); };
+    $scope.payUPI = function() { $scope.finalizeTransaction("UPI"); };
+    $scope.payCard = function() { $scope.finalizeTransaction("CARD"); };
+
+    $scope.confirmCredit = function() {
+        if (!$scope.selectedCustomer.id) {
+            alert("Please select a customer.");
+            return;
+        }
+
+        const grandTotal = $scope.getTotal() - $scope.discount;
+
+        // 1. Update Customer Outstanding
+        $http({
+            method: 'POST',
+            url: 'CustomerServlet?action=updateOutstanding',
+            params: {
+                customerId: $scope.selectedCustomer.id,
+                amount: grandTotal
+            }
+        }).then(response => {
+            let data = typeof response.data === 'string' ? JSON.parse(response.data) : response.data;
+
+            if (data.status === "success") {
+                // 2. Finalize Transaction as CREDIT
+                $scope.finalizeTransaction("CREDIT", $scope.selectedCustomer.id);
+            } else {
+                alert("Failed to update outstanding balance.");
+            }
+        }).catch(error => {
+            console.error("HTTP request failed:", error);
+            alert("Something went wrong!");
         });
     };
+    
+    // ... (utility functions)
+    $scope.addToCart = function(p) {
+        $scope.selectProduct(p);
+    };
 
-    // 🛑 FIX: Updated to use the async QR code generator
+    $scope.incrementQty = function(item) {
+        item.qty += 1;
+        $scope.updateAmount(item);
+    };
+
+    $scope.decrementQty = function(item) {
+        if (item.qty > 1) {
+            item.qty -= 1;
+            $scope.updateAmount(item);
+        }
+    };
+    
+    // 🛑 UPDATED: Use billDateTime for locale formatting
     $scope.printInvoice = function() {
         let billNo = $scope.billNo;
-        let billDate = $scope.billDate;
+        let billDate = $scope.billDateTime ? $scope.billDateTime.toLocaleString() : 'N/A'; // Use locale string for print
         let cart = $scope.cart;
         let discount = $scope.discount;
         let total = $scope.getTotal();
@@ -388,17 +314,16 @@ app.controller("BillingTableController", function($scope, $http) {
 
         // Await the QR code data URL before generating the HTML
         $scope.generateQrCodeDataUrl(upiString).then(qrCodeDataUrl => {
-
-            // 🛑 FIX: Added the external CSS links inside the print HTML
+            // ... (Invoice HTML generation using billDate)
             let invoiceHtml = `
             <!DOCTYPE html>
             <html>
             <head>
                 <meta charset="UTF-8">
                 <title>Invoice #INV-${billNo}</title>
-                <link rel="stylesheet" href="assets/css/invoice.css" media="all"> 
+                <link rel="stylesheet" href="assets/css/invoice.css" media="all"> 
                 <style>
-                    /* Styles previously defined here remain for robustness */
+                    /* ... (your print styles) ... */
                     body { font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: 10pt; margin: 0; padding: 0; color: #333; }
                     .container { width: 90%; max-width: 800px; margin: 20px auto; padding: 20px; box-sizing: border-box; }
                     .company-name { font-size: 1.8em; text-align: center; margin-bottom: 5px; color: #2c3e50; }
@@ -486,14 +411,19 @@ app.controller("BillingTableController", function($scope, $http) {
                 printWindow.document.close();
                 printWindow.focus();
                 
-                // Give browser a moment to load external resources/apply CSS before printing
                 printWindow.onload = function() {
                     printWindow.print();
-                    // Optional: Close after print (or user manually closes)
-                    // printWindow.close();
                 }
             }
         });
     };
+    
+    // ... (Loaders at the end)
+    $scope.loadCustomers = function() {
+        $http.get('CustomerServlet?action=getAll')
+            .then(response => $scope.customers = response.data)
+            .catch(error => console.error('Error fetching customers', error));
+    };
 
+    $scope.loadCustomers();
 });

@@ -103,6 +103,8 @@ public class ProductController extends HttpServlet {
 				}
 
 				boolean success = productService.updateStock(products);
+
+				System.out.println("DEbug Mode:-" + success);
 				response.getWriter().write("{\"status\":\"" + (success ? "success" : "error") + "\"}");
 			}
 
