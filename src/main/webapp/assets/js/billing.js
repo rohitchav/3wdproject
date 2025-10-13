@@ -377,6 +377,24 @@ app.controller("BillingTableController", function($scope, $http) {
     $scope.addToCart = function(p) {
         $scope.selectProduct(p);
     };
+	// Inside app.controller("BillingTableController", function($scope, $http) { ... });
+
+	$scope.openModal = function() { 
+	    $scope.newCustomer = {}; // Good practice: clear form data on open
+	    // 🚀 FIX: Must use $scope.showModal for binding
+	    $scope.showModal = true;
+	};
+    
+	$scope.addCustomer = function() {
+	       $http.post('CustomerServlet?action=add', $scope.newCustomer)
+	           .then(() => { alert("Customer added!"); $scope.closeModal(); $scope.loadCustomers(); })
+	           .catch(() => alert("Error adding customer."));
+	   };
+	
+	$scope.closeModal = function() { 
+	    // Good practice: close the modal
+	    $scope.showModal = false; 
+	};
 
   	$scope.incrementQty = function(item) {
 	        // Find the product's actual stock from the $scope.products array
