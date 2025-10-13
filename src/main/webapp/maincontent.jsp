@@ -8,19 +8,22 @@
     <div class="products-section">
         
         <div class="search-bar">
-            <input type="text" id="searchInput" placeholder="Search for products...">
-            <select id="categorySelect">
-                <option value="all">${lblAllCategory}</option>
-                  <option value="Snacks"> ${lblSnacks} </option>
-                                <option value="Beverages"> ${lblBeverages} </option>
-                                <option value="Dairy"> ${lblDairy} </option>
-                                <option value="Household"> ${lblHousehold} </option>
-                                <option value="Other"> ${lblOther} </option>
+            <input type="text" id="searchInput" placeholder="Search for products..." ng-model="searchQuery">
+            
+            <select id="categorySelect" ng-model="categoryFilter">
+                <option value="">${lblAllCategory}</option>
+                <option value="Snacks"> ${lblSnacks} </option>
+                <option value="Beverages"> ${lblBeverages} </option>
+                <option value="Dairy"> ${lblDairy} </option>
+                <option value="Household"> ${lblHousehold} </option>
+                <option value="Other"> ${lblOther} </option>
             </select>
         </div>
 
         <div class="products" id="productList">
-	    <div class="product-card" ng-repeat="p in products" data-category="{{p.category}}" data-name="{{p.name}}">
+            <div class="product-card" 
+            ng-repeat="p in products | filter:searchFilter | orderBy:'name'"
+            ng-click="addToCart(p)">
 	        <div class="product-image">
 	            <img ng-src="{{p.imagePath}}" alt="{{p.name}}">
 	            <span class="stock">{{p.stock}}</span>
@@ -45,9 +48,9 @@
         <p class="item-price">₹{{item.price * item.qty | number:2}}</p>
     </div>
     <div class="item-qty">
-        <button ng-click="decreaseQty(item)" ng-disabled="item.qty <= 1">-</button>
+        <button ng-click="decrementQty(item)" ng-disabled="item.qty <= 1">-</button>
         <input type="text" ng-model="item.qty" readonly>
-        <button ng-click="increaseQty(item)" ng-disabled="item.qty >= item.stock">+</button>
+        <button ng-click="incrementQty(item)">+</button>
     </div>
     <button class="delete-btn" ng-click="removeFromCart(item)">🗑️</button>
 </div>
@@ -75,7 +78,7 @@
         
         <div class="bill-info">
             <span> ${lblBillNo} : #INV-{{billNo}}</span>
-            <span> ${lblDate} : {{billDate}}</span>
+            <span> ${lblDate} : {{billDateTime.toLocaleString()}}</span>
         </div>
 
         <table>
@@ -124,7 +127,6 @@
 	    ng-options="customer.id as customer.name for customer in customers track by customer.id">
 	    <option value="">-- Select Customer --</option>
 	</select>
-
 
 
         <button class="add-button"  ng-click="openModal()" title="Add Customer">➕</button>

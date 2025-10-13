@@ -6,20 +6,18 @@
     <meta charset="UTF-8">
     <title>Modern Themed Product Table</title>
 
-    <!-- ✅ Google Font -->
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
     </style>
 
-    <!-- ✅ AngularJS -->
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
+    <script src="https://cdn.rawgit.com/davidshimjs/qrcodejs/gh-pages/qrcode.min.js"></script>
 
-    <!-- ✅ CSS -->
     <link rel="stylesheet" href="assets/css/billing.css">
     <link rel="stylesheet" href="assets/css/invoice.css">
 </head>
 
-<body ng-controller="BillingTableController">
+<body ng-controller="BillingTableController" ng-keydown="handleKeyPress($event)">
 <div class="container">
 
      <div class="search-area">
@@ -31,19 +29,24 @@
                placeholder="Search product name..."
                class="search-input">
 
-        <!-- Suggestions -->
-        <ul class="suggestions-box" ng-if="filteredProducts.length > 0">
+       <!--  <ul class="suggestions-box" ng-if="filteredProducts.length > 0">
             <li ng-repeat="product in filteredProducts" ng-click="selectProduct(product)">
                 {{product.name}} - ₹{{product.sellingPrice}}
             </li>
-        </ul>
+        </ul> -->
+        <ul class="suggestions-box" ng-if="filteredProducts.length > 0">
+		    <li ng-repeat="product in filteredProducts" 
+		        ng-click="selectProduct(product)"
+		        ng-class="{ 'highlighted': $index === selectedIndex }">
+		        {{product.name}} - ₹{{product.sellingPrice}}
+		    </li>
+       </ul>
     </div>
 
     <button ng-click="filterProducts()" class="search-button">Search</button>
 </div>
 
 
-    <!-- 🔹 Product Table -->
     <table class="product-table">
         <thead>
             <tr>
@@ -74,7 +77,7 @@
         <tfoot>
             <tr class="total-row">
                 <td colspan="2" class="total-label">Total</td>
-                <td colspan="2" class="total-amount">₹{{getTotalAmount()}}</td>
+                <td colspan="2" class="total-amount">₹{{getTotalAmount() | number:2}}</td>
             </tr>
         </tfoot>
     </table>
@@ -92,7 +95,7 @@
         
         <div class="bill-info">
             <span>Bill No: #INV-{{billNo}}</span>
-            <span>Date: {{billDate}}</span>
+            <span>Date: {{billDateTime.toLocaleString()}}</span>
         </div>
 
         <table>
@@ -143,7 +146,6 @@
 	</select>
 
 
-
         <button class="add-button"  ng-click="openModal()" title="Add Customer">➕</button>
     </div>
 
@@ -182,7 +184,6 @@
     </div>
   </div>
 
-<!-- ✅ AngularJS Script -->
 <script src="assets/js/billing.js"></script>
 
 </body>

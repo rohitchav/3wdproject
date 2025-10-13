@@ -33,7 +33,6 @@ app.directive('qrCode', function() {
 
 app.controller("BillingTableController", function($scope, $http) {
 
-    // ... (Your existing scope variables remain unchanged)
     $scope.products = [];
     $scope.filteredProducts = [];
     $scope.searchQuery = "";
@@ -45,13 +44,13 @@ app.controller("BillingTableController", function($scope, $http) {
     $scope.newCustomer = {};
     $scope.selectedCustomer = {};
     $scope.showCustomerCredit = false;
-    // New variable to hold the Date object for locale display
     $scope.billDateTime = null; 
+    
+    $scope.selectedIndex = -1; 
     
     const VPA = "9326981878@amazonpay";
     const PAYEE_NAME = "Yashwanti Kirana Store";
 
-    // 🛑 NEW: Helper function to format date for MySQL
     $scope.formatDateForMySql = function(date) {
         let year = date.getFullYear();
         let month = ('0' + (date.getMonth() + 1)).slice(-2);
@@ -60,53 +59,147 @@ app.controller("BillingTableController", function($scope, $http) {
         let minutes = ('0' + date.getMinutes()).slice(-2);
         let seconds = ('0' + date.getSeconds()).slice(-2);
 
-        // MySQL/SQL Standard Format: YYYY-MM-DD HH:MM:SS
         return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
     };
+    
+	$scope.handleKeyPress = function(event) {
+	    const PLUS_KEY_CODES = [107, 187]; 
+	    const MINUS_KEY_CODES = [109];
+		const ENTER_KEY_CODE = 13;
+		const UP_ARROW_KEY_CODE = 38;
+		const DOWN_ARROW_KEY_CODE = 40;
+        const listLength = $scope.filteredProducts.length;
+		const DELETE_KEY_CODE = 46;
+		const ESC_KEY_CODE = 27;
 
-    // 🔹 Load all products from backend once
+	    if (event.keyCode === UP_ARROW_KEY_CODE) {
+	        if (listLength > 0) {
+                event.preventDefault(); 
+                $scope.selectedIndex = ($scope.selectedIndex <= 0) ? (listLength - 1) : ($scope.selectedIndex - 1);
+	        }
+	    }
+	    else if (event.keyCode === DOWN_ARROW_KEY_CODE) {
+	        if (listLength > 0) {
+                event.preventDefault(); 
+	            $scope.selectedIndex = ($scope.selectedIndex === listLength - 1) ? 0 : ($scope.selectedIndex + 1);
+	        }
+	    }
+		else if(event.keyCode === ENTER_KEY_CODE){
+		        event.preventDefault(); 
+                
+                if ($scope.filteredProducts.length > 0 && $scope.selectedIndex !== -1) {
+		            $scope.selectProductByIndex($scope.selectedIndex);
+		        } else if ($scope.filteredProducts.length === 1 && $scope.searchQuery) {
+		             $scope.selectProductByIndex(0);
+		        } else if ($scope.cart.length > 0) {
+		             $scope.generateBill();
+		        }
+		    }
+	    else if (PLUS_KEY_CODES.includes(event.keyCode)) {
+	        event.preventDefault(); 
+	        if ($scope.cart.length > 0) {
+	            const lastItem = $scope.cart[$scope.cart.length - 1];
+	            $scope.incrementQty(lastItem);
+	        }
+	    }
+	    else if(MINUS_KEY_CODES.includes(event.keyCode)){
+	        event.preventDefault(); 
+	        if ($scope.cart.length > 0) {
+	            const lastItem = $scope.cart[$scope.cart.length - 1]; 
+	            $scope.decrementQty(lastItem);
+	        }
+	    }else if(event.keyCode === DELETE_KEY_CODE){
+		       if (!$scope.searchQuery && $scope.cart.length > 0) {
+		           event.preventDefault(); 
+		           $scope.removeItem($scope.cart.length - 1);
+		       }
+		}else if(event.keyCode === ESC_KEY_CODE){
+		   		       if ($scope.cart.length > 0) {
+		   		           event.preventDefault(); 
+		   		           $scope.clearCart();
+		   		       }
+		   		}
+	};
+
     $http.get("ProductController?action=list").then(function(response) {
         $scope.products = response.data;
     }, function(error) {
         console.error("Error loading products:", error);
     });
 
-    // 🔹 Filter products for live search or on button click
     $scope.filterProducts = function() {
         let query = $scope.searchQuery ? $scope.searchQuery.toLowerCase() : "";
+        
+        const previousSelectedIndex = $scope.selectedIndex;
 
         if (!query || query.trim() === "") {
             $scope.filteredProducts = [];
+            $scope.selectedIndex = -1;
             return;
         }
 
         $scope.filteredProducts = $scope.products.filter(function(p) {
             return p.name && p.name.toLowerCase().includes(query);
         });
-    };
+        
+        const currentLength = $scope.filteredProducts.length;
 
-    // 🔹 Add selected product to cart (USED FOR SEARCH SELECTION)
-    $scope.selectProduct = function(product) {
-        let existing = $scope.cart.find(item => item.id === product.id);
-
-        if (existing) {
-            existing.qty += 1;
-            existing.amount = existing.qty * existing.price;
-        } else {
-            $scope.cart.push({
-                id: product.id,
-                name: product.name,
-                qty: 1,
-                price: product.sellingPrice,
-                amount: product.sellingPrice
-            });
+        if (currentLength === 0) {
+            $scope.selectedIndex = -1;
+        } else if (previousSelectedIndex === -1) {
+             $scope.selectedIndex = 0;
+        } else if ($scope.selectedIndex >= currentLength) {
+             $scope.selectedIndex = currentLength - 1;
         }
-
-        $scope.searchQuery = "";
-        $scope.filteredProducts = [];
+    };
+    
+    $scope.selectProductByIndex = function(index) {
+        if (index >= 0 && index < $scope.filteredProducts.length) {
+            $scope.selectProduct($scope.filteredProducts[index]);
+        }
     };
 
-    // 🔹 Update amount when quantity changes
+	$scope.selectProduct = function(product) {
+	        // Find the actual stock of the product from the main list
+	        let productInStock = $scope.products.find(prod => prod.id === product.id);
+	        
+	        if (!productInStock || productInStock.stock <= 0) {
+	            alert(`Sorry, ${product.name} is out of stock!`);
+	            return;
+	        }
+
+	        let existing = $scope.cart.find(item => item.id === product.id);
+
+	        if (existing) {
+	            // Check if incrementing by 1 exceeds stock
+	            if (existing.qty + 1 > productInStock.stock) {
+	                alert(`Cannot add more. Only ${productInStock.stock} units of ${product.name} are available.`);
+	                return;
+	            }
+	            
+	            existing.qty += 1;
+	            existing.amount = existing.qty * existing.price;
+	        } else {
+	            // Check if adding the initial 1 unit exceeds stock (shouldn't happen if stock > 0, but good for safety)
+	            if (1 > productInStock.stock) {
+	                 alert(`Cannot add more. Only ${productInStock.stock} units of ${product.name} are available.`);
+	                 return;
+	            }
+	            
+	            $scope.cart.push({
+	                id: product.id,
+	                name: product.name,
+	                qty: 1,
+	                price: product.sellingPrice,
+	                amount: product.sellingPrice
+	            });
+	        }
+
+	        $scope.searchQuery = "";
+	        $scope.filteredProducts = [];
+	        $scope.selectedIndex = -1;
+	    };
+
     $scope.updateAmount = function(item) {
         if (item.price) { 
             item.amount = item.qty * item.price;
@@ -117,12 +210,10 @@ app.controller("BillingTableController", function($scope, $http) {
         $scope.cart.splice(index, 1);
     };
     
-    // Total amount calculation (Grand Total in Main Table)
     $scope.getTotalAmount = function() {
         return $scope.cart.reduce((sum, item) => sum + item.amount, 0);
     };
     
-    // Helper function for raw total
     $scope.getTotal = function() {
         return $scope.cart.reduce((total, item) => total + (item.price * item.qty), 0);
     };
@@ -144,7 +235,6 @@ app.controller("BillingTableController", function($scope, $http) {
         return currentNo;
     };
 
-    // 🔹 UPDATE STOCK AFTER BILL (Promise-based for clean flow)
     $scope.updateStock = function() {
         if ($scope.cart.length === 0) return Promise.resolve();
         let stockUpdateList = $scope.cart.map(item => ({ id: item.id, qty: item.qty }));
@@ -173,11 +263,10 @@ app.controller("BillingTableController", function($scope, $http) {
         });
     };
     
-    // SAVE BILL TO DATABASE (Promise-based for clean flow)
     $scope.saveBillToDatabase = function(paymentMethod, customerId) {
         const billData = {
             billNo: $scope.billNo,
-            billDate: $scope.billDate, // ✅ This is now YYYY-MM-DD HH:MM:SS
+            billDate: $scope.billDate,
             subtotal: $scope.getTotal(),
             discount: $scope.discount,
             grandTotal: $scope.getTotal() - $scope.discount,
@@ -203,14 +292,14 @@ app.controller("BillingTableController", function($scope, $http) {
                 return Promise.reject(error);
             });
     };
+    
 
     $scope.generateBill = function() {
         $scope.billNo = $scope.getNextBillNo();
         
-        // 🛑 FIX: Store Date object for print/UI, and MySQL format for DB
         const now = new Date();
         $scope.billDateTime = now; 
-        $scope.billDate = $scope.formatDateForMySql(now); // DB format
+        $scope.billDate = $scope.formatDateForMySql(now);
         
         $scope.showInvoice = true;
         
@@ -228,12 +317,12 @@ app.controller("BillingTableController", function($scope, $http) {
         $scope.searchQuery = "";
         $scope.filteredProducts = [];
     };
+	
+	    $scope.showCustomerCreditBack = function() { $scope.showCustomerCredit = false; };
 
-    // 🔹 MODIFIED PAYMENT FLOW: Use promises to sequence Save, Stock Update, and UI Clear
     $scope.finalizeTransaction = function(paymentMethod, customerId) {
         if ($scope.cart.length === 0) return;
         
-        // 1. Save Bill -> 2. Update Stock -> 3. Clear UI
         $scope.saveBillToDatabase(paymentMethod, customerId)
             .then(() => $scope.updateStock())
             .then(() => {
@@ -241,7 +330,6 @@ app.controller("BillingTableController", function($scope, $http) {
                 $scope.showCustomerCredit = false;
                 $scope.clearCart();
                 $scope.selectedCustomer = {};
-                $scope.closeModal();
             })
             .catch(error => {
                 console.error("Transaction failed:", error);
@@ -260,7 +348,6 @@ app.controller("BillingTableController", function($scope, $http) {
 
         const grandTotal = $scope.getTotal() - $scope.discount;
 
-        // 1. Update Customer Outstanding
         $http({
             method: 'POST',
             url: 'CustomerServlet?action=updateOutstanding',
@@ -272,7 +359,6 @@ app.controller("BillingTableController", function($scope, $http) {
             let data = typeof response.data === 'string' ? JSON.parse(response.data) : response.data;
 
             if (data.status === "success") {
-                // 2. Finalize Transaction as CREDIT
                 $scope.finalizeTransaction("CREDIT", $scope.selectedCustomer.id);
             } else {
                 alert("Failed to update outstanding balance.");
@@ -282,39 +368,88 @@ app.controller("BillingTableController", function($scope, $http) {
             alert("Something went wrong!");
         });
     };
+	
+	$scope.addToCredit = function() { 
+		
+		console.log("Hello ROhiot");
+		$scope.showCustomerCredit = true; $scope.loadCustomers(); };
     
-    // ... (utility functions)
     $scope.addToCart = function(p) {
         $scope.selectProduct(p);
     };
 
-    $scope.incrementQty = function(item) {
-        item.qty += 1;
-        $scope.updateAmount(item);
-    };
+  	$scope.incrementQty = function(item) {
+	        // Find the product's actual stock from the $scope.products array
+	        let productInStock = $scope.products.find(prod => prod.id === item.id);
+	        
+	        if (!productInStock) {
+	            console.error("Product not found in stock list for increment:", item.name);
+	            return;
+	        }
 
-    $scope.decrementQty = function(item) {
-        if (item.qty > 1) {
-            item.qty -= 1;
-            $scope.updateAmount(item);
-        }
+	        // Check if the increment will exceed the stock
+	        if (item.qty + 1 > productInStock.stock) {
+	            alert(`Cannot add more. Only ${productInStock.stock} units of ${item.name} are available.`);
+	            return;
+	        }
+	        
+	        item.qty += 1;
+	        $scope.updateAmount(item);
+	    };
+		$scope.decrementQty = function(item) {
+		        if (item.qty > 1) {
+		            item.qty -= 1;
+		            $scope.updateAmount(item); // Ensure amount is updated
+		        }
+		    };
+    
+    $scope.generateQrCodeDataUrl = function(text) {
+        return new Promise((resolve) => {
+            if (typeof QRCode === 'undefined') {
+                console.error("QRCode library not found.");
+                resolve('');
+                return;
+            }
+
+            const tempDiv = document.createElement('div');
+            tempDiv.style.display = 'none';
+            document.body.appendChild(tempDiv);
+
+            new QRCode(tempDiv, {
+                text: text,
+                width: 150,
+                height: 150,
+                colorDark: "#000000",
+                colorLight: "#ffffff",
+                correctLevel: QRCode.CorrectLevel.H
+            });
+
+            setTimeout(() => {
+                let dataURL = '';
+                const canvas = tempDiv.querySelector('canvas');
+                if (canvas) {
+                    dataURL = canvas.toDataURL("image/png");
+                }
+                document.body.removeChild(tempDiv);
+                resolve(dataURL);
+            }, 100);
+        });
     };
     
-    // 🛑 UPDATED: Use billDateTime for locale formatting
     $scope.printInvoice = function() {
         let billNo = $scope.billNo;
-        let billDate = $scope.billDateTime ? $scope.billDateTime.toLocaleString() : 'N/A'; // Use locale string for print
+        let billDate = $scope.billDateTime ? $scope.billDateTime.toLocaleString() : 'N/A';
         let cart = $scope.cart;
         let discount = $scope.discount;
         let total = $scope.getTotal();
         const grandTotal = total - discount;
         const upiString = $scope.generateUpiString(grandTotal);
+        const VPA = "9326981878@amazonpay"; 
         
         const formatCurrency = num => "₹" + num.toFixed(2);
 
-        // Await the QR code data URL before generating the HTML
         $scope.generateQrCodeDataUrl(upiString).then(qrCodeDataUrl => {
-            // ... (Invoice HTML generation using billDate)
+
             let invoiceHtml = `
             <!DOCTYPE html>
             <html>
@@ -323,7 +458,6 @@ app.controller("BillingTableController", function($scope, $http) {
                 <title>Invoice #INV-${billNo}</title>
                 <link rel="stylesheet" href="assets/css/invoice.css" media="all"> 
                 <style>
-                    /* ... (your print styles) ... */
                     body { font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: 10pt; margin: 0; padding: 0; color: #333; }
                     .container { width: 90%; max-width: 800px; margin: 20px auto; padding: 20px; box-sizing: border-box; }
                     .company-name { font-size: 1.8em; text-align: center; margin-bottom: 5px; color: #2c3e50; }
@@ -418,7 +552,6 @@ app.controller("BillingTableController", function($scope, $http) {
         });
     };
     
-    // ... (Loaders at the end)
     $scope.loadCustomers = function() {
         $http.get('CustomerServlet?action=getAll')
             .then(response => $scope.customers = response.data)

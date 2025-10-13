@@ -22,7 +22,6 @@ public class CustomerDao {
 			ps.setString(3, customer.getAddress());
 
 			int row = ps.executeUpdate(); // returns number of affected rows
-			System.out.println("Inserted " + row + " row(s)");
 
 			return row > 0; // return true if insert was successful
 		}

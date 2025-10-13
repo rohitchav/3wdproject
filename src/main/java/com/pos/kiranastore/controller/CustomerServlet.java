@@ -53,7 +53,6 @@ public class CustomerServlet extends HttpServlet {
 			throws ServletException, IOException {
 
 		String action = request.getParameter("action");
-		System.out.println(action);
 
 		try {
 			if ("add".equalsIgnoreCase(action)) {

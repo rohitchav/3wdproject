@@ -35,6 +35,11 @@ app.controller("BillingController", function($scope, $http) {
 
     $scope.products = [];
     $scope.cart = [];
+    
+    // 🛑 NEW: Search and Filter models
+    $scope.searchQuery = "";
+    $scope.categoryFilter = ""; // Empty string means select "all" in the filter function
+    
     $scope.showInvoice = false;
     $scope.discount = 0;
     $scope.upiData = "";
@@ -42,7 +47,6 @@ app.controller("BillingController", function($scope, $http) {
     $scope.newCustomer = {};
     $scope.selectedCustomer = {};
     $scope.showCustomerCredit = false;
-    // New variable to hold the Date object for locale display
     $scope.billDateTime = null; 
 
     const VPA = "9326981878@amazonpay";
@@ -50,7 +54,6 @@ app.controller("BillingController", function($scope, $http) {
 
     console.log("BillingController initialized");
 
-    // 🛑 NEW: Helper function to format date for MySQL
     $scope.formatDateForMySql = function(date) {
         let year = date.getFullYear();
         let month = ('0' + (date.getMonth() + 1)).slice(-2);
@@ -59,7 +62,6 @@ app.controller("BillingController", function($scope, $http) {
         let minutes = ('0' + date.getMinutes()).slice(-2);
         let seconds = ('0' + date.getSeconds()).slice(-2);
 
-        // MySQL/SQL Standard Format: YYYY-MM-DD HH:MM:SS
         return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
     };
 
@@ -92,23 +94,60 @@ app.controller("BillingController", function($scope, $http) {
             });
     };
 
-    // 🛑 FIX: Added 'id' and 'amount' property
-    $scope.addToCart = function(p) {
-        let existing = $scope.cart.find(item => item.id === p.id); 
-        if (existing) {
-            existing.qty += 1;
-            existing.amount = existing.qty * existing.price;
-        } else {
-            $scope.cart.push({
-                id: p.id,
-                name: p.name,
-                price: p.sellingPrice,
-                image: p.imagePath,
-                qty: 1,
-                amount: p.sellingPrice
-            });
+    // 🛑 NEW: Custom filter logic applied by ng-repeat
+    $scope.searchFilter = function(product) {
+        let matchesSearch = true;
+        let matchesCategory = true;
+        
+        // 1. Text Search Filter (by product name)
+        if ($scope.searchQuery) {
+            let query = $scope.searchQuery.toLowerCase();
+            if (product.name && product.name.toLowerCase().indexOf(query) === -1) {
+                matchesSearch = false;
+            }
         }
+        
+        // 2. Category Filter (by select dropdown)
+        if ($scope.categoryFilter && $scope.categoryFilter !== "") {
+            if (product.category !== $scope.categoryFilter) {
+                matchesCategory = false;
+            }
+        }
+        
+        return matchesSearch && matchesCategory;
     };
+
+
+	$scope.addToCart = function(p) {
+	        // Find the product's actual stock from the $scope.products array
+	        let productInStock = $scope.products.find(prod => prod.id === p.id);
+	        if (!productInStock || productInStock.stock <= 0) {
+	            alert(`Sorry, ${p.name} is out of stock!`);
+	            return;
+	        }
+
+	        let existing = $scope.cart.find(item => item.id === p.id);
+	        
+	        if (existing) {
+	            // Check if incrementing by 1 exceeds stock
+	            if (existing.qty + 1 > productInStock.stock) {
+	                alert(`Cannot add more. Only ${productInStock.stock} units of ${p.name} are available.`);
+	                return;
+	            }
+	            existing.qty += 1;
+	            existing.amount = existing.qty * existing.price;
+	        } else {
+	            // Adding a new item, quantity is 1, which is already checked above (stock > 0)
+	            $scope.cart.push({
+	                id: p.id,
+	                name: p.name,
+	                price: p.sellingPrice,
+	                image: p.imagePath,
+	                qty: 1,
+	                amount: p.sellingPrice
+	            });
+	        }
+	    };
 
     $scope.removeFromCart = function(item) {
         let index = $scope.cart.indexOf(item);
@@ -117,11 +156,24 @@ app.controller("BillingController", function($scope, $http) {
         }
     };
 
-    $scope.incrementQty = function(item) {
-        item.qty += 1;
-        item.amount = item.qty * item.price; 
-    };
+	$scope.incrementQty = function(item) {
+	        // Find the product's actual stock from the $scope.products array
+	        let productInStock = $scope.products.find(prod => prod.id === item.id);
 
+	        if (!productInStock) {
+	            console.error("Product not found in stock list for increment:", item.name);
+	            return;
+	        }
+	        
+	        // Check if the increment will exceed the stock
+	        if (item.qty + 1 > productInStock.stock) {
+	            alert(`Cannot add more. Only ${productInStock.stock} units of ${item.name} are available.`);
+	            return;
+	        }
+	        
+	        item.qty += 1;
+	        item.amount = item.qty * item.price; 
+	    };
     $scope.decrementQty = function(item) {
         if (item.qty > 1) {
             item.qty -= 1;
@@ -137,7 +189,6 @@ app.controller("BillingController", function($scope, $http) {
         $scope.cart = [];
     };
     
-    // 🔹 UPDATE STOCK AFTER BILL (Made promise-based for clean flow)
     $scope.updateStock = function() {
         if ($scope.cart.length === 0) return Promise.resolve();
         let stockUpdateList = $scope.cart.map(item => ({ id: item.id, qty: item.qty }));
@@ -148,7 +199,6 @@ app.controller("BillingController", function($scope, $http) {
             data: stockUpdateList,
             headers: { 'Content-Type': 'application/json' }
         }).then(response => {
-            // 🛑 FIX: Parse response data to handle potential string return
             let data = typeof response.data === 'string' ? JSON.parse(response.data) : response.data;
             
             if (data.status === "success") {
@@ -171,10 +221,9 @@ app.controller("BillingController", function($scope, $http) {
     $scope.generateBill = function() {
         $scope.billNo = $scope.getNextBillNo();
         
-        // 🛑 FIX: Store Date object for print/UI, and MySQL format for DB
         const now = new Date();
         $scope.billDateTime = now; 
-        $scope.billDate = $scope.formatDateForMySql(now); // DB format
+        $scope.billDate = $scope.formatDateForMySql(now);
         
         $scope.showInvoice = true;
         
@@ -190,11 +239,10 @@ app.controller("BillingController", function($scope, $http) {
         return "₹" + num.toFixed(2);
     };
     
-    // SAVE BILL TO DATABASE (Made promise-based for clean flow)
     $scope.saveBillToDatabase = function(paymentMethod, customerId) {
         const billData = {
             billNo: $scope.billNo,
-            billDate: $scope.billDate, // ✅ This is now YYYY-MM-DD HH:MM:SS
+            billDate: $scope.billDate,
             subtotal: $scope.getTotal(),
             discount: $scope.discount,
             grandTotal: $scope.getTotal() - $scope.discount,
@@ -221,11 +269,9 @@ app.controller("BillingController", function($scope, $http) {
             });
     };
 
-    // 🔹 MODIFIED PAYMENT FLOW: Use promises to sequence Save, Stock Update, and UI Clear
     $scope.finalizeTransaction = function(paymentMethod, customerId) {
         if ($scope.cart.length === 0) return;
         
-        // 1. Save Bill -> 2. Update Stock -> 3. Clear UI
         $scope.saveBillToDatabase(paymentMethod, customerId)
             .then(() => $scope.updateStock())
             .then(() => {
@@ -240,12 +286,10 @@ app.controller("BillingController", function($scope, $http) {
             });
     };
     
-    // Payment functions now use the new finalizeTransaction
     $scope.payCash = function() { $scope.finalizeTransaction("CASH"); };
     $scope.payUPI = function() { $scope.finalizeTransaction("UPI"); };
     $scope.payCard = function() { $scope.finalizeTransaction("CARD"); };
 
-    // CUSTOMER MANAGEMENT
     $scope.loadCustomers = function() {
         $http.get('CustomerServlet?action=getAll')
             .then(response => $scope.customers = response.data)
@@ -259,11 +303,9 @@ app.controller("BillingController", function($scope, $http) {
     $scope.openModal = function() { $scope.newCustomer = {}; $scope.showModal = true; };
     $scope.closeModal = function() { $scope.showModal = false; };
 
-    // CUSTOMER CREDIT
     $scope.addToCredit = function() { $scope.showCustomerCredit = true; $scope.loadCustomers(); };
     $scope.showCustomerCreditBack = function() { $scope.showCustomerCredit = false; };
     
-    // MODIFIED confirmCredit to use finalizeTransaction
     $scope.confirmCredit = function() {
         if (!$scope.selectedCustomer.id) {
             alert("Please select a customer.");
@@ -272,7 +314,6 @@ app.controller("BillingController", function($scope, $http) {
         
         const grandTotal = $scope.getTotal() - $scope.discount;
 
-        // 1. Update Customer Outstanding
         $http({
             method: 'POST',
             url: 'CustomerServlet?action=updateOutstanding',
@@ -281,7 +322,6 @@ app.controller("BillingController", function($scope, $http) {
             let data = typeof response.data === 'string' ? JSON.parse(response.data) : response.data;
             
             if (data.status === "success") {
-                // 2. Finalize Transaction as CREDIT
                 $scope.finalizeTransaction("CREDIT", $scope.selectedCustomer.id);
             } else {
                 alert("Failed to update outstanding balance.");
@@ -321,7 +361,7 @@ app.controller("BillingController", function($scope, $http) {
 
 	$scope.printInvoice = function() {
 	    let billNo = $scope.billNo;
-	    let billDate = $scope.billDateTime ? $scope.billDateTime.toLocaleString() : 'N/A'; // Use locale string for print
+	    let billDate = $scope.billDateTime ? $scope.billDateTime.toLocaleString() : 'N/A';
 	    let cart = $scope.cart;
 	    let discount = $scope.discount;
 	    let total = $scope.getTotal();
@@ -338,7 +378,6 @@ app.controller("BillingController", function($scope, $http) {
 		        <meta charset="UTF-8">
 		        <title>Invoice #INV-${billNo}</title>
 		        <style>
-		            /* ... (your print styles) ... */
                     body { font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: 10pt; margin: 0; padding: 0; color: #333; }
                     .container { width: 90%; max-width: 800px; margin: 20px auto; padding: 20px; box-sizing: border-box; }
                     .company-name { font-size: 1.8em; text-align: center; margin-bottom: 5px; color: #2c3e50; }

@@ -251,6 +251,9 @@
 .suggestions-box li:hover {
     background-color: #eaf3ff; /* Themed hover color */
 }
+.suggestions-box .highlighted {
+    background-color: #e0e0e0; /* Or any color you prefer */
+}
 
 .buttons {
     margin-top: 20px;

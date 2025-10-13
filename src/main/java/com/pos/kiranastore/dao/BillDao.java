@@ -33,7 +33,7 @@ public class BillDao {
 			psBill.setDouble(5, bill.getGrandTotal());
 			psBill.setString(6, bill.getPaymentMethod());
 			psBill.executeUpdate();
-			System.out.println("Data Inserted");
+
 			// 2️⃣ Get generated bill_id
 			rs = psBill.getGeneratedKeys();
 			int billId = 0;
