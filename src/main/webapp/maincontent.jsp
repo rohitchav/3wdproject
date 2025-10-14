@@ -127,7 +127,7 @@
 	  <select
 	    ng-model="selectedCustomer.id"
 	    ng-options="customer.id as customer.name for customer in customers track by customer.id">
-	    <option value="">-- Select Customer --</option>
+	    <option value="">-- ${lblSelectCustomer} --</option>
 	</select>
 
 
