@@ -269,22 +269,24 @@ app.controller("BillingController", function($scope, $http) {
             });
     };
 
-    $scope.finalizeTransaction = function(paymentMethod, customerId) {
-        if ($scope.cart.length === 0) return;
-        
-        $scope.saveBillToDatabase(paymentMethod, customerId)
-            .then(() => $scope.updateStock())
-            .then(() => {
-                $scope.showInvoice = false;
-                $scope.showCustomerCredit = false;
-                $scope.clearCart();
-                $scope.selectedCustomer = {};
-                $scope.closeModal();
-            })
-            .catch(error => {
-                console.error("Transaction failed:", error);
-            });
-    };
+	$scope.finalizeTransaction = function(paymentMethod, customerId) {
+	    if ($scope.cart.length === 0) return;
+
+	    // Only send customerId for CREDIT bills
+	    const cid = paymentMethod === "CREDIT" ? customerId : null;
+
+	    $scope.saveBillToDatabase(paymentMethod, cid)
+	        .then(() => $scope.updateStock())
+	        .then(() => {
+	            $scope.showInvoice = false;
+	            $scope.showCustomerCredit = false;
+	            $scope.clearCart();
+	            $scope.selectedCustomer = {};
+	            $scope.closeModal();
+	        })
+	        .catch(error => console.error("Transaction failed:", error));
+	};
+
     
     $scope.payCash = function() { $scope.finalizeTransaction("CASH"); };
     $scope.payUPI = function() { $scope.finalizeTransaction("UPI"); };

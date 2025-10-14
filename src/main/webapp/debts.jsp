@@ -44,28 +44,81 @@
 
     <!-- Payment Modal -->
     <div class="modal-overlay" ng-show="showModal">
-        <div class="modal">
-            <h3>${lblPayDebts}</h3>
-            <form ng-submit="payDebt()">
-                <label> ${lblName}</label>
-                <input type="text" ng-model="selectedCustomer.name" readonly>
-
-                <label>${lblMobile}</label>
-                <input type="text" ng-model="selectedCustomer.phone" readonly>
-
-                <label>${lblOutstandingAmount}</label>
-                <input type="text" ng-model="selectedCustomer.outstanding" readonly>
-
-                <label> ${lblPaidAmount}</label>
-                <input type="number" ng-model="paidAmount" min="0" placeholder="Enter amount to pay" required>
-
-                <div class="modal-buttons">
-                    <button type="button" class="btn-cancel" ng-click="closeModal()"> ${lblcancel}</button>
-                    <button type="submit" class="btn-submit"> ${lblPay}</button>
-                </div>
-            </form>
-        </div>
-    </div>
+	        <div class="modal">
+	            <h3>${lblPayDebts}</h3>
+	            <form ng-submit="payDebt()">
+	                <label> ${lblName}</label>
+	                <input type="text" ng-model="selectedCustomer.name" readonly>
+	
+	                <label>${lblMobile}</label>
+	                <input type="text" ng-model="selectedCustomer.phone" readonly>
+	
+	                <label>${lblOutstandingAmount}</label>
+	                <input type="text" ng-model="selectedCustomer.outstanding" readonly>
+	
+	                <label> ${lblPaidAmount}</label>
+	                <input type="number" ng-model="paidAmount" min="0" placeholder="Enter amount to pay" required>
+	
+	                <div  class="modal-buttons">
+	                    <button type="submit" class="btn-submit"> ${lblPay}</button>
+	                     <button type="submit" class="btn-view">View</button>
+	                     <button type="button" class="btn-cancel" ng-click="closeModal()"> ${lblcancel}</button>
+	                </div>
+	            </form>
+	        </div>
+	    </div>
+	    
+	 <div class="debt-bill-container" ng-show = "viewModal">
+	    <div class="bill-header">
+	        <h2>Customer Bill</h2>
+	    </div>
+	
+	    <div class="customer-info">
+	        <p><strong>Customer Name:</strong> <span>Rohit Chavan</span></p>
+	        <p><strong>Mobile No:</strong> <span>9876543210</span></p>
+	        <p><strong>Date:</strong> <span>14-Oct-2025</span></p>
+	    </div>
+	
+	    <table class="bill-table">
+	        <thead>
+	            <tr>
+	                <th>Sr. No</th>
+	                <th>Product Name</th>
+	                <th>Qty</th>
+	                <th>Price</th>
+	            </tr>
+	        </thead>
+	        <tbody>
+	            <tr>
+	                <td>1</td>
+	                <td>Wheat Flour 10kg</td>
+	                <td>1</td>
+	                <td>₹550.00</td>
+	            </tr>
+	            <tr>
+	                <td>2</td>
+	                <td>Sunflower Oil 5L</td>
+	                <td>1</td>
+	                <td>₹800.00</td>
+	            </tr>
+	            <tr>
+	                <td>3</td>
+	                <td>Rice 25kg</td>
+	                <td>1</td>
+	                <td>₹1200.00</td>
+	            </tr>
+	        </tbody>
+	    </table>
+	
+	    <div class="total-outstanding">
+	        Total Outstanding: <span>₹2550.00</span>
+	    </div>
+	
+	    <div class="bill-actions">
+	        <button class="print-btn">🖨️ Print</button>
+	        <button class="generate-btn">💾 Save</button>
+	    </div>
+   </div>
 
 </div>
 

@@ -63,7 +63,7 @@ public class CustomerServlet extends HttpServlet {
 				int customerId = Integer.parseInt(request.getParameter("customerId"));
 				double amount = Double.parseDouble(request.getParameter("amount"));
 				boolean updated = customerService.updateOutstanding(customerId, amount);
-				System.out.println("Outstadning Status: " + updated);
+				System.out.println("From Customer Servlet: " + customerId);
 				if (updated) {
 					writeJson(response, "{\"status\":\"success\"}");
 				} else {

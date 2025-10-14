@@ -23,8 +23,15 @@ public class BillDao {
 			conn = DBConnection.getConnection();
 			conn.setAutoCommit(false); // Start transaction
 
-			// 1️⃣ Insert into bills
-			String sqlBill = "INSERT INTO bills (bill_no, bill_date, subtotal, discount, grand_total, payment_method) VALUES (?, ?, ?, ?, ?, ?)";
+			String sqlBill;
+			if (bill.getCustomerId() != null) {
+				System.out.println("From Bill Dao: " + bill.getCustomerId());
+				sqlBill = "INSERT INTO bills (bill_no, bill_date, subtotal, discount, grand_total, payment_method, customer_id) VALUES (?, ?, ?, ?, ?, ?, ?)";
+			} else {
+				System.out.println("From Bill Dao: " + bill.getCustomerId());
+				sqlBill = "INSERT INTO bills (bill_no, bill_date, subtotal, discount, grand_total, payment_method) VALUES (?, ?, ?, ?, ?, ?)";
+			}
+
 			psBill = conn.prepareStatement(sqlBill, Statement.RETURN_GENERATED_KEYS);
 			psBill.setString(1, bill.getBillNo());
 			psBill.setString(2, bill.getBillDate());
@@ -32,9 +39,14 @@ public class BillDao {
 			psBill.setDouble(4, bill.getDiscount());
 			psBill.setDouble(5, bill.getGrandTotal());
 			psBill.setString(6, bill.getPaymentMethod());
+			if (bill.getCustomerId() != null) {
+				psBill.setInt(7, bill.getCustomerId());
+			}
+
+			// ✅ Execute the bill insert first
 			psBill.executeUpdate();
 
-			// 2️⃣ Get generated bill_id
+			// ✅ Then get the generated bill_id
 			rs = psBill.getGeneratedKeys();
 			int billId = 0;
 			if (rs.next()) {

@@ -10,6 +10,15 @@ public class Bill {
 	private double grandTotal;
 	private String paymentMethod;
 	private List<BillItem> items;
+	private Integer customerId;
+
+	public void setCustomerId(Integer customerId) {
+		this.customerId = customerId;
+	}
+
+	public Integer getCustomerId() {
+		return customerId;
+	}
 
 	// Getters and Setters
 	public String getBillNo() {
@@ -67,4 +76,5 @@ public class Bill {
 	public void setItems(List<BillItem> items) {
 		this.items = items;
 	}
+
 }
