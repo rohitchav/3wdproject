@@ -134,6 +134,12 @@ public class ConstantVariables {
 	public static String lblAction = "Action";
 	public static String lblAction_MR = "कृती";
 	
+	public static String lblSelectCustomerforCredit = "Select Customer for Credit";
+	public static String lblSelectCustomerforCredit_MR = "क्रेडिटसाठी ग्राहक निवडा";
+	
+	public static String lblSelectCustomer = "Select Customer ";
+	public static String lblSelectCustomer_MR = " ग्राहक निवडा";
+	
 
 	// Add more labels for home page or product categories as needed
 	public static String lblCategoryFruits = "Fruits";

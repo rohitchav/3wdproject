@@ -189,6 +189,11 @@ public class LanguageUtil {
 				isEN ? ConstantVariables.lblSubTotal : ConstantVariables.lblSubTotal_MR);
 		request.setAttribute("lblDiscount",
 				isEN ? ConstantVariables.lblDiscount : ConstantVariables.lblDiscount_MR);
+		request.setAttribute("lblSelectCustomerforCredit",
+				isEN ? ConstantVariables.lblSelectCustomerforCredit : ConstantVariables.lblSelectCustomerforCredit_MR);
+		request.setAttribute("lblSelectCustomer",
+				isEN ? ConstantVariables.lblSelectCustomer : ConstantVariables.lblSelectCustomer_MR);
+		
 		
 		// Customer
 		request.setAttribute("lblCustomerName",
