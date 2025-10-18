@@ -1,75 +1,74 @@
-🏪 Kirana Store Management System
+# 🏪 Kirana Store Management System
 
-A Java-based desktop application designed to help local Kirana (grocery) shop owners efficiently manage customers, products, billing, and purchases.
+A **Java-based desktop application** designed to help local Kirana (grocery) shop owners efficiently manage **customers, products, billing, and purchases**.  
 It provides a user-friendly interface to handle sales, track stock, and monitor outstanding balances.
 
-📋 Features
+---
 
-👤 Customer Management — Add, edit, or remove customer details and track outstanding payments.
+## 📋 Features
 
-📦 Product Management — Maintain product stock, categories, and pricing.
+- 👤 **Customer Management** — Add, edit, or remove customer details and track outstanding payments.  
+- 📦 **Product Management** — Maintain product stock, categories, and pricing.  
+- 🧾 **Billing System** — Generate bills with multiple items, automatic total and discount calculation.  
+- 💰 **Purchases Record** — Keep track of supplier purchases and expenses.  
+- 🔒 **User Authentication** — Secure login system for shop owners or staff.  
+- 📊 **Customer Bill View** — Combined view of customer, bill, and product details for reporting.  
 
-🧾 Billing System — Generate bills with multiple items, automatic total and discount calculation.
+---
 
-💰 Purchases Record — Keep track of supplier purchases and expenses.
+## 🧱 Database Structure
 
-🔒 User Authentication — Secure login system for shop owners or staff.
+The project uses a **MySQL** database. Below are the main tables and their purpose:
 
-📊 Customer Bill View — Combined view of customer, bill, and product details for reporting.
+| Table | Description |
+|--------|--------------|
+| `customers` | Stores customer information and outstanding amounts |
+| `products` | Contains product details and stock |
+| `bills` | Holds bill headers (bill number, date, totals, payment info) |
+| `bill_items` | Stores item-level details for each bill |
+| `purchases` | Records supplier purchases |
+| `users` | Manages application login credentials |
+| `customer_bill_view` | View joining customers, bills, and items for easy reporting |
 
-🧱 Database Structure
+---
 
-The project uses a MySQL database. Below are the main tables:
+## ⚙️ Installation Steps
 
-Table	Description
-customers	Stores customer information and outstanding amounts
-products	Contains product details and stock
-bills	Holds bill headers (bill number, date, totals, payment info)
-bill_items	Stores item-level details for each bill
-purchases	Records supplier purchases
-users	Manages application login credentials
-customer_bill_view	View joining customers, bills, and items for easy reporting
-⚙️ Installation Steps
-1. Install Requirements
+### 1️⃣ Install Requirements
+- Install **MySQL Server** and **MySQL Workbench** (or phpMyAdmin)  
+- Install **Java JDK 8+**  
+- *(Optional)* Install **NetBeans** or **IntelliJ IDEA** to open the project  
 
-Install MySQL Server and MySQL Workbench (or phpMyAdmin)
+---
 
-Install Java JDK 8+
+### 2️⃣ Database Setup
 
-(Optional) Install NetBeans or IntelliJ IDEA if you want to open the project
+1. Open **MySQL** or **phpMyAdmin**.  
+2. Create the database:
+   ```sql
+   CREATE DATABASE kirana_store;
+Run the SQL script file (kirana_store.sql) included in the project:
 
-2. Database Setup
-
-Open MySQL or phpMyAdmin.
-
-Create a database:
-
-CREATE DATABASE kirana_store;
-
-
-Run the SQL script file kirana_store.sql (included in the project) — it will create all tables and views:
-
+sql
+Copy code
 SOURCE kirana_store.sql;
+3️⃣ Configure Database Connection
+Open DBConnection.java and update your MySQL credentials:
 
-3. Configure Database Connection
-
-Open the Java source file (e.g., DBConnection.java) and update credentials:
-
+java
+Copy code
 private static final String URL = "jdbc:mysql://localhost:3306/kirana_store";
 private static final String USER = "root";
 private static final String PASSWORD = "your_password";
-
-4. Run the Application
-
+4️⃣ Run the Application
 Compile and run the main class (e.g., Main.java).
 
 Login using credentials from the users table (add a user manually if needed).
 
-💡 Usage
-
+💡 Usage Guide
 Login using your username and password.
 
-Add Products in the product section.
+Add Products in the product management section.
 
 Add Customers with name, phone, and address.
 
@@ -77,15 +76,13 @@ Create a Bill:
 
 Select a customer
 
-Add products
+Add products and enter quantity
 
-Enter quantity
-
-The system auto-calculates total, discount, and grand total
+System auto-calculates total, discount, and grand total
 
 Save Bill — updates stock and records outstanding amounts automatically.
 
-View Reports through customer_bill_view.
+View Reports via the customer_bill_view.
 
 🧠 Technologies Used
 Technology	Purpose
@@ -95,7 +92,10 @@ JDBC	Database connectivity
 Swing / JavaFX	User Interface
 CSS	UI Styling
 JasperReports / PDF (optional)	Bill generation
+
 🗂️ Folder Structure (Example)
+pgsql
+Copy code
 kirana-store/
 │
 ├── src/
@@ -107,36 +107,35 @@ kirana-store/
 │   │   │   └── controllers/
 │   │   └── resources/
 │   │       └── images/
-│   │
+│
 ├── sql/
 │   └── kirana_store.sql
 │
 ├── README.md
 └── pom.xml / build.gradle (if using Maven/Gradle)
-
 🧑‍💻 Default Admin Login (Optional)
+If no user exists, insert one manually using:
 
-If no user exists, insert one manually:
-
+sql
+Copy code
 INSERT INTO users (username, password) VALUES ('admin', 'admin123');
-
 🧰 Backup & Restore
+Backup Database:
 
-Backup:
-
+bash
+Copy code
 mysqldump -u root -p kirana_store > kirana_store_backup.sql
+Restore Database:
 
-
-Restore:
-
+bash
+Copy code
 mysql -u root -p kirana_store < kirana_store_backup.sql
-
 💬 Support
+If you face any issues while setting up or running the project:
 
-If you face any issues setting up or running the project:
+✅ Ensure MySQL service is running
 
-Check MySQL service is running
+✅ Verify database credentials in DBConnection.java
 
-Verify database credentials in DBConnection.java
+✅ Make sure kirana_store.sql has been properly imported
 
-Ensure kirana_store.sql has been imported correctly
