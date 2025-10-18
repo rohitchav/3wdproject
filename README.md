@@ -139,3 +139,103 @@ If you face any issues while setting up or running the project:
 
 ✅ Make sure kirana_store.sql has been properly imported
 
+
+
+-- Create Database
+CREATE DATABASE IF NOT EXISTS kirana_store;
+USE kirana_store;
+
+-- -------------------------------
+-- Table: customers
+-- -------------------------------
+CREATE TABLE customers (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  name VARCHAR(100) NOT NULL,
+  phone VARCHAR(20),
+  address VARCHAR(255),
+  outstanding DECIMAL(10,2) DEFAULT 0,
+  status VARCHAR(1) DEFAULT 'A'
+);
+
+-- -------------------------------
+-- Table: products
+-- -------------------------------
+CREATE TABLE products (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  name VARCHAR(100) NOT NULL,
+  selling_price DECIMAL(10,2) NOT NULL,
+  stock INT NOT NULL,
+  image_path VARCHAR(255),
+  cost_price DECIMAL(10,2) NOT NULL,
+  category VARCHAR(100) NOT NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- -------------------------------
+-- Table: bills
+-- -------------------------------
+CREATE TABLE bills (
+  bill_id INT AUTO_INCREMENT PRIMARY KEY,
+  customer_id INT,
+  bill_no VARCHAR(20),
+  bill_date DATETIME,
+  subtotal DECIMAL(10,2),
+  discount DECIMAL(10,2),
+  grand_total DECIMAL(10,2),
+  payment_method VARCHAR(20),
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY (customer_id) REFERENCES customers(id) ON DELETE SET NULL
+);
+
+-- -------------------------------
+-- Table: bill_items
+-- -------------------------------
+CREATE TABLE bill_items (
+  item_id INT AUTO_INCREMENT PRIMARY KEY,
+  bill_id INT,
+  product_id INT,
+  product_name VARCHAR(100),
+  qty INT,
+  price DECIMAL(10,2),
+  total_price DECIMAL(10,2),
+  FOREIGN KEY (bill_id) REFERENCES bills(bill_id) ON DELETE CASCADE,
+  FOREIGN KEY (product_id) REFERENCES products(id) ON DELETE SET NULL
+);
+
+-- -------------------------------
+-- Table: purchases
+-- -------------------------------
+CREATE TABLE purchases (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  supplier VARCHAR(100),
+  amount DECIMAL(10,2),
+  date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  bill_path VARCHAR(255)
+);
+
+-- -------------------------------
+-- Table: users
+-- -------------------------------
+CREATE TABLE users (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  username VARCHAR(50) NOT NULL UNIQUE,
+  password VARCHAR(255) NOT NULL
+);
+
+-- -------------------------------
+-- View: customer_bill_view
+-- -------------------------------
+CREATE OR REPLACE VIEW customer_bill_view AS
+SELECT 
+    c.id AS id,
+    c.name AS name,
+    c.outstanding AS outstanding,
+    b.bill_id AS bill_id,
+    bi.product_name AS product_name,
+    bi.qty AS qty,
+    bi.price AS price
+FROM customers c
+JOIN bills b ON c.id = b.customer_id
+JOIN bill_items bi ON b.bill_id = bi.bill_id;
+
+
