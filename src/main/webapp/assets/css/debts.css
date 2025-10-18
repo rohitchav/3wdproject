@@ -1,3 +1,19 @@
+/* Center the bill container */
+.debt-bill-container {
+    width: 420px; /* vertical receipt style */
+    min-height: 400px;
+    background: #fff;
+    border-radius: 14px;
+    padding: 25px;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15);
+    transition: 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    margin: 40px auto; /* ✅ centers it horizontally */
+}
+
+/* Optional: Center the section itself when bill view is active */
 .debts-wrapper {
     margin-left: 220px;
     margin-top: 90px;
@@ -5,7 +21,11 @@
     background: #fff;
     border-radius: 10px;
     box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* ✅ centers child elements horizontally */
 }
+
 
 .debts-header h2 {
     font-size: 20px;
@@ -177,9 +197,9 @@ hr {
 }
 
 
-.debt-bill-container {
-    width: 420px; /* Narrow width for vertical look */
-    min-height: 700px; /* Taller shape like a receipt */
+/* .debt-bill-container {
+    width: 420px; Narrow width for vertical look
+    min-height: 500px; Taller shape like a receipt
     background: #fff;
     border-radius: 14px;
     padding: 25px;
@@ -189,7 +209,7 @@ hr {
     flex-direction: column;
     justify-content: space-between;
 }
-
+ */
 .debt-bill-container:hover {
     transform: scale(1.01);
     box-shadow: 0 8px 22px rgba(0, 0, 0, 0.25);
@@ -281,8 +301,9 @@ hr {
 
 .bill-actions {
     display: flex;
-    justify-content: space-between;
-    margin-top: auto;
+    justify-content: flex-end; /* 👈 moves content to right */
+    align-items: center;
+    margin-top: 10px;
 }
 
 .bill-actions button {
@@ -295,6 +316,7 @@ hr {
     cursor: pointer;
     transition: 0.3s;
 }
+
 
 .bill-actions button:hover {
     background: #005fd1;

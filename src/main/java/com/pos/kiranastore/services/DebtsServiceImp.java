@@ -17,9 +17,7 @@ public class DebtsServiceImp implements DebtService {
 
 	@Override
 	public boolean payDebt(int customerId, double paidAmount) throws Exception {
-		if (paidAmount <= 0) {
-			throw new IllegalArgumentException("Paid amount must be greater than zero.");
-		}
+
 		return dao.payDebt(customerId, paidAmount);
 	}
 }
